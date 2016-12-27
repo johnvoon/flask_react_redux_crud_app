@@ -1,0 +1,82 @@
+{% extends 'layouts/app.html' %}
+
+{% block title %}Concept Law Firm{% endblock %}
+{% block meta_description %}Compete against yourself and others by guessing the
+outcome of a dice roll. Win points and dominate the leaderboard.{% endblock %}
+
+{% block hero %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>{{ post.title }}</h1>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="col-md-4">
+      <h3>Blog Posts by Practice Area</h3>
+        <ul class="list-group">
+          {% for area in all_practice_areas.query %}
+            <li class="list-group-item">
+              <span class="badge">{{ area[0] }}</span>
+              <a href="{{ url_for('blog.areas', area=area[1]) }}">{{ area[1] }}</a>
+            </li>
+          {% endfor %}
+    </div>
+    <div class="col-md-8">  
+      <div>
+        <img class='img-responsive' src="{{ post.imgSrc }}" alt="img">
+        <p><a href="">{{ post.author }}</a> in <a href="{{ url_for('blog.areas', area=post.area) }}">{{ post.area }}</a> on <time class="short-date" data-datetime="{{ post.created_on }}">{{ post.created_on }}</time></p>
+        <p>{{ post.body }}</p>  
+      </div>
+      <div>
+        <h3>Related Posts</h3>
+        <div class='container-fluid no-padding'>
+          {% for post in posts_by_area %}
+            <div class='col-md-6'>
+              <img src="{{ post.imgSrc }}" alt="img" class=img-responsive>
+              <h3><a href="{{ url_for('blog.single_post', title=post.title) }}">{{ post.title }}</a></h3>
+              <p>{{ post.author }} in {{ post.area }}</p>
+              <p>{{ post.summary }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Comments -->
+
+      <div>
+        <h3>{{ post.comments.count() }} comments</h3>
+        {% for comment in post.comments %}
+          <h3>{{ comment.author }}</h3>
+          <p>{{ comment.content }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Comments form -->
+      <div class="well border-square">
+        {% call f.form_tag('blog.single_post', css_class='', title=post.title) %}
+          <h3>Leave a comment</h3>
+          {% call f.form_group(form.author, 
+                               css_class='col-md-6',
+                               placeholder='Name') %}
+          {% endcall %}
+
+          {% call f.form_group(form.email,
+                               css_class='col-md-6',
+                               placeholder='E-mail') %}
+          {% endcall %}
+
+          {% call f.form_group(form.content,
+                               css_class='col-md-12',
+                               placeholder='Your comments',
+                               rows='12') %}
+          {% endcall %}
+
+          <button type="submit" class="btn btn-primary btn-lg btn-extra-margin border-square">Post Comment</button>
+        {% endcall %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

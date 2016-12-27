@@ -1,0 +1,85 @@
+{% extends 'layouts/app.html' %}
+<!-- {% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+{% import 'macros/user.html' as account %} -->
+
+{% block title %}Admin - Blogs / Index{% endblock %}
+
+{% block body %}
+<!--   {{ f.search('admin.blogs') }}
+
+  {% if blogs.total == 0 %}
+    <h3>No results found</h3>
+
+    {% if request.args.get('q') %}
+      <p>Try limiting or removing your search terms.</p>
+    {% else %}
+      <p>There are no blogs present.</p>
+    {% endif %}
+  {% else %}
+    {% call f.form_tag('admin.blogs_bulk_delete') %}
+      
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>
+              <label for="select_all"></label>
+              <input id="select_all" name="select_all" type="checkbox">
+            </th>
+            <th class="col-header">
+              {{ items.sort('created_on', 'Created') }}
+            </th>
+            <th class="col-header">
+              {{ items.sort('title', 'Title') }}
+            </th>
+            <th class="col-header">
+              {{ items.sort('author', 'Author') }}
+            </th>
+            <th class="col-header">
+              {{ items.sort('area', 'Practice Area') }}
+            </th>
+            <th id="bulk_actions" colspan="4">
+              <div class="form-inline">
+                {{ f.field(bulk_form.scope, inline=True) }}
+                  <button type="submit"
+                          class="btn btn-danger btn-sm">
+                    Delete items
+                  </button>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for post in blogs.items %}
+          <tr>
+            <td>
+              <label for="bulk_ids"></label>
+              <input class="checkbox-item" id="bulk_ids" name="bulk_ids"
+                     type="checkbox" value="{{ post.id }}">
+            </td>
+            <td>
+              <time class="from-now"
+                    data-datetime="{{ post.created_on }}">
+                {{ post.created_on }}
+              </time>
+            </td>
+            <td>
+              <a href="{{ url_for('admin.blog_edit', id=post.id) }}">
+                <h4 class="media-heading">{{ post.title }}</h4>
+              </a>
+            </td>
+            <td>
+              <h4 class="media-heading">{{ post.author }}</h4>
+            </td>
+            <td>
+              <h4 class="media-heading">{{ post.area }}</h4>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endcall %}
+
+    {{ items.paginate(blogs) }}
+  {% endif %} -->
+{% endblock %}

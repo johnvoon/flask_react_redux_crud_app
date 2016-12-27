@@ -1,0 +1,413 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+
+@font-face {
+  font-family: "Lato Thin";
+  src: url(../fonts/Lato-Thin.woff) format('woff'),
+       url(../fonts/Lato-Thin.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: "Lato Light";
+  src: url(../fonts/Lato-Light.woff) format('woff'),
+       url(../fonts/Lato-Light.woff2) format('woff2');
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  padding-bottom: 20px;
+  margin-bottom: 60px;
+  font: normal 16px "Lato Light", Helvetica, Arial, sans-serif;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid #e9e9e9;
+  height: 60px;
+}
+
+/* Margin and padding
+-------------------------------------------------- */
+.lg-margin-bottom {
+  margin-bottom: 60px;
+}
+
+.md-margin-bottom {
+  margin-bottom: 40px;
+}
+
+.sm-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.lg-margin-top {
+  margin-top: 60px;
+}
+
+.md-margin-top {
+  margin-top: 40px;
+}
+
+.sm-margin-top {
+  margin-top: 20px;
+}
+
+.btn-extra-margin {
+  margin: 15px 0 0 15px;
+}
+
+/* Helpers
+-------------------------------------------------- */
+
+.small {
+  font-size: 12px;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.spinner {
+  display: none;
+}
+
+.scale-up {
+  transform: scale(1.05);
+}
+
+.quarter-faded {
+  opacity: 0.75;
+}
+
+.half-faded {
+  opacity: 0.5;
+}
+
+.relative {
+  position: relative;
+}
+
+.border-square {
+  border-radius: 0;
+}
+
+.no-border {
+  border: 0;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+/* Bootstrap overrides
+-------------------------------------------------- */
+.btn {
+  font-size: 16px;
+}
+
+label {
+  font-weight: 400;
+}
+
+.checkbox input[type='checkbox'], .checkbox-inline input[type='checkbox'] {
+  margin-left: 0;
+}
+
+.alert-small {
+  padding: 5px;
+  margin-bottom: 0;
+}
+
+.alert-error, .alert-message {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.alert-error hr, .alert-message hr {
+  border-top-color: #e4b9c0;
+}
+
+.alert-error .alert-link, .alert-message .alert-link {
+  color: #843534;
+}
+
+.col-header {
+  height: 26px;
+}
+
+dd {
+  margin-bottom: 8px;
+}
+
+.navbar {
+  min-height: 70px;
+}
+
+.navbar-default {
+  background: #fff;
+  margin-bottom: 0;
+  border: 0;
+}
+
+.navbar-nav > li {
+  float: none;
+  display: inline-block;
+  position: static;
+  font: normal 18px "Lato Thin", Arial, sans-serif;
+  font-weight: bold;
+  width: min-content;
+  transition: background-color 0.5s ease;
+  vertical-align: top;
+}
+
+.form-control {
+  height: 40px;
+}
+
+.practice-areas {
+  background: #373737;
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  transition: all 333ms ease;
+}
+
+.practice-areas .navbar-nav {
+  border: 0;
+  float: none;
+  vertical-align: top;
+  text-align: center;
+  font-size: 0;
+}
+
+.practice-areas .navbar-nav > li > a {
+  color: #fff;
+  vertical-align: middle;
+}
+
+.practice-areas .navbar-nav > li > a:hover {
+  color: #fff;
+}
+
+.practice-areas .navbar-nav > li > i {
+  font-size: 40px;
+  line-height: 70px;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+}
+
+.panel {
+  visibility: hidden;
+  opacity: 0;
+  background: #859b3c;
+  color: #fff;
+  padding: 100px 40px 50px 40px;
+  margin-bottom: 0;
+  width: 100%;
+  height: 300px;
+  position: absolute;
+  transition: all 333ms ease;
+}
+
+.panel:hover {
+  display: block;
+}
+
+.panel li {
+  list-style: none;
+  color: #fff;
+}
+
+.selected {
+  background: #859b3c;
+}
+
+.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.panel .title {
+  font: normal bold 30px/150% "Lato Thin", Arial, sans-serif;
+}
+
+.hero {
+  width: 100%;
+  height: 600px;
+  display: block;
+  background: url(../images/hero-image.jpg) center center;
+  background-size: cover;
+  text-align: center;
+}
+
+.hero > .menu-toggle {
+  color: #fff;
+  font-size: 30px;
+  text-align: right;
+  padding: 20px 20px 0 0;
+  font-family: "Lato Thin";
+}
+
+.hero > .menu-toggle p {
+  display: inline;
+}
+
+.hero > .menu-toggle i {
+  padding-left: 20px;
+  cursor: pointer;
+}
+
+.hero > h2 {
+  margin-top: 200px;
+  color: #fff;
+}
+
+.hero > button.btn {
+  font-family: "Lato Thin", Arial, sans-serif;
+  font-size: 40px;
+  width: min-content;
+  margin-top: 350px;
+  background: none;
+  border: 2px solid #fff;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: '';
+  height: 0;
+  clear: both;
+}
+
+.post-container {
+  margin-top: 30px;
+}
+
+.img-fixed-width, .img-fixed {
+  width: 300px;
+}
+
+.img-fixed-width {
+  float: left;
+}
+
+.text-fluid {
+  overflow: hidden;
+}
+
+.text-fluid > h2 {
+  margin-top: 0;
+}
+
+
+
+/* Admin dashboard
+-------------------------------------------------- */
+.table th {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#bulk_actions {
+  display: none;
+  padding-bottom: 8px;
+}
+
+#scope {
+  margin-bottom: 0;
+  width: 160px;
+  height: 29px;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.sort:after {
+  content: '\f0dc';
+  font-family: FontAwesome;
+  margin-left: 6px;
+  color: #BBB;
+}
+
+.ascending:after {
+  content: '\f0de';
+  font-family: FontAwesome;
+  margin-left: 6px;
+  color: #444;
+}
+
+.descending:after {
+  content: '\f0dd';
+  font-family: FontAwesome;
+  margin-left: 6px;
+  color: #444;
+}
+
+#duration-in-months {
+  display: none;
+}
+
+.rd-date table td {
+  padding: 5px;
+}
+
+/* Billing
+-------------------------------------------------- */
+#coupon_code_status {
+  display: none;
+}
+
+.coupon-code {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px dashed #e1e1e1;
+}
+
+.coupon-code input {
+  margin-bottom: 5px;
+}
+
+.payment-errors {
+  display: none;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.cc-details {
+  width: 75px;
+}
+
+a.pricing--primary {
+  color: #fff;
+}
+
+/* Bet
+-------------------------------------------------- */
+#dice {
+  font-size: 100px;
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-nav > li {
+    display: block;
+  }
+}

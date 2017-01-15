@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class PageLengthMenu extends Component {
   render() {
@@ -26,3 +26,9 @@ export default class PageLengthMenu extends Component {
     );
   }
 }
+
+PageLengthMenu.propTypes = {
+  onPageLengthChange: PropTypes.func.isRequired,
+  pageLength: PropTypes.number.isRequired,
+  pageLengthOptions: PropTypes.array.isRequired
+};

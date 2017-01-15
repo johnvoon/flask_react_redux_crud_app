@@ -1,25 +1,20 @@
-import { DATA_LOADED } from '../constants/actionTypes';
-import { sortByDate } from '../utils/filterSort';
+import _ from 'lodash';
 
 const initialState = {
-  dataSet: []
+  posts: {},
+  postAuthors: {},
+  comments: {},
+  commentAuthors: {},
+  practiceAreas: {}
 };
 
-export default function globalPostsReducer(state = initialState, action) {
-  switch (action.type) {
-    case DATA_LOADED:
-      return dataLoaded(state, action);
+export default function blogEntitiesReducer(state = initialState, action) {
+  if (action.entities) {
+    return _.merge({}, state, action.entities);
+  }
+  if (action.remainingEntities) {
+    return Object.assign({}, state, action.remainingEntities);
   }
 
   return state;
-}
-
-function dataLoaded(state, {dataSet: {posts}}) {
-  const loadedState = { ...initialState, ...state };
-  const sortedPosts = sortByDate(posts, 'descending');
-
-  return {
-    ...loadedState,
-    dataSet: sortedPosts
-  };
 }

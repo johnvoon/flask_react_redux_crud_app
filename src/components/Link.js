@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class Link extends Component {
   onClick(event) {
-    const { filterByArea, data } = this.props;
+    const { dispatchEvent } = this.props;
 
     event.preventDefault();
-    filterByArea(data);
+    dispatchEvent(event);
   }
 
   render() {
@@ -16,7 +16,7 @@ export default class Link extends Component {
       <li 
         className="list-group-item">
         <a role="button" 
-           href='#'
+           href="#"
            onClick={clickEvent}>
           {linkText}
         </a>
@@ -25,3 +25,9 @@ export default class Link extends Component {
     );
   }
 }
+
+Link.propTypes = {
+  dispatchEvent: PropTypes.func.isRequired,
+  linkText: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired
+};

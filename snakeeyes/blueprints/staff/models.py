@@ -15,7 +15,7 @@ class Staff(ResourceMixin, db.Model):
 
 
     # Relationships
-    posts_authored = db.relationship(Post, backref='author', lazy='dynamic')
+    posts_authored = db.relationship(Post, backref=db.backref('author', lazy="joined"), lazy='dynamic')
     cases_handled = db.relationship(Case, backref='staff', secondary=staff_case)
     appointments = db.relationship(Appointment, backref='staff', secondary=staff_appointment)
 
@@ -123,7 +123,8 @@ class Staff(ResourceMixin, db.Model):
         return {
             'id': self.id,
             'name': self.user.first_last_name,
-            'dated_joined': self.dated_joined,
+            'datedJoined': self.dated_joined,
             'position': self.position,
-            'img_src': self.img_src
+            'imgSrc': self.img_src,
+            'posts': self.posts_authored.count() 
         }

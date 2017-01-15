@@ -6,9 +6,9 @@ from flask_login import current_user
 
 def anonymous_required(url='/settings'):
     """
-    Redirect a user to a specified location if they are already signed in.
+    Redirect user if already signed in.
 
-    :param url: URL to be redirected to if invalid
+    :param url: Redirect URL if invalid
     :type url: str
     :return: Function
     """
@@ -27,16 +27,16 @@ def anonymous_required(url='/settings'):
 
 def role_required(*roles):
     """
-    Does a user have permission to view this page?
+    Check if user has permission to view page
 
-    :param *roles: 1 or more allowed roles
+    :param *roles: 1 or more roles
     :return: Function
     """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if current_user.role not in roles:
-                flash('You do not have permission to do that.', 'error')
+                flash('Sorry, you do not have permission to access this page.', 'error')
                 return redirect('/')
 
             return f(*args, **kwargs)

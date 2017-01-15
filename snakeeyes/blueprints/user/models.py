@@ -73,9 +73,9 @@ class User(UserMixin, ResourceMixin, db.Model):
     @hybrid_property
     def full_name(self):
         if self.middle_name:
-            return self.first_name + ' ' + self.middle_name + ' ' + self.last_name 
+            return self.last_name.upper() + ', ' + self.first_name + ' ' + self.middle_name 
         else:
-            return self.first_name + ' ' + self.last_name 
+            return self.last_name.upper() + ', ' + self.first_name 
 
     @hybrid_property
     def first_last_name(self):
@@ -84,7 +84,7 @@ class User(UserMixin, ResourceMixin, db.Model):
     @classmethod
     def find_by_identity(cls, identity):
         """
-        Find a user by their e-mail or username.
+        Find user by e-mail or username.
 
         :param identity: Email or username
         :type identity: str
@@ -96,7 +96,7 @@ class User(UserMixin, ResourceMixin, db.Model):
     @classmethod
     def encrypt_password(cls, plaintext_password):
         """
-        Hash a plaintext string using PBKDF2.
+        Hash password using PBKDF2.
 
         :param plaintext_password: Password in plain text
         :type plaintext_password: str
@@ -110,7 +110,7 @@ class User(UserMixin, ResourceMixin, db.Model):
     @classmethod
     def deserialize_token(cls, token):
         """
-        Obtain a user from de-serializing a signed token.
+        Obtain user from de-serializing token.
 
         :param token: Signed token.
         :type token: str
@@ -128,7 +128,7 @@ class User(UserMixin, ResourceMixin, db.Model):
     @classmethod
     def initialize_password_reset(cls, identity):
         """
-        Generate a token to reset the password for a specific user.
+        Generate token to reset the password for a specific user.
 
         :param identity: User e-mail address or username
         :type identity: str
@@ -211,11 +211,11 @@ class User(UserMixin, ResourceMixin, db.Model):
 
     def authenticated(self, with_password=True, password=''):
         """
-        Ensure a user is authenticated, and optionally check their password.
+        Ensure user authenticated.
 
-        :param with_password: Optionally check their password
+        :param with_password: Optionally check password
         :type with_password: bool
-        :param password: Optionally verify this as their password
+        :param password: Password to verify
         :type password: str
         :return: bool
         """
@@ -226,7 +226,7 @@ class User(UserMixin, ResourceMixin, db.Model):
 
     def serialize_token(self, expiration=3600):
         """
-        Sign and create a token for resetting passwords, etc.
+        Serialize token for resetting passwords, etc.
 
         :param expiration: Seconds until it expires, defaults to 1 hour
         :type expiration: int
@@ -256,7 +256,9 @@ class User(UserMixin, ResourceMixin, db.Model):
     def to_json(self):
         return {
             'id': self.id,
-            'name': self.first_last_name,
+            'created': self.created_on,
+            'firstLastName': self.first_last_name,
+            'fullName': self.full_name,
             'username': self.username,
             'email': self.email,
             'role': self.role

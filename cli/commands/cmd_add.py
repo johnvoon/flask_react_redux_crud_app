@@ -1,5 +1,6 @@
 import click
 import random
+import itertools
 
 from datetime import datetime
 from faker import Faker
@@ -150,6 +151,7 @@ def users():
 
             params['role'] = 'admin'
             params['password'] = password
+            params['email'] = 'dev@local.host'
 
         data.append(params)
 
@@ -229,17 +231,26 @@ def posts():
     random_titles = []
     data = []
 
-    for i in range(0, 200):
+    for i in range(0, 400):
         random_titles.append(fake.sentence(nb_words=6, variable_nb_words=True))
 
     random_titles = list(set(random_titles))
     with app.app_context():
-        img_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
-                    url_for('static', filename='images/400/building.jpg'),
-                    url_for('static', filename='images/400/ipad.jpg'),
-                    url_for('static', filename='images/400/pencils.jpg'),
-                    url_for('static', filename='images/400/team_meeting.jpg'),
-                    url_for('static', filename='images/400/suit.jpg')]
+        thumbnail_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
+                          url_for('static', filename='images/400/building.jpg'),
+                          url_for('static', filename='images/400/ipad.jpg'),
+                          url_for('static', filename='images/400/pencils.jpg'),
+                          url_for('static', filename='images/400/team_meeting.jpg'),
+                          url_for('static', filename='images/400/suit.jpg')]
+    thumbnail_srcs = itertools.cycle(thumbnail_srcs)
+    with app.app_context():
+        img_srcs = [url_for('static', filename='images/2000/glass-architecture.jpg'), 
+                    url_for('static', filename='images/2000/building.jpg'),
+                    url_for('static', filename='images/2000/ipad.jpg'),
+                    url_for('static', filename='images/2000/pencils.jpg'),
+                    url_for('static', filename='images/2000/team_meeting.jpg'),
+                    url_for('static', filename='images/2000/suit.jpg')]
+    img_srcs = itertools.cycle(img_srcs)
     author_ids = db.session.query(Staff.id).all()
     practice_area_ids = db.session.query(PracticeArea.id).all()
 
@@ -250,8 +261,9 @@ def posts():
             float(fake_datetime)).strftime('%Y-%m-%dT%H:%M:%S Z')
         author_id = random.choice(author_ids)
         practice_area_id = random.choice(practice_area_ids)
-        img_src = random.choice(img_srcs)
-        body = '\n\n'.join(fake.paragraphs(nb=5))
+        thumbnail_src = thumbnail_srcs.next()
+        img_src = img_srcs.next()
+        body = list(fake.paragraphs(nb=20))
         summary = fake.sentence(nb_words=10)
 
         params = {
@@ -259,6 +271,7 @@ def posts():
             'updated_on': created_on,
             'title': title,
             'body': body,
+            'thumbnail_src': thumbnail_src,
             'img_src': img_src,
             'summary': summary,
             'author_id': author_id,
@@ -280,7 +293,7 @@ def comments():
     post_ids = db.session.query(Post.id).all()
     user_ids = db.session.query(User.id).all()
 
-    for i in range(0, 200):
+    for i in range(0, 1000):
         fake_datetime = fake.date_time_between(
             start_date='-1y', end_date='now').strftime('%s')
         created_on = datetime.utcfromtimestamp(

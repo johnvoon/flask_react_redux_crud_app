@@ -5,11 +5,9 @@ from snakeeyes.extensions import mail
 
 def send_template_message(template=None, ctx=None, *args, **kwargs):
     """
-    Send a templated e-mail using a similar signature as Flask-Mail:
-    http://pythonhosted.org/Flask-Mail/
+    Send a templated e-mail 
 
-    Except, it also supports template rendering. If you want to use a template
-    then just omit the body and html kwargs to Flask-Mail and instead supply
+    To use a template, omit body and html kwargs to Flask-Mail supply
     a path to a template. It will auto-lookup and render text/html messages.
 
     Example:

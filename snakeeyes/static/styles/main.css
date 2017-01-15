@@ -318,7 +318,7 @@ dd {
 
 
 
-/* Admin dashboard
+/* Admin
 -------------------------------------------------- */
 .table th {
   cursor: pointer;
@@ -326,11 +326,6 @@ dd {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-}
-
-#bulk_actions {
-  display: none;
-  padding-bottom: 8px;
 }
 
 #scope {
@@ -360,6 +355,18 @@ dd {
   font-family: FontAwesome;
   margin-left: 6px;
   color: #444;
+}
+
+.edit:after {
+  content: '\f044';
+  font-family: FontAwesome;
+  color: #fff;
+}
+
+.delete:after {
+  content: '\f014';
+  font-family: FontAwesome;
+  color: #fff;
 }
 
 #duration-in-months {

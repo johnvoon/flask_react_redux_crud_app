@@ -21,9 +21,10 @@ class Post(ResourceMixin, db.Model):
     # Properties
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), index=True, unique=True, nullable=False)
-    body = db.Column(db.Text(), nullable=False)
+    body = db.Column(db.ARRAY(db.String), nullable=False)
     summary = db.Column(db.String(250), nullable=False)
     img_src = db.Column(db.String(200))
+    thumbnail_src = db.Column(db.String(200))
     view_count = db.Column(db.Integer, server_default='0')
 
     # Foreign Keys
@@ -124,17 +125,21 @@ class Post(ResourceMixin, db.Model):
         return or_(*search_chain)
 
     def to_json(self):
-        comments = [comment.to_json() for comment in self.comments.all()]
-
         return {
             'id': self.id,
             'title': self.title,
-            'author': self.author.to_json(),
+            'author': self.author.user.first_last_name,
             'body': self.body,
             'summary': self.summary,
-            'practice_area': self.practice_area.area,
-            'comments': comments,
-            'img_src': self.img_src,
+            'practiceArea': self.practice_area.area,
+            'imgSrc': self.img_src,
+            'thumbnailSrc': self.thumbnail_src,
             'created': self.created_on,
             'updated': self.updated_on,
+        }
+
+    def to_json_short(self):
+        return {
+            'id': self.id,
+            'title': self.title
         }

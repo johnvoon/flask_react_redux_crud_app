@@ -22,9 +22,9 @@ admin = Blueprint('admin', __name__,
                   template_folder='templates', url_prefix='/admin')
 
 
-@admin.before_request
-@login_required
-@role_required('admin')
+# @admin.before_request
+# @login_required
+# @role_required('admin')
 def before_request():
     """ Protect all of the admin endpoints. """
     pass
@@ -97,86 +97,8 @@ def users_edit(id):
     return render_template('admin/user/edit.html', form=form, user=user,
                            coupon=coupon)
 
-# Invoices --------------------------------------------------------------------
-@admin.route('/invoices', defaults={'page': 1})
-@admin.route('/invoices/page/<int:page>')
-def invoices(page):
-    search_form = SearchForm()
-
-    sort_by = Invoice.sort_by(request.args.get('sort', 'created_on'),
-                              request.args.get('direction', 'desc'))
-    order_values = 'invoices.{0} {1}'.format(sort_by[0], sort_by[1])
-
-    paginated_invoices = Invoice.query.join(User) \
-        .filter(Invoice.search(request.args.get('q', ''))) \
-        .order_by(text(order_values)) \
-        .paginate(page, 50, True)
-
-    return render_template('admin/invoice/index.html',
-                           form=search_form, invoices=paginated_invoices)
-
 # Blogs
-@admin.route('/blogs', defaults={'page': 1})
-@admin.route('/blogs/page/<int:page>')
-def blogs(page):
-    search_form = SearchForm()
-    bulk_form = BulkDeleteForm()
-    sort_by = Blog.sort_by(request.args.get('sort', 'created_on'),
-                              request.args.get('direction', 'desc'))
-    order_values = 'blogs.{0} {1}'.format(sort_by[0], sort_by[1])
-
-    paginated_blogs = Blog.query \
-        .filter(Blog.search(request.args.get('q', ''))) \
-        .order_by(text(order_values)) \
-        .paginate(page, 10, True)
-
-    return render_template('admin/blog/index.html', bulk_form=bulk_form,
-                           form=search_form, blogs=paginated_blogs)
-
-@admin.route('/blogs/new', methods=['GET', 'POST'])
-def blog_new():
-    blog = Blog()
-    form = BlogForm()
-
-    if form.validate_on_submit():
-        form.populate_obj(blog)
-        blog.save()
-
-        # flash("New blog was successfully posted.", 'success')
-        return redirect(url_for('blog.single_post', title=blog.title))
-
-    return render_template('admin/blog/new.html',
-                           form=form, blog=blog)
-
-@admin.route('/blogs/edit/<int:id>', methods=['GET', 'POST'])
-def blog_edit(id):
-    blog = Blog.query.get(id)
-    form = BlogForm(obj=blog)
-
-    if form.validate_on_submit():
-        form.populate_obj(blog)
-
-        blog.save()
-
-        flash('Blog has been saved successfully.', 'success')
-        return redirect(url_for('admin.blogs'))
-
-    return render_template('admin/blog/edit.html', form=form, blog=blog)
-
-@admin.route('/blogs/bulk_delete', methods=['POST'])
-def blogs_bulk_delete():
-    form = BulkDeleteForm()
-
-    if form.validate_on_submit():
-        ids = Blog.get_bulk_action_ids(request.form.get('scope'),
-                                       request.form.getlist('bulk_ids'),
-                                       query=request.args.get('q', ''))
-
-        Blog.bulk_delete(ids)
-
-        flash('{0} blog post(s) were deleted.'.format(len(ids)),
-              'success')
-    else:
-        flash('No blog posts were deleted, something went wrong.', 'error')
-
-    return redirect(url_for('admin.blogs'))
+@admin.route('/posts', strict_slashes=False, defaults={'path': ''})
+@admin.route('/posts/<path:path>')
+def blogs(path):
+    return render_template('admin/blog/index.html')

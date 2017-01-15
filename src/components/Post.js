@@ -1,25 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 
-const Post = ({ post }) => {
-  const postCreated = moment(post.created, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
+export default class Post extends Component {
+  render() {
+    const { post } = this.props;
+    const postCreated = moment(post.created, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
+    const postUpdated = moment(post.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
+    const postBody = (post.body || []).map((paragraph, idx) => {
+      return (
+        <p key={idx}>{paragraph}</p>
+      );
+    });
 
-  return (
-    <div className="post-container clearfix">
-      <div className="img-fixed-width">
-        <img className="img-fixed" src={post.img_src} alt="img" />
+    return (
+      <div>
+        <img className="img-responsive center-block" src={post.imgSrc} alt="img" />  
+        <h1>{post.title}</h1>
+        <p><a href="#">{post.author}</a> in <a href="#">{post.practiceArea}</a> on {postCreated}</p>
+        <p>Last updated on {postUpdated}</p>
+        {postBody}
       </div>
-      <div className="container-fluid text-fluid">
-        <h2><Link>{post.title}</Link></h2>
-        <p>
-          By <a href="#">{post.author.name}</a> in <a href="#">{post.practice_area}</a> on {postCreated}
-        </p>
-        <p>{post.summary}</p>
-        <a href="#" className="btn btn-primary btn-lg border-square">Read More</a>
-      </div>
-    </div>
-  );
+    );
+  }
+}
+
+Post.propTypes = {
+  post: PropTypes.object.isRequired
 };
-
-export default Post;

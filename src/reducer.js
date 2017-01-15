@@ -1,12 +1,18 @@
 import { combineReducers } from 'redux';
-import globalPostsReducer from './Blog/reducer';
-import blogHomeReducer from './containers/BlogHome/reducer';
-import adminPostsReducer from './containers/AdminPosts/reducer';
+import blogEntitiesReducer from './Blog/reducer';
+// import userEntitiesReducer from './User/reducer';
+import blogHomeReducer from './BlogHome/reducer';
+import blogPostReducer from './BlogPost/reducer';
+import adminPagesReducer from './AdminPages/reducer';
+import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
-  posts: globalPostsReducer,
-  blog: blogHomeReducer,
-  adminPosts: adminPostsReducer
+  blogEntities: blogEntitiesReducer,
+  // userEntities: userEntitiesReducer,
+  blogHome: blogHomeReducer,
+  blogPost: blogPostReducer,
+  adminPages: adminPagesReducer,
+  form: formReducer
 });
 
 export default rootReducer;

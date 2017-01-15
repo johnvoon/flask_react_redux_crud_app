@@ -1,4 +1,3 @@
-{# Toggle sorting order on a specific field. #}
 {% macro sort(field, title_header=None) -%}
   {% set sort = request.args.get('sort', None) %}
   {% set direction = request.args.get('direction', 'asc') %}
@@ -30,7 +29,6 @@
 {%- endmacro %}
 
 
-{# Paginate through a resource. #}
 {% macro paginate(resource) -%}
   {% set args = request.args.to_dict() %}
 

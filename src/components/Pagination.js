@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import _ from 'lodash'
+import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 
 const preventDefault = e => e.preventDefault();
 
@@ -20,7 +20,7 @@ export default class Pagination extends Component {
             pageNavLength, 
             currentPage } = this.props;
 
-    if (totalPages === 0) return null
+    if (totalPages === 0) return null;
 
     let pagesFromCenter = Math.floor(pageNavLength / 2);
     let start = Math.max(currentPage - pagesFromCenter, 0);
@@ -53,18 +53,18 @@ export default class Pagination extends Component {
     let isFirst = currentPage === 0;
     if (!isFirst) {
       firstPage = this.onChange.bind(this, 0);
-      prevPage = this.onChange.bind(this, currentPage - 1)
+      prevPage = this.onChange.bind(this, currentPage - 1);
     }
 
     buttons = [
       <li key="first" className={isFirst ? 'disabled' : null}>
         <a role="button" href="#" tabIndex="0" onClick={firstPage}>
-          <span className="fa fa-angle-double-left"></span>
+          <span className="fa fa-angle-double-left" />
         </a>
       </li>,
       <li key="prev" className={isFirst ? 'disabled' : null}>
         <a role="button" href="#" tabIndex="0" onClick={prevPage}>
-          <span className="fa fa-angle-left"></span>
+          <span className="fa fa-angle-left" />
         </a>
       </li>
     ].concat(buttons);
@@ -81,20 +81,27 @@ export default class Pagination extends Component {
     buttons = buttons.concat([
       <li key="next" className={isLast ? 'disabled' : null}>
         <a role="button" href="#" tabIndex="0" onClick={nextPage}>
-          <span className="fa fa-angle-right"></span>
+          <span className="fa fa-angle-right" />
         </a>
       </li>,
       <li key="last" className={isLast ? 'disabled' : null}>
         <a role="button" href="#" tabIndex="0" onClick={lastPage}>
-          <span className="fa fa-angle-double-right"></span>
+          <span className="fa fa-angle-double-right" />
         </a>
       </li>
     ]);
 
     return (
-      <ul className={this.props.className}>
+      <ul className="pagination d-inline-block">
         {buttons}
       </ul>
     );
   }
 }
+
+Pagination.propTypes = {
+  onPageNumberChange: PropTypes.func.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  pageNavLength: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired
+};

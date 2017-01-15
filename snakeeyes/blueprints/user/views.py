@@ -1,3 +1,5 @@
+import requests
+import json
 from flask import (
     Blueprint,
     redirect,
@@ -34,15 +36,9 @@ def login():
         u = User.find_by_identity(request.form.get('identity'))
 
         if u and u.authenticated(password=request.form.get('password')):
-            # To allow user to select whether or not they
-            # should remain logged in, perform these 3 steps:
-            # 1) Replace 'True' below with: request.form.get('remember', False)
-            # 2) Uncomment the 'remember' field in user/forms.py#LoginForm
-            # 3) Add a checkbox to the login form with the id/name 'remember'
             if login_user(u, remember=True) and u.is_active():
                 u.update_activity_tracking(request.remote_addr)
 
-                # Handle optionally redirecting to the next URL safely.
                 next_url = request.form.get('next')
                 if next_url:
                     return redirect(safe_next_url(next_url))

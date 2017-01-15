@@ -9,7 +9,7 @@ class PracticeArea(ResourceMixin, db.Model):
     __tablename__ = 'practice_areas'
 
     # Relationships
-    posts = db.relationship('Post', backref='practice_area', lazy='dynamic')
+    posts = db.relationship('Post', backref=db.backref('practice_area', lazy="joined"), lazy='dynamic')
     staff = db.relationship('Staff', backref='practice_area', lazy='dynamic')
     cases = db.relationship('Case', backref='practice_area', lazy='dynamic')
 
@@ -50,13 +50,16 @@ class PracticeArea(ResourceMixin, db.Model):
 
         return results
 
-    def to_json(self):
-        posts = [post.to_json() for post in self.posts.all()]
-        print posts
+    def to_json_short(self):
+        return {
+            'id': self.id,
+            'area': self.area
+        }
 
+    def to_json(self):
         return {
             'id': self.id,
             'area': self.area,
-            'img_src': self.img_src,
-            'posts': posts
+            'imgSrc': self.img_src,
+            'posts': self.posts.count()
         }

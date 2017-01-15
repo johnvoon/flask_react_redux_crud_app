@@ -1,19 +1,16 @@
 import logging
-
 from logging.handlers import SMTPHandler
-
-import stripe
-
 from werkzeug.contrib.fixers import ProxyFix
 from flask import Flask, render_template
 from celery import Celery
 from itsdangerous import URLSafeTimedSerializer
-
 from snakeeyes.blueprints.admin import admin
 from snakeeyes.blueprints.page import page
 from snakeeyes.blueprints.blog import blog
 from snakeeyes.blueprints.blog import posts_api
+from snakeeyes.blueprints.blog import comments_api
 from snakeeyes.blueprints.practice_area import practice_areas_api
+from snakeeyes.blueprints.staff import staff_api
 from snakeeyes.blueprints.contact import contact
 from snakeeyes.blueprints.user import user
 from snakeeyes.blueprints.user.models import User
@@ -23,7 +20,8 @@ from snakeeyes.extensions import (
     csrf,
     db,
     login_manager,
-    limiter
+    limiter,
+    jwt
 )
 
 CELERY_TASK_LIST = [
@@ -73,9 +71,6 @@ def create_app(settings_override=None):
     if settings_override:
         app.config.update(settings_override)
 
-    stripe.api_key = app.config.get('STRIPE_SECRET_KEY')
-    stripe.api_version = app.config.get('STRIPE_API_VERSION')
-
     middleware(app)
     error_templates(app)
     exception_handler(app)
@@ -83,7 +78,9 @@ def create_app(settings_override=None):
     app.register_blueprint(page)
     app.register_blueprint(blog)
     app.register_blueprint(posts_api.blueprint, url_prefix='/api')
+    app.register_blueprint(comments_api.blueprint, url_prefix='/api')
     app.register_blueprint(practice_areas_api.blueprint, url_prefix='/api')
+    app.register_blueprint(staff_api.blueprint, url_prefix='/api')
     app.register_blueprint(contact)
     app.register_blueprint(user)
     extensions(app)
@@ -94,7 +91,7 @@ def create_app(settings_override=None):
 
 def extensions(app):
     """
-    Register 0 or more extensions (mutates the app passed in).
+    Register extensions.
 
     :param app: Flask application instance
     :return: None
@@ -105,13 +102,14 @@ def extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
     limiter.init_app(app)
+    jwt.init_app(app)
 
     return None
 
 
 def authentication(app, user_model):
     """
-    Initialize the Flask-Login extension (mutates the app passed in).
+    Initialize the Flask-Login extension.
 
     :param app: Flask application instance
     :param user_model: Model that contains the authentication information
@@ -137,7 +135,7 @@ def authentication(app, user_model):
 
 def middleware(app):
     """
-    Register 0 or more middleware (mutates the app passed in).
+    Register middleware.
 
     :param app: Flask application instance
     :return: None
@@ -150,7 +148,7 @@ def middleware(app):
 
 def error_templates(app):
     """
-    Register 0 or more custom error pages (mutates the app passed in).
+    Register custom error pages.
 
     :param app: Flask application instance
     :return: None
@@ -178,7 +176,7 @@ def error_templates(app):
 
 def exception_handler(app):
     """
-    Register 0 or more exception handlers (mutates the app passed in).
+    Register exception handlers.
 
     :param app: Flask application instance
     :return: None

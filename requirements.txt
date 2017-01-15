@@ -1,7 +1,7 @@
 Flask==0.10.1
 
-# REST APIs
-Flask-RESTful==0.3.5
+# HTTP Requests
+requests==2.12.4
 
 # Dev and production web app server.
 gunicorn==19.4.5
@@ -17,13 +17,11 @@ Click==6.4
 
 # Data and workers.
 psycopg2==2.6.1
-Flask-SQLAlchemy==2.1
 alembic==0.8.6
 redis==2.10.5
 celery==3.1.23
 
 # Forms.
-Flask-WTF==0.9.5
 WTForms-Components==0.9.7
 
 # Payments.
@@ -31,9 +29,14 @@ stripe==1.32.0
 
 # Utils.
 fake-factory==0.5.7
+Pillow==4.0.0
 
 # Extensions.
 flask-debugtoolbar==0.10.0
 Flask-Mail==0.9.1
 Flask-Login==0.3.2
+Flask-JWT==0.3.2
 Flask-Limiter==0.9.3
+Flask-RESTful==0.3.5
+Flask-SQLAlchemy==2.1
+Flask-WTF==0.9.5

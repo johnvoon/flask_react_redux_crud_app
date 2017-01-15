@@ -11,6 +11,6 @@ class PostsAPI(Resource):
     def get():
         practice_areas = PracticeArea.query.all()
         if practice_areas:
-            return render_json(200, {'practice_areas': [area.to_json() for area in practice_areas]})
+            return render_json(200, {'practiceAreas': [area.to_json() for area in practice_areas]})
 
         return render_json(404, {'message': 'No posts found'})

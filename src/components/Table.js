@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-const buildSortProps = (column, sortBy, onSort) => {
+const buildSortProps = (data, column, sortBy, onSort) => {
   // set order (ascending or descending) if:
   // `sortBy` is not null; and 
   // `column` has a `prop` value.
@@ -14,20 +14,19 @@ const buildSortProps = (column, sortBy, onSort) => {
     'tabIndex': 0,
     'aria-sort': order
   };
-}
+};
 
 const isEmpty = value => value === null || value === '';
 
-const getCellValue = ({ prop, defaultContent, render }, row) =>
-  !isEmpty(prop) && isEmpty(row[prop]) ? defaultContent :
-    render ? render(row[prop], row) :
-    row[prop];
+const getCellValue = ({ prop, defaultContent, component }, row) => {
+  return !isEmpty(prop) && isEmpty(row[prop]) ? defaultContent :
+    component ? component(row[prop], row) : row[prop];
+};
 
 export default class Table extends Component {
   render() {
-    const { onSort, columns, trKey, pageData, 
-            sortBy } = this.props;
-    const getUniqueKey = (row, key) => row[key];
+    const { onSort, columns, pageData, 
+            sortBy, data } = this.props;
     
     const headers = columns.map((column, idx) => {
       let sortProps;
@@ -37,8 +36,8 @@ export default class Table extends Component {
       // column's `sortable` property not `false`; and
       // column has `prop` value assigned to it
       if (onSort && column.sortable !== false && 'prop' in column) {
-        sortProps = buildSortProps(column, sortBy, onSort);
-        order = sortProps['aria-sort']
+        sortProps = buildSortProps(data, column, sortBy, onSort);
+        order = sortProps['aria-sort'];
       }
 
       return (
@@ -56,13 +55,12 @@ export default class Table extends Component {
         </th>
       );
     });
-
-    const rows = pageData.map(row => {
+    const rows = pageData.map(id => {
       return (
-        <tr key={getUniqueKey(row, trKey)}>
+        <tr key={id}>
           {columns.map((column, idx) =>
             <td key={idx}>
-              {getCellValue(column, row)}
+              {getCellValue(column, data[id])}
             </td>
           )}
         </tr>
@@ -87,4 +85,10 @@ export default class Table extends Component {
   }  
 }
 
-
+Table.propTypes = {
+  onSort: PropTypes.func.isRequired,
+  sortBy: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  pageData: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired
+};

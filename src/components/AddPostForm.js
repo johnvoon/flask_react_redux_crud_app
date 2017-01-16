@@ -17,7 +17,7 @@ class AddPostForm extends Component {
   }
 
   render() {
-    const { onAdd, onHide, onJWTExpired, onDrop } = this.props;
+    const { onAdd, onHide, onJWTExpired } = this.props;
     const { postAuthors, practiceAreas } = this.props; 
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
@@ -61,8 +61,7 @@ class AddPostForm extends Component {
           name="file"
           component={FileUploadFormGroup}
           label="Image Source"
-          validate={required}
-          onDrop={onDrop}/>
+          validate={required}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 

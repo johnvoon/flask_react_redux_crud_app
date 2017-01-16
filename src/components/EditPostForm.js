@@ -4,6 +4,7 @@ import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFormGroup';
 import TextAreaFormGroup from './TextAreaFormGroup';
 import StaticFormGroup from './StaticFormGroup';
+import FileUploadFormGroup from './FileUploadFormGroup';
 import ErrorAlert from './ErrorAlert';
 import { required, maxLength, createOptionsList } from '../utils';
 import moment from 'moment';
@@ -31,8 +32,7 @@ class EditPostForm extends Component {
       "author": _.findKey(postAuthors, (val) => val.name === post.author),
       "body": postBody,
       "summary": post.summary,
-      "practiceArea": _.findKey(practiceAreas, (val) => val.name === practiceAreas.area),
-      "imgSrc": post.imgSrc.split("/").pop()
+      "practiceArea": _.findKey(practiceAreas, (val) => val.name === practiceAreas.area)
     };
 
     initialize(initData);
@@ -87,10 +87,9 @@ class EditPostForm extends Component {
           validate={required}
           options={practiceAreaOptions}/>
         <Field 
-          name="imgSrc"
-          type="text"
-          component={InputFormGroup}
-          label="Image Filename"
+          name="file"
+          component={FileUploadFormGroup}
+          label="Image Source"
           validate={required}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
@@ -106,7 +105,12 @@ class EditPostForm extends Component {
             type="submit"
             disabled={submitting}
             onClick={handleSubmit(data => {
-              onEdit(data, post.id)
+              let formData = new FormData();
+              Object.keys(data).forEach((key) => {
+                key === 'file' && formData.append('file', data[key][0]);
+                formData.append(key, data[key]);
+              });
+              onEdit(formData, post.id)
               .then(() => onHide())
               .catch(({response, message}) => {
                 const { status, data } = response;

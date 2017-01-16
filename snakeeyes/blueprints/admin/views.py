@@ -22,9 +22,9 @@ admin = Blueprint('admin', __name__,
                   template_folder='templates', url_prefix='/admin')
 
 
-# @admin.before_request
-# @login_required
-# @role_required('admin')
+@admin.before_request
+@login_required
+@role_required('admin')
 def before_request():
     """ Protect all of the admin endpoints. """
     pass

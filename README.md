@@ -21,8 +21,8 @@ Login with username: "admin", password: "devpassword" for access to account with
 - General public user account allows scheduling appointments and commenting on posts
 - Individual client and staff accounts can only be created by a user with admin privileges
 - Individual blog posts show list of related posts and comments
-- Admin pages with instantaneous keyword search filter, column sorting and comprehensive CRUD functionality 
-- Forms feature client-side validation, image file upload and address autocomplete
+- Admin pages with instantaneous keyword search filter, column sorting and full CRUD functionality 
+- Forms feature client-side field validation, image file uploading, address autocomplete and markdown editor with preview.
 - Admin dashboard and pages are protected and require authentication and admin user privileges
 - Certain admin operations (e.g. POST, PUT, DELETE requests) additionally require a JWT (obtained client-side from admin pages).
 - On expiry of JWT, user is redirected back to JWT request page (inputted data is automatically saved)
@@ -50,6 +50,7 @@ Login with username: "admin", password: "devpassword" for access to account with
 - HTTP requests with <b>Axios</b>
 - Modal implementation with <b>React-Bootstrap</b>
 - Infinite scrolling with <b>Redux Infinite Scroll</b>
+- Markdown textarea input with <b>React-Markdown-Area</b>
 - <b>Lodash</b> JavaScript helper functions
 - Front-end module bundling with <b>Webpack</b>
 - <b>Docker</b> for containerization

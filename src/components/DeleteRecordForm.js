@@ -30,7 +30,6 @@ class DeleteRecordForm extends Component {
                 onDelete()
                 .then(() => onHide())
                 .catch(({response, message}) => {
-                  console.log(response, message);
                   const { status, data } = response;
                   if (status === 401) {
                     onJWTExpired();

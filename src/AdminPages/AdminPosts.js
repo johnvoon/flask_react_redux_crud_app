@@ -57,10 +57,6 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(deletePost(JWT, id));
     },
 
-    onDrop: (file) => {
-      dispatch(uploadImage(file));
-    },
-
     onFilter: (data, {target: {value}}) => {
       dispatch(filterAdminData(value, data));
     },
@@ -95,7 +91,7 @@ class AdminPosts extends Component {
   }
 
   render() {
-    const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange, onDrop } = this.props;
+    const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { posts, postAuthors, practiceAreas } = this.props;
     const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
     const { currentRecord } = this.state;

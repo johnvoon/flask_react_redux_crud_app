@@ -56,6 +56,9 @@ class PostsAPI(Resource):
             with current_app.app_context():
                 post.img_src = url_for('static', filename='images/2000/{}'.format(filename))
                 post.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
+        else:
+            post.img_src = None
+            post.thumbnail_src = None
 
         try: 
             post.save()
@@ -77,22 +80,41 @@ class PostAPI(Resource):
     @staticmethod
     @jwt_required()
     def put(post_id):
-        content = request.get_json()
+        content = request.form
+        image = request.files['file']
         post = Post.query.get_or_404(post_id)
+
         if post:
             post.title = content['title']
             post.author_id = content['author']
             post.practice_area_id = content['practiceArea']
             post.body = [content['body']]
             post.summary = content['summary']
-            post.img_src = content['imgSrc']
-            post.thumbnail_src = content['imgSrc']
+
+            if image:
+                filename = secure_filename(image.filename)
+                path_to_image_2000 = os.path.join(current_app.config['IMAGES_2000'], filename)
+                path_to_image_400 = os.path.join(current_app.config['IMAGES_400'], filename)
+                if not os.path.isfile(path_to_image_2000) and not os.path.isfile(path_to_image_400):
+                    image_2000 = Image.open(image)
+                    image_400 = Image.open(image)
+                    image_2000.thumbnail((2000, 2000))
+                    image_400.thumbnail((400, 400))
+                    image_2000.save(path_to_image_2000)
+                    image_400.save(path_to_image_400)
+                
+                with current_app.app_context():
+                    post.img_src = url_for('static', filename='images/2000/{}'.format(filename))
+                    post.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
+            else:
+                post.img_src = None
+                post.thumbnail_src = None
         
-            try: 
-                post.save()
-                return render_json(200, {'post': post.to_json()})
-            except:
-                return render_json(500, {'message': "An error occurred."})
+        try: 
+            post.save()
+            return render_json(200, {'post': post.to_json()})
+        except:
+            return render_json(500, {'message': "An error occurred."})
 
         return render_json(404, {'message': 'No post with ID {} found'.format(post_id)})
 

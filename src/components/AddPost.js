@@ -4,7 +4,7 @@ import AddPostForm from './AddPostForm';
 
 export default class AddPost extends Component {
   render() {
-    const { onAdd, onHide, onGetJWT, onJWTExpired, onDrop } = this.props;
+    const { onAdd, onHide, onGetJWT, onJWTExpired } = this.props;
     const { postAuthors, practiceAreas, JWT, JWTExpired } = this.props;
 
     return (
@@ -17,8 +17,7 @@ export default class AddPost extends Component {
                   practiceAreas={practiceAreas}
                   onJWTExpired={onJWTExpired}
                   onAdd={onAdd}
-                  onHide={onHide}
-                  onDrop={onDrop}/>}
+                  onHide={onHide}/>}
       </div>
     );
   }

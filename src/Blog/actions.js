@@ -130,11 +130,7 @@ export function deletePost(config, id) {
   };
 }
 
-function loadImage(file) {
-  
-}
-
-function fetchRelatedPosts(id, practiceArea) {
+export function fetchRelatedPosts(id, practiceArea) {
   return dispatch => {
     const request = axios.get('http://localhost:8000/api/posts');
     id = Number(id);

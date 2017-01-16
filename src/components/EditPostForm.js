@@ -5,6 +5,7 @@ import SelectFormGroup from './SelectFormGroup';
 import TextAreaFormGroup from './TextAreaFormGroup';
 import StaticFormGroup from './StaticFormGroup';
 import FileUploadFormGroup from './FileUploadFormGroup';
+import TextEditorFormGroup from './TextEditorFormGroup';
 import ErrorAlert from './ErrorAlert';
 import { required, maxLength, createOptionsList } from '../utils';
 import moment from 'moment';
@@ -70,10 +71,8 @@ class EditPostForm extends Component {
           options={postAuthorOptions}/>
         <Field 
           name="body"
-          component={TextAreaFormGroup}
-          label="Body"
-          validate={required}
-          rows="20"/>
+          component={TextEditorFormGroup}
+          label="Body"/>
         <Field 
           name="summary"
           component={TextAreaFormGroup}
@@ -89,8 +88,7 @@ class EditPostForm extends Component {
         <Field 
           name="file"
           component={FileUploadFormGroup}
-          label="Image Source"
-          validate={required}/>
+          label="Image Source"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -149,5 +147,6 @@ EditPostForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'EditPostForm'
+  form: 'EditPostForm',
+  destroyOnUnmount: false
 })(EditPostForm);

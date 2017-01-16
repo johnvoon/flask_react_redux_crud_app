@@ -27,7 +27,7 @@ class PostsAPI(Resource):
     def post(): 
         content = request.form
         title = content['title']
-        image = request.files['file']
+        image = request.files.get('file', default=None)
 
         if Post.find_by_title(title):
             return render_json(404, 
@@ -57,8 +57,8 @@ class PostsAPI(Resource):
                 post.img_src = url_for('static', filename='images/2000/{}'.format(filename))
                 post.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
         else:
-            post.img_src = None
-            post.thumbnail_src = None
+            post.img_src = ''
+            post.thumbnail_src = ''
 
         try: 
             post.save()
@@ -81,7 +81,7 @@ class PostAPI(Resource):
     @jwt_required()
     def put(post_id):
         content = request.form
-        image = request.files['file']
+        image = request.files.get('file', default=None)
         post = Post.query.get_or_404(post_id)
 
         if post:
@@ -107,8 +107,8 @@ class PostAPI(Resource):
                     post.img_src = url_for('static', filename='images/2000/{}'.format(filename))
                     post.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
             else:
-                post.img_src = None
-                post.thumbnail_src = None
+                post.img_src = ''
+                post.thumbnail_src = ''
         
         try: 
             post.save()

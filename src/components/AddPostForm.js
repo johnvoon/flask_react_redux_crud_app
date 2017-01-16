@@ -5,6 +5,7 @@ import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFormGroup';
 import TextAreaFormGroup from './TextAreaFormGroup';
 import FileUploadFormGroup from './FileUploadFormGroup';
+import TextEditorFormGroup from './TextEditorFormGroup';
 import { required, maxLength, createOptionsList } from '../utils';
 
 
@@ -23,7 +24,7 @@ class AddPostForm extends Component {
     const { errorMessage } = this.state;
     const postAuthorOptions = createOptionsList(postAuthors, "name");
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
-    
+
     return (
       <form className="form-horizontal">
         <Field 
@@ -41,10 +42,9 @@ class AddPostForm extends Component {
         </Field>
         <Field 
           name="body"
-          component={TextAreaFormGroup}
+          component={TextEditorFormGroup}
           label="Body"
-          validate={required}
-          rows="20"/>
+          validate={required}/>
         <Field 
           name="summary"
           component={TextAreaFormGroup}
@@ -60,8 +60,7 @@ class AddPostForm extends Component {
         <Field 
           name="file"
           component={FileUploadFormGroup}
-          label="Image Source"
-          validate={required}/>
+          label="Image Source"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -118,6 +117,6 @@ AddPostForm.propTypes = {
 };
 
 export default reduxForm({
-  form:  'AddPostForm',
+  form: 'AddPostForm',
   destroyOnUnmount: false
 })(AddPostForm);

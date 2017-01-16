@@ -8,7 +8,7 @@ export default class Post extends Component {
     const postUpdated = moment(post.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
     const postBody = (post.body || []).map((paragraph, idx) => {
       return (
-        <p key={idx}>{paragraph}</p>
+        <div dangerouslySetInnerHTML={{__html: paragraph}}></div>
       );
     });
 

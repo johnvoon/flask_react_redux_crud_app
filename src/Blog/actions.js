@@ -6,14 +6,14 @@ import { postSchema,
          postAuthorSchema,
          commentSchema } from '../constants/Schemas';
 import { sortByDate } from '../utils';
+import { recordAdded, 
+         recordEdited, 
+         recordDeleted } from '../AdminPages/actions';
 import { POSTS_LOADED,
+         POST_LOADED,
          PRACTICE_AREAS_LOADED,
          POST_AUTHORS_LOADED,
-         POST_LOADED,
-         COMMENTS_LOADED,
-         POST_ADDED,
-         POST_EDITED,
-         POST_DELETED } from '../constants/actionTypes';
+         COMMENTS_LOADED } from '../constants/actionTypes';
 
 export function fetchBlogData() {
   return dispatch => {
@@ -80,11 +80,12 @@ export function fetchPostData(id) {
 }
 
 export function fetchPost(id) {
+  console.log(id);
   return (dispatch) => {
     return axios.get(`http://localhost:8000/api/posts/${id}`)
       .then(({data: {post}}) => {
         const normalized = normalize(post, postSchema);
-        dispatch(postLoaded(normalized.entities, id));
+        dispatch(postLoaded(normalized.entities, post.id));
       });
   };
 }
@@ -94,7 +95,7 @@ export function addPost(config, content) {
     return axios.post('http://localhost:8000/api/posts', content, config)
       .then(({data: {post}}) => {
         const normalized = normalize(post, postSchema);
-        dispatch(postAdded(normalized.entities, post.id));
+        dispatch(recordAdded(normalized.entities, normalized.entities.posts, post.id));
       })
   };
 }
@@ -104,7 +105,7 @@ export function editPost(config, content, id) {
     return axios.put(`http://localhost:8000/api/posts/${id}`, content, config)
       .then(({data: {post}}) => {
         const normalized = normalize(post, postSchema);
-        dispatch(postEdited(normalized.entities));
+        dispatch(recordEdited(normalized.entities));
       });
   };
 }
@@ -121,9 +122,8 @@ export function deletePost(config, id) {
           Object.keys(remainingPosts), 
           'descending'
         );
-        dispatch(postDeleted(
-          remainingPosts, 
-          remainingPostIds,
+        dispatch(recordDeleted(
+          remainingPosts,
           post.id
         ));
       });
@@ -178,6 +178,14 @@ export function postsLoaded(entities, posts) {
   };
 }
 
+export function postLoaded(entities, postId) {
+  return {
+    type: POST_LOADED,
+    entities,
+    postId
+  };
+}
+
 export function commentsLoaded(entities, comments) {
   return {
     type: COMMENTS_LOADED,
@@ -197,38 +205,5 @@ export function postAuthorsLoaded(entities) {
   return {
     type: POST_AUTHORS_LOADED,
     entities
-  };
-}
-
-export function postLoaded(entities, post) {
-  return {
-    type: POST_LOADED,
-    entities,
-    post
-  };
-}
-
-export function postAdded(entities, addedPost) {
-  return {
-    type: POST_ADDED,
-    entities,
-    addedPost
-  };
-}
-
-export function postEdited(entities) {
-  console.log(entities);
-  return {
-    type: POST_EDITED,
-    entities
-  };
-}
-
-export function postDeleted(remainingEntities, posts, deletedPost) {
-  return {
-    type: POST_DELETED,
-    remainingEntities,
-    posts,
-    deletedPost
   };
 }

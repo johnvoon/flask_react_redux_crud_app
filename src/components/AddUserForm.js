@@ -13,19 +13,38 @@ class AddUserForm extends Component {
     };
   }
 
+  _handleSubmit(data) {
+    const { onAdd, onHide, onJWTExpired } = this.props;
+      
+    let formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+    onAdd(formData)
+    .then(() => onHide())
+    .catch(({response, message}) => {
+      const { status, data } = response;
+      if (status === 401) {
+        onJWTExpired();
+      } else if (status === 404) {
+        this.setState({
+          errorMessage: data.message
+        })
+      } else {
+        this.setState({
+          errorMessage: message
+        })
+      }
+    });
+  }
+
   render() {
-    const { onAdd, onHide,
-            handleSubmit, pristine, reset, submitting } = this.props;
+    const { onAdd, onHide, onJWTExpired } = this.props;
+    const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
 
     return (
-      <form className="form-horizontal" onClick={handleSubmit(data => {
-        onAdd(data)
-        .then(() => onHide())
-        .catch(error => this.setState({
-          errorMessage: {error}
-        }));
-      })}>
+      <form className="form-horizontal">
         <Field 
           name="username"
           type="text"
@@ -62,10 +81,10 @@ class AddUserForm extends Component {
           label="Last Name"
           validate={required}/>
         <Field 
-          name="unitNo"
-          type="text"
+          name="mobileNumber"
+          type="tel"
           component={InputFormGroup}
-          label="Unit No"
+          label="Mobile Number"
           validate={required}/>
         <Field 
           name="addressSearch"
@@ -76,48 +95,44 @@ class AddUserForm extends Component {
           validate={required}>
         </Field>
         <Field 
-          name="unitNo"
+          name="unitNumber"
           type="text"
           component={InputFormGroup}
-          label="Unit No"
-          validate={required}/>
+          label="Unit Number"/>
         <Field 
           name="streetAddress"
           type="text"
           component={InputFormGroup}
-          label="Street Address"
-          validate={required}/>
+          label="Street Address"/>
         <Field 
           name="suburb"
           type="text"
           component={InputFormGroup}
-          label="Suburb"
-          validate={required}/>
+          label="Suburb"/>
         <Field 
           name="state"
           type="text"
           component={InputFormGroup}
-          label="State"
-          validate={required}/>
+          label="State"/>
         <Field 
           name="postCode"
           type="text"
           component={InputFormGroup}
-          label="Post Code"
-          validate={required}/>
-        <Field 
-          name="suburb"
-          type="text"
-          component={InputFormGroup}
-          label="Unit No"
-          validate={required}/>
+          label="Post Code"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
-          <button className="btn btn-primary pull-right" type="button" disabled={pristine || submitting} onClick={reset}>
+          <button 
+            className="btn btn-primary pull-right" 
+            type="button" 
+            disabled={pristine || submitting} 
+            onClick={reset}>
             Reset
           </button>
           <button
-            className="btn btn-primary pull-right" type="submit" disabled={submitting}>
+            className="btn btn-primary pull-right" 
+            type="submit" 
+            disabled={submitting}
+            onClick={handleSubmit(data => this._handleSubmit(data))}>
             Save
           </button>
         </div>
@@ -136,5 +151,6 @@ AddUserForm.propTypes = {
 };
 
 export default reduxForm({
-  form:  'AddUserForm'
+  form:  'AddUserForm',
+  destroyOnUnmount: false
 })(AddUserForm);

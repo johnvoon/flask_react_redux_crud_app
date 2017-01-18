@@ -36,24 +36,28 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchUsers());
     },
 
+    onGetJWT: (data) => {
+      return dispatch(getJWT(data));
+    },
+
+    onJWTExpired: () => {
+      dispatch(removeJWT());
+    },
+
     onAdd: (content) => {
-      dispatch(addUser(content));
+      return dispatch(addUser(content));
     },
 
     onEdit: (content, id) => {
-      dispatch(editUser(content, id));
+      return dispatch(editUser(content, id));
     },
 
     onDelete: (id) => {
-      dispatch(deleteUser(id));
+      return dispatch(deleteUser(id));
     },
 
-    onGetJWT: (data) => {
-      dispatch(getJWT(data));
-    },
-
-    onFilter: (data, {target: {value}}) => {
-      dispatch(filterAdminData(value, data));
+    onFilter: ({target: {value}}) => {
+      dispatch(filterAdminData(value));
     },
 
     onSort: (sortBy) => {
@@ -86,39 +90,35 @@ class AdminUsers extends Component {
   }
 
   render() {
-    const { onGetJWT, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
+    const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { users } = this.props;
-    const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, successMessage } = this.props;
+    const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
+    const { currentRecord, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `JWT ${JWT}`
       }
     };
 
     return (
-      <div>
-        <h1>
-          List of All Users
-          <button
-            className="btn btn-primary btn-lg sm-margin-top"
-            onClick={() => this.setState({showAddModal: true})}>
-            Add
-          </button>
-        </h1>
+      <div className="container-fluid">
+        <h1>List of All Users</h1>
+        <button
+          className="btn btn-primary btn-lg sm-margin-top"
+          onClick={() => this.setState({showAddModal: true})}>
+          Add
+        </button>
         {successMessage && <SuccessAlert message={successMessage}/>}
         <SearchField 
           filterValues={filterValues}
-          onFilter={onFilter.bind(null, users)}
+          onFilter={onFilter}
         />
-        <div className="row">
-          <Pagination
-            pageNavLength={5}
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onPageNumberChange={onPageNumberChange}
-          />  
-        </div>
+        <Pagination
+          pageNavLength={5}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageNumberChange={onPageNumberChange}
+        />
         <PageLengthMenu 
           pageLengthOptions={[ 5, 10, 20]}
           pageLength={pageLength}
@@ -130,8 +130,12 @@ class AdminUsers extends Component {
             { title: 'Username', component: TableUserInfoLink, prop: 'username'},
             { title: 'Full Name', component: TableHeading, prop: 'fullName'},
             { title: 'Role', component: TableHeading, prop: 'role'},
-            { title: '', component: TableEditLink, className: 'text-center'},
-            { title: '', component: TableDeleteLink, className: 'text-center'}
+            { title: '', 
+              component: (val, row) => this.renderTableEditLink(val, row),
+              className: 'text-center' },
+            { title: '', 
+              component: (val, row) => this.renderTableDeleteLink(val, row),
+              className: 'text-center' }
           ]}
           sortBy={sortBy}
           onSort={onSort}
@@ -140,34 +144,40 @@ class AdminUsers extends Component {
         />
         <ModalLarge 
           title="Add New User" 
-          show={this.state.showAddModal} 
+          show={showAddModal} 
           onHide={() => this.setState({showAddModal: false})}>
           <AddUser
             onGetJWT={onGetJWT.bind(null)}
-            onHide={() => this.setState({showAddModal: false})}
             onAdd={onAdd.bind(null)}
-            JWT={JWT}/>
+            onHide={() => this.setState({showAddModal: false})}
+            onJWTExpired={onJWTExpired}
+            JWT={JWT}
+            JWTExpired={JWTExpired}/>
         </ModalLarge>
         <ModalLarge
-          title={`Edit This User (ID: ${this.state.currentRecord.id})`}
-          show={this.state.showEditModal} 
+          title={`Edit This User (ID: ${currentRecord.id})`}
+          show={showEditModal} 
           onHide={() => this.setState({showEditModal: false})}>
           <EditUser
-            user={this.state.currentRecord}
+            user={currentRecord}
             onEdit={onEdit.bind(null)}
             onHide={() => this.setState({showEditModal: false})}
             onGetJWT={onGetJWT.bind(null)}
-            JWT={JWT}/>
+            onJWTExpired={onJWTExpired}
+            JWT={JWT}
+            JWTExpired={JWTExpired}/>
         </ModalLarge>
         <ModalSmall
-          title={`Delete User (ID: ${this.state.currentRecord.id})`}
-          show={this.state.showDeleteModal} 
+          title={`Delete User (ID: ${currentRecord.id})`}
+          show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
           <DeleteRecord
-            onDelete={onDelete.bind(null, this.state.currentRecord.id)}
+            onDelete={onDelete.bind(null, currentRecord.id)}
             onHide={() => this.setState({showDeleteModal: false})}
             onGetJWT={onGetJWT.bind(null)}
-            JWT={JWT}/>
+            onJWTExpired={onJWTExpired}
+            JWT={JWT}
+            JWTExpired={JWTExpired}/>
         </ModalSmall>
       </div>
     );

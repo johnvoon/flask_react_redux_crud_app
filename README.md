@@ -23,6 +23,7 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Individual blog posts show list of related posts and comments
 - Admin pages with instantaneous keyword search filter, column sorting and full CRUD functionality 
 - Forms feature client-side field validation, image file uploading, address autocomplete and RichTextEditor.
+- Forms prompt different information for adding different types of users, e.g. (staff, clients or public users)
 - Admin dashboard and pages are protected and require authentication and admin user privileges
 - Certain admin operations (e.g. POST, PUT, DELETE requests) additionally require a JWT (obtained client-side from admin pages).
 - On expiry of JWT, user is redirected back to JWT request page (inputted data is automatically saved)
@@ -48,6 +49,7 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Date-time formatting with <b>Moment.js</b> 
 - JSON data normalization with <b>Normalizr</b>
 - HTTP requests with <b>Axios</b>
+- Memoized selectors with <b>Reselect</b>
 - Modal implementation with <b>React-Bootstrap</b>
 - Infinite scrolling with <b>Redux Infinite Scroll</b>
 - RichTextEditor element using <b>React-RTE</b>

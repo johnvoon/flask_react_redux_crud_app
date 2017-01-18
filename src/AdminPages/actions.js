@@ -2,7 +2,10 @@ import {
   CHANGE_PAGE_LENGTH,
   CHANGE_PAGE_NUMBER,
   SORT_DATA,
-  FILTER_ADMIN_DATA
+  FILTER_ADMIN_DATA,
+  RECORD_ADDED,
+  RECORD_EDITED,
+  RECORD_DELETED
 } from '../constants/actionTypes';
 
 export function changePageLength(value) {
@@ -26,10 +29,34 @@ export function sortData(sortBy) {
   };
 }
 
-export function filterAdminData(value, data) {
+export function filterAdminData(value) {
   return {
     type: FILTER_ADMIN_DATA,
-    value,
-    data
+    value
   };
 }
+
+export function recordAdded(entities, addedRecord, addedRecordId) {
+  return {
+    type: RECORD_ADDED,
+    entities,
+    addedRecord,
+    addedRecordId
+  };
+}
+
+export function recordEdited(entities) {
+  return {
+    type: RECORD_EDITED,
+    entities
+  };
+}
+
+export function recordDeleted(remainingEntities, deletedRecord) {
+  return {
+    type: RECORD_DELETED,
+    remainingEntities,
+    deletedRecord,
+  };
+}
+

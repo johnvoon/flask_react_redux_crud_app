@@ -4,12 +4,15 @@ import EditUserForm from './EditUserForm';
 
 class EditUser extends Component {
   render() {
-    const { user, onEdit, onHide, getJWT, token } = this.props;
+    const { user, onEdit, onHide, onGetJWT, onJWTExpired, JWT, JWTExpired } = this.props;
     
     return (
       <div>
-        {!token && <GetJWTForm getJWT={getJWT}/>}
-        {token && <EditUserForm
+        {!JWT && <GetJWTForm 
+                   onGetJWT={onGetJWT}
+                   JWTExpired={JWTExpired}/>}
+        {JWT && <EditUserForm
+                    onJWTExpired={onJWTExpired}
                     onEdit={onEdit}
                     user={user}
                     onHide={onHide}/>}
@@ -22,8 +25,10 @@ EditUser.propTypes = {
   user: PropTypes.object.isRequired,
   onEdit: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
-  getJWT: PropTypes.func.isRequired,
-  token: PropTypes.string.isRequired
+  onGetJWT: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  JWT: PropTypes.string.isRequired,
+  JWTExpired: PropTypes.bool.isRequired
 };
 
 export default EditUser;

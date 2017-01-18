@@ -39,8 +39,33 @@ class EditPostForm extends Component {
     initialize(initData);
   }
 
+  _handleSubmit(data) {
+    const { post, onEdit, onHide, onJWTExpired } = this.props;
+
+    let formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      key === 'file' && formData.append('file', data[key][0]);
+      formData.append(key, data[key]);
+    });
+    onEdit(formData, post.id)
+    .then(() => onHide())
+    .catch(({response, message}) => {
+      const { status, data } = response;
+      if (status === 401) {
+        onJWTExpired();
+      } else if (status === 404) {
+        this.setState({
+          errorMessage: data.message
+        })
+      } else {
+        this.setState({
+          errorMessage: message
+        })
+      }
+    });
+  }
+
   render() {
-    const { onEdit, onHide, onJWTExpired } = this.props;
     const { post, postAuthors, practiceAreas } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
@@ -102,29 +127,7 @@ class EditPostForm extends Component {
             className="btn btn-primary pull-right" 
             type="submit"
             disabled={submitting}
-            onClick={handleSubmit(data => {
-              let formData = new FormData();
-              Object.keys(data).forEach((key) => {
-                key === 'file' && formData.append('file', data[key][0]);
-                formData.append(key, data[key]);
-              });
-              onEdit(formData, post.id)
-              .then(() => onHide())
-              .catch(({response, message}) => {
-                const { status, data } = response;
-                if (status === 401) {
-                  onJWTExpired();
-                } else if (status === 404) {
-                  this.setState({
-                    errorMessage: data.message
-                  })
-                } else {
-                  this.setState({
-                    errorMessage: message
-                  })
-                }
-              });
-            })}>
+            onClick={handleSubmit(data => this._handleSubmit(data))}>
             Save
           </button>
         </div>

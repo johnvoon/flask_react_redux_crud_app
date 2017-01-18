@@ -21,11 +21,13 @@ import { filterAdminData,
          sortData, 
          changePageLength, 
          changePageNumber } from './actions';
+import { selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
   const { blogEntities, adminPages } = state;
-
   return {
+    pageData: selectPageData(state),
+    totalPages: selectTotalPages(state),
     ...blogEntities,
     ...adminPages
   };
@@ -57,8 +59,8 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(deletePost(JWT, id));
     },
 
-    onFilter: (data, {target: {value}}) => {
-      dispatch(filterAdminData(value, data));
+    onFilter: ({target: {value}}) => {
+      dispatch(filterAdminData(value));
     },
 
     onSort: (sortBy) => {
@@ -90,11 +92,30 @@ class AdminPosts extends Component {
     this.props.onFetchBlogData();
   }
 
+  renderTableEditLink(val, row) {
+    return (
+      <TableEditLink 
+        handleClick={() => {
+          this.setState({
+            currentRecord: row, 
+            showEditModal: true })}}/>
+    );
+  }
+
+  renderTableDeleteLink(val, row) {
+    return (
+      <TableDeleteLink 
+        handleClick={() => this.setState({
+          currentRecord: row,
+          showDeleteModal: true })}/>
+    );
+  }
+
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { posts, postAuthors, practiceAreas } = this.props;
     const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord } = this.state;
+    const { currentRecord, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -112,7 +133,7 @@ class AdminPosts extends Component {
         {successMessage && <SuccessAlert message={successMessage}/>}
         <SearchField 
           filterValues={filterValues}
-          onFilter={onFilter.bind(null, posts)}/>
+          onFilter={onFilter}/>
         <Pagination
           pageNavLength={5}
           totalPages={totalPages}
@@ -129,25 +150,10 @@ class AdminPosts extends Component {
             { title: 'Author', component: TableHeading, prop: 'author'},
             { title: 'Practice Area', component: TableHeading, prop: 'practiceArea'},
             { title: '', 
-              component: (val, row) => {
-                return (
-                  <TableEditLink 
-                    handleClick={() => {
-                      this.setState({
-                        currentRecord: row, 
-                        showEditModal: true })}}/>
-                );
-              }, 
+              component: (val, row) => this.renderTableEditLink(val, row),
               className: 'text-center' },
             { title: '', 
-              component: (val, row) => {
-                return (
-                  <TableDeleteLink 
-                    handleClick={() => this.setState({
-                      currentRecord: row,
-                      showDeleteModal: true })}/>
-                );
-              },
+              component: (val, row) => this.renderTableDeleteLink(val, row),
               className: 'text-center' }
           ]}
           sortBy={sortBy}
@@ -156,7 +162,7 @@ class AdminPosts extends Component {
           data={posts}/>
         <ModalLarge 
           title="Add New Post"
-          show={this.state.showAddModal} 
+          show={showAddModal} 
           onHide={() => this.setState({showAddModal: false})}>
           <AddPost
             postAuthors={postAuthors}
@@ -170,7 +176,7 @@ class AdminPosts extends Component {
         </ModalLarge>
         <ModalLarge
           title={`Edit This Post (ID: ${currentRecord.id})`}
-          show={this.state.showEditModal} 
+          show={showEditModal} 
           onHide={() => this.setState({showEditModal: false})}>
           <EditPost
             postAuthors={postAuthors}
@@ -185,7 +191,7 @@ class AdminPosts extends Component {
         </ModalLarge>
         <ModalLarge
           title={`Delete Post (ID: ${currentRecord.id})`}
-          show={this.state.showDeleteModal} 
+          show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
           <DeleteRecord
             onDelete={onDelete.bind(null, config, currentRecord.id)}

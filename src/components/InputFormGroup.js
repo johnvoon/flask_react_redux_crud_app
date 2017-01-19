@@ -1,7 +1,7 @@
 import React from 'react';
 
 const InputFormGroup = (field) => {
-  const { input, label, type, meta } = field;
+  const { input, label, type, meta, placeholder } = field;
   const error = meta.touched && meta.error;
   
   return (
@@ -15,6 +15,7 @@ const InputFormGroup = (field) => {
           id={input.name}
           type={type}
           value={input.value}
+          placeholder={placeholder}
           {...input}/>
         {error && <span className="text-danger">{meta.error}</span>}
       </div>

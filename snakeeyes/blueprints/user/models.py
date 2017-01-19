@@ -49,10 +49,11 @@ class User(UserMixin, ResourceMixin, db.Model):
     last_name = db.Column(db.String(256), index=True, nullable=False)
     unit_number = db.Column(db.String(128))
     street_address = db.Column(db.String(128))
-    phone_number = db.Column(db.String(128), nullable=False)
-    postcode = db.Column(db.Integer)
+    suburb = db.Column(db.String(128))
+    postcode = db.Column(db.String(4))
     state = db.Column(db.String(128))
     country = db.Column(db.String(128))
+    phone_number = db.Column(db.String(128), nullable=False)
 
     # Activity tracking.
     sign_in_count = db.Column(db.Integer, nullable=False, default=0)
@@ -80,6 +81,12 @@ class User(UserMixin, ResourceMixin, db.Model):
     @hybrid_property
     def first_last_name(self):
         return self.first_name + ' ' + self.last_name        
+
+    @hybrid_property
+    def full_address(self):
+        street_address = self.unit_number + "/" + self.street_address if self.unit_number else self.street_address
+        addressElements = [street_address, self.suburb, self.postcode, self.state, self.country]
+        return ", ".join(addressElements)
 
     @classmethod
     def find_by_identity(cls, identity):
@@ -254,12 +261,27 @@ class User(UserMixin, ResourceMixin, db.Model):
         return self.save()
 
     def to_json(self):
+        active = "Active" if self.active == True else "Disabled"
+        
         return {
             'id': self.id,
             'created': self.created_on,
+            'updated': self.updated_on,
+            'active': active,
             'firstLastName': self.first_last_name,
+            'firstName': self.first_name,
+            'middleName': self.middle_name,
+            'lastName': self.last_name.upper(),
             'fullName': self.full_name,
             'username': self.username,
             'email': self.email,
+            'phoneNumber': self.phone_number,
+            'unitNumber': self.unit_number,
+            'streetAddress': self.street_address,
+            'suburb': self.suburb,
+            'postcode': self.postcode,
+            'state': self.state,
+            'country': self.country,
+            'fullAddress': self.full_address,
             'role': self.role
         }

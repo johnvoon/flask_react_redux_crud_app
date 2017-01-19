@@ -4,11 +4,11 @@ import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
-import ModalSmall from '../components/ModalSmall';
 import ModalLarge from '../components/ModalLarge';
 import AddUser from '../components/AddUser';
 import EditUser from '../components/EditUser';
 import DeleteRecord from '../components/DeleteRecord';
+import UserInfo from '../components/UserInfo';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate'; 
 import TableUserInfoLink from '../components/TableUserInfoLink';
@@ -20,11 +20,14 @@ import { filterAdminData,
          sortData, 
          changePageLength, 
          changePageNumber } from './actions';
+import { selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
   const { userEntities, adminPages } = state;
-  
+  console.log(userEntities);
   return {
+    pageData: selectPageData(state),
+    totalPages: selectTotalPages(state),
     ...userEntities,
     ...adminPages
   };
@@ -78,6 +81,7 @@ class AdminUsers extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      showUserInfoModal: false,
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
@@ -89,11 +93,42 @@ class AdminUsers extends Component {
     this.props.onFetchUsers();
   }
 
+  renderTableEditLink(val, row) {
+    return (
+      <TableEditLink 
+        handleClick={() => {
+          this.setState({
+            currentRecord: row, 
+            showEditModal: true })}}/>
+    );
+  }
+
+  renderTableDeleteLink(val, row) {
+    return (
+      <TableDeleteLink 
+        handleClick={() => this.setState({
+          currentRecord: row,
+          showDeleteModal: true })}/>
+    );
+  }
+
+  renderUserInfoLink(val, row) {
+    return (
+      <TableUserInfoLink
+        username={val}
+        handleClick={(event) => {
+          event.preventDefault();
+          this.setState({
+           currentRecord: row,
+           showUserInfoModal: true })}}/>
+    );
+  }
+
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { users } = this.props;
     const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord, showAddModal, showEditModal, showDeleteModal } = this.state;
+    const { currentRecord, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -127,7 +162,9 @@ class AdminUsers extends Component {
         <Table 
           columns={[
             { title: 'Created On', component: TableDate, prop: 'created' },
-            { title: 'Username', component: TableUserInfoLink, prop: 'username'},
+            { title: 'Username', 
+              component: (val, row) => this.renderUserInfoLink(val, row), 
+              prop: 'username'},
             { title: 'Full Name', component: TableHeading, prop: 'fullName'},
             { title: 'Role', component: TableHeading, prop: 'role'},
             { title: '', 
@@ -142,6 +179,14 @@ class AdminUsers extends Component {
           pageData={pageData}
           data={users}
         />
+        <ModalLarge
+          title="User Info"
+          show={showUserInfoModal}
+          onHide={() => this.setState({showUserInfoModal: false})}>
+          <UserInfo
+            onHide={() => this.setState({showUserInfoModal: false})}
+            user={currentRecord}/>
+        </ModalLarge>
         <ModalLarge 
           title="Add New User" 
           show={showAddModal} 
@@ -167,7 +212,7 @@ class AdminUsers extends Component {
             JWT={JWT}
             JWTExpired={JWTExpired}/>
         </ModalLarge>
-        <ModalSmall
+        <ModalLarge
           title={`Delete User (ID: ${currentRecord.id})`}
           show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
@@ -178,7 +223,7 @@ class AdminUsers extends Component {
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}/>
-        </ModalSmall>
+        </ModalLarge>
       </div>
     );
   }

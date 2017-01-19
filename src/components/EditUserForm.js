@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from  'redux-form';
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFormGroup';
-import TextAreaFormGroup from './TextAreaFormGroup';
 import StaticFormGroup from './StaticFormGroup';
 import ErrorAlert from './ErrorAlert';
 import { required, maxLength, createOptionsList } from '../utils';
@@ -23,10 +22,12 @@ class EditUserForm extends Component {
 
   handleInitialize() {
     const { user } = this.props;
+    console.log(user);
     const { initialize } = this.props;
     const initData = {
       "username": user.title,
-      "password": user.password,
+      "active": user.active === "Active" ? "1" : "0",
+      "role": user.role,
       "email": user.email,
       "firstName": user.firstName,
       "middleName": user.middleName,
@@ -35,8 +36,9 @@ class EditUserForm extends Component {
       "unitNumber": user.unitNumber,
       "streetAddress": user.streetAddress,
       "suburb": user.suburb,
+      "postcode": user.postcode,
       "state": user.state,
-      "postCode": user.postCode
+      "country": user.country
     };
 
     initialize(initData);
@@ -74,7 +76,9 @@ class EditUserForm extends Component {
     
     const userCreated = moment(user.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const userUpdated = moment(user.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
-
+    const activeOptions = ["1 - Active", "2 - Disabled"]
+    const roleOptions = ["admin - Admin", "client - Client", "staff - Staff", "public - Public"]
+    
     return (
       <form className="form-horizontal">
         <StaticFormGroup 
@@ -83,6 +87,18 @@ class EditUserForm extends Component {
         <StaticFormGroup 
           label="Updated"
           text={userUpdated}/>
+        <Field 
+          name="active"
+          component={SelectFormGroup}
+          label="Status"
+          validate={required}
+          options={activeOptions}/>   
+        <Field 
+          name="role"
+          component={SelectFormGroup}
+          label="Role"
+          validate={required}
+          options={roleOptions}/>        
         <Field 
           name="username"
           type="text"
@@ -128,9 +144,8 @@ class EditUserForm extends Component {
           name="addressSearch"
           type="text"
           component={InputFormGroup}
-          label=""
-          placeholder="Enter address to search"
-          validate={required}>
+          label="Address Search"
+          placeholder="Enter address to search">
         </Field>
         <Field 
           name="unitNumber"
@@ -153,10 +168,10 @@ class EditUserForm extends Component {
           component={InputFormGroup}
           label="State"/>
         <Field 
-          name="postCode"
+          name="postcode"
           type="text"
           component={InputFormGroup}
-          label="Post Code"/>
+          label="Postcode"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 

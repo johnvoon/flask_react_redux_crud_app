@@ -122,6 +122,7 @@ def users():
         role = 'public' if random_percent >= 0.5 \
                else 'staff' if random_percent >= 0.25 \
                else 'client'
+        street_address = fake.building_number() + ' ' + fake.street_name()
 
         params = {
             'created_on': created_on,
@@ -134,10 +135,11 @@ def users():
             'middle_name': fake.first_name(),
             'last_name': fake.last_name(),
             'unit_number': fake.building_number(),
-            'street_address': fake.street_address(),
+            'street_address': street_address,
             'postcode': fake.postcode(),
             'state': fake.state(),
-            'country': fake.country(),
+            'suburb': fake.city(),
+            'country': 'Australia',
             'phone_number': fake.phone_number(),
             'sign_in_count': random.random() * 100,
             'current_sign_in_on': created_on,

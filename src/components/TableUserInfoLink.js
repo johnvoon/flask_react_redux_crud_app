@@ -1,13 +1,8 @@
 import React from 'react';
 
-const TableUserInfoLink = (val, row) => {
+const TableUserInfoLink = (props) => {
   return (
-    <a onClick={(event) => {
-         event.preventDefault();
-         this.setState({
-         currentUser: row,
-         showUserInfoModal: true
-       })}}/>
+    <a onClick={props.handleClick}>{props.username}</a>
   );
 };
 

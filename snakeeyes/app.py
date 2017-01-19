@@ -11,6 +11,7 @@ from snakeeyes.blueprints.blog import posts_api
 from snakeeyes.blueprints.blog import comments_api
 from snakeeyes.blueprints.practice_area import practice_areas_api
 from snakeeyes.blueprints.staff import staff_api
+from snakeeyes.blueprints.user import users_api
 from snakeeyes.blueprints.contact import contact
 from snakeeyes.blueprints.user import user
 from snakeeyes.blueprints.user.models import User
@@ -81,6 +82,7 @@ def create_app(settings_override=None):
     app.register_blueprint(comments_api.blueprint, url_prefix='/api')
     app.register_blueprint(practice_areas_api.blueprint, url_prefix='/api')
     app.register_blueprint(staff_api.blueprint, url_prefix='/api')
+    app.register_blueprint(users_api.blueprint, url_prefix='/api')
     app.register_blueprint(contact)
     app.register_blueprint(user)
     extensions(app)

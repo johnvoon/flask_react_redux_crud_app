@@ -4,6 +4,8 @@ A modern law firm website I would enjoy using.
 
 <strong>LIVE AT: TBA</strong>
 
+<strong>Development process documented at: medium.com</strong>
+
 <strong>Note: Please use Chrome for now as cross-browser compatibility is still being implemented.</strong>
 
 ## Overview

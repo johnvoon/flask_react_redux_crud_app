@@ -90,7 +90,7 @@ class AddUserForm extends Component {
           name="addressSearch"
           type="text"
           component={InputFormGroup}
-          label=""
+          label="Address Search"
           placeholder="Enter address to search"
           validate={required}>
         </Field>

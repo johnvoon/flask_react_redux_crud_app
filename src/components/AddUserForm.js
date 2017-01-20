@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from  'redux-form';
 import ErrorAlert from './ErrorAlert';
 import InputFormGroup from './InputFormGroup';
-import { required } from '../utils';
+import SelectFormGroup from './SelectFormGroup';
+import AsyncValidationFormGroup from './AsyncValidationFormGroup';
+import { required, email, username, asyncValidate } from '../utils';
 
 
 class AddUserForm extends Component { 
@@ -42,15 +44,22 @@ class AddUserForm extends Component {
     const { onAdd, onHide, onJWTExpired } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
+    const roleOptions = ["client - Client", "staff - Staff", "public - Public"];
 
     return (
       <form className="form-horizontal">
         <Field 
+          name="role"
+          component={SelectFormGroup}
+          label="Role"
+          validate={required}
+          options={roleOptions}/>
+        <Field 
           name="username"
           type="text"
-          component={InputFormGroup}
+          component={AsyncValidationFormGroup}
           label="Username"
-          validate={required}/>
+          validate={[required, username]}/>
         <Field 
           name="password"
           type="password"
@@ -60,9 +69,9 @@ class AddUserForm extends Component {
         <Field 
           name="email"
           type="email"
-          component={InputFormGroup}
+          component={AsyncValidationFormGroup}
           label="Email"
-          validate={required}/>
+          validate={[required, email]}/>
         <Field 
           name="firstName"
           type="text"
@@ -110,15 +119,20 @@ class AddUserForm extends Component {
           component={InputFormGroup}
           label="Suburb"/>
         <Field 
+          name="postcode"
+          type="text"
+          component={InputFormGroup}
+          label="Postcode"/>
+        <Field 
           name="state"
           type="text"
           component={InputFormGroup}
           label="State"/>
         <Field 
-          name="postCode"
+          name="country"
           type="text"
           component={InputFormGroup}
-          label="Post Code"/>
+          label="Country"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -152,5 +166,7 @@ AddUserForm.propTypes = {
 
 export default reduxForm({
   form:  'AddUserForm',
+  asyncValidate,
+  asyncBlurFields: ['username', 'email'],
   destroyOnUnmount: false
 })(AddUserForm);

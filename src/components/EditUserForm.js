@@ -163,15 +163,20 @@ class EditUserForm extends Component {
           component={InputFormGroup}
           label="Suburb"/>
         <Field 
+          name="postcode"
+          type="text"
+          component={InputFormGroup}
+          label="Postcode"/>
+        <Field 
           name="state"
           type="text"
           component={InputFormGroup}
           label="State"/>
         <Field 
-          name="postcode"
+          name="country"
           type="text"
           component={InputFormGroup}
-          label="Postcode"/>
+          label="Country"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 

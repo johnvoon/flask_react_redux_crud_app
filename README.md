@@ -24,7 +24,7 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Individual client and staff accounts can only be created by a user with admin privileges
 - Individual blog posts show list of related posts and comments
 - Admin pages with instantaneous keyword search filter, column sorting and full CRUD functionality 
-- Forms feature client-side field validation, image file uploading, address autocomplete and RichTextEditor.
+- Forms feature client-side field validation, server-side async validation, image file uploading, address autocomplete and RichTextEditor input.
 - Forms prompt different information for adding different types of users, e.g. (staff, clients or public users)
 - Admin dashboard and pages are protected and require authentication and admin user privileges
 - Certain admin operations (e.g. POST, PUT, DELETE requests) additionally require a JWT (obtained client-side from admin pages).

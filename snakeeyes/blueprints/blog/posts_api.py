@@ -27,7 +27,7 @@ class PostsAPI(Resource):
     def post(): 
         content = request.form
         title = content['title']
-        image = request.files.get('file', default=None)
+        image = request.files.get('file', None)
 
         if Post.find_by_title(title):
             return render_json(404, 
@@ -81,7 +81,7 @@ class PostAPI(Resource):
     @jwt_required()
     def put(post_id):
         content = request.form
-        image = request.files.get('file', default=None)
+        image = request.files.get('file', None)
         post = Post.query.get_or_404(post_id)
 
         if post:

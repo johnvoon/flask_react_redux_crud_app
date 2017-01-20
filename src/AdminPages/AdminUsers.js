@@ -24,7 +24,6 @@ import { selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
   const { userEntities, adminPages } = state;
-  console.log(userEntities);
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),

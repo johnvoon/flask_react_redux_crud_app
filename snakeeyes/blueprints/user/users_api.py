@@ -24,39 +24,19 @@ class UsersAPI(Resource):
     @jwt_required()
     def post(): 
         content = request.form
-        title = content['title']
-        image = request.files.get('file', default=None)
-
-        if User.find_by_title(title):
-            return render_json(404, 
-                {'message': "A user with the title '{}' already exists. Please choose another title".format(title)})
-
-        user = User()
-        user.title = title
-        user.author_id = content['author']
-        user.practice_area_id = content['practiceArea']
-        user.body = [content['body']]
-        user.summary = content['summary']
-        
-        if image:
-            filename = secure_filename(image.filename)
-            path_to_image_2000 = os.path.join(current_app.config['IMAGES_2000'], filename)
-            path_to_image_400 = os.path.join(current_app.config['IMAGES_400'], filename)
-
-            image_2000 = Image.open(image)
-            image_400 = Image.open(image)
-            image_2000.thumbnail((2000, 2000))
-            image_400.thumbnail((400, 400))
-
-            image_2000.save(path_to_image_2000)
-            image_400.save(path_to_image_400)
-            
-            with current_app.app_context():
-                user.img_src = url_for('static', filename='images/2000/{}'.format(filename))
-                user.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
-        else:
-            user.img_src = ''
-            user.thumbnail_src = ''
+        username = content.get('username', None)
+        password = content.get('password', None)
+        email = content.get('email', None)
+        first_name = content.get('firstName', None)
+        middle_name = content.get('middleName', None)
+        last_name = content.get('lastName', None)
+        phone_number = content.get('phoneNumber', None)
+        unit_number = content.get('unitNumber', None)
+        street_address = content.get('streetAddress', None)
+        suburb = content.get('suburb', None)
+        state = content.get('state', None)
+        postcode = content.get('postcode', None)
+        country = content.get('country', None)
 
         try: 
             user.save()
@@ -64,6 +44,27 @@ class UsersAPI(Resource):
             return render_json(500, {'message': "An error occurred."})
         
         return render_json(200, {'user': user.to_json()})
+
+@users_api.resource('/users/validate')
+class UserValidationApi(Resource):
+    @staticmethod
+    def post():
+        content = request.get_json()
+        username = content.get('username', None)
+        email = content.get('email', None)
+        username_error = "Username has been taken."
+        email_error = "An account with that email has already been registered."
+
+        if User.find_by_identity(username) and User.find_by_identity(email):
+            return render_json(404,
+                {'username': username_error,
+                 'email': email_error})
+        if User.find_by_identity(username):
+            return render_json(404, 
+                {'username': username_error})
+        if User.find_by_identity(email):
+            return render_json(404, 
+                {'email': email_error})
 
 @users_api.resource('/users/<int:user_id>')
 class UserApi(Resource):
@@ -79,7 +80,7 @@ class UserApi(Resource):
     @jwt_required()
     def put(user_id):
         content = request.form
-        image = request.files.get('file', default=None)
+        image = request.files.get('file', None)
         user = User.query.get_or_404(user_id)
 
         if user:

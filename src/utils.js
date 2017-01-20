@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import axios from 'axios';
+
 
 // Options list
 
@@ -60,6 +62,33 @@ export const maxLength = max => value =>
 export const number = value => 
   value && isNaN(Number(value)) ? 'Must be a number' : undefined;
 
+export const username = value =>
+  value && !/^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/.test(value) ?
+  'Invalid username' : undefined;
+
 export const email = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
     'Invalid email address' : undefined;
+
+export const asyncValidate = (value) => {
+  console.log(value);
+  return axios.post(
+    'http://localhost:8000/api/users/validate', value)
+    .catch(({response, message}) => {
+      const { status, data } = response;
+      if (status === 404 &&
+        ['username', 'email'].every(key => 
+          Object.keys(value).indexOf(key) > -1)) {
+        throw { username: data.username,
+                email: data.email }
+      }
+      if (status === 404 && 
+        Object.keys(value).includes('username')) {
+        throw { username: data.username };
+      }
+      if (status === 404 && 
+        Object.keys(value).includes('email')) {
+        throw { email: data.email };
+      } 
+    });
+}

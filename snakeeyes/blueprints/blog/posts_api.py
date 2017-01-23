@@ -67,6 +67,19 @@ class PostsAPI(Resource):
         
         return render_json(200, {'post': post.to_json()})
 
+@posts_api.resource('/posts/validate')
+class PostValidationApi(Resource):
+    @staticmethod
+    def post():
+        content = request.get_json()
+        title = content.get('title', None)
+        title_error = "A post with that title already exists."
+
+        if Post.find_by_title(title):
+            return render_json(404, {'title': title_error})
+
+        return None
+
 @posts_api.resource('/posts/<int:post_id>')
 class PostAPI(Resource):
     @staticmethod

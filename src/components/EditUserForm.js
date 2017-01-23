@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from  'redux-form';
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFormGroup';
 import StaticFormGroup from './StaticFormGroup';
+import AsyncValidationFormGroup from './AsyncValidationFormGroup';
+import GeosuggestFormGroup from './GeosuggestFormGroup';
 import ErrorAlert from './ErrorAlert';
-import { required, maxLength, createOptionsList } from '../utils';
+import { required, email, username, asyncValidateUserIdentity as asyncValidate } from '../utils';
+import { loadFormData as load } from '../AdminPages/actions';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -22,17 +26,14 @@ class EditUserForm extends Component {
 
   handleInitialize() {
     const { user } = this.props;
-    console.log(user);
-    const { initialize } = this.props;
+    const { loadFormData } = this.props;
     const initData = {
-      "username": user.title,
       "active": user.active === "Active" ? "1" : "0",
       "role": user.role,
-      "email": user.email,
       "firstName": user.firstName,
       "middleName": user.middleName,
       "lastName": user.lastName,
-      "mobileNumber": user.phoneNumber,
+      "phoneNumber": user.phoneNumber,
       "unitNumber": user.unitNumber,
       "streetAddress": user.streetAddress,
       "suburb": user.suburb,
@@ -41,17 +42,39 @@ class EditUserForm extends Component {
       "country": user.country
     };
 
-    initialize(initData);
+    loadFormData(initData);
+  }
+
+  fillInAddress(value) {
+    const { loadFormData } = this.props;
+    const { gmaps } = value;
+    const { address_components } = gmaps;
+    const addressComponents = {}
+    address_components.forEach((component) => {
+      const addressType = component.types[0];
+      const value = component.long_name;
+      addressComponents[addressType] = value
+    });
+    const initData = {
+      unitNumber: _.get(addressComponents, 'subpremise', ''),
+      streetAddress: _.get(addressComponents, 'street_number', '') + ' ' + _.get(addressComponents, 'route', ''),
+      suburb: _.get(addressComponents, 'locality', ''),
+      postcode: _.get(addressComponents, 'postal_code', ''),
+      state: _.get(addressComponents, 'administrative_area_level_1', ''),
+      country: _.get(addressComponents, 'country', '')
+    };
+
+    loadFormData(initData);
   }
 
   _handleSubmit(data) {
-    const { onEdit, onHide, onJWTExpired } = this.props;
+    const { user, onEdit, onHide, onJWTExpired } = this.props;
       
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    onEdit(formData)
+    onEdit(formData, user.id)
     .then(() => onHide())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -87,6 +110,12 @@ class EditUserForm extends Component {
         <StaticFormGroup 
           label="Updated"
           text={userUpdated}/>
+        <StaticFormGroup 
+          label="Username"
+          text={user.username}/>
+        <StaticFormGroup 
+          label="Email"
+          text={user.email}/>
         <Field 
           name="active"
           component={SelectFormGroup}
@@ -99,24 +128,6 @@ class EditUserForm extends Component {
           label="Role"
           validate={required}
           options={roleOptions}/>        
-        <Field 
-          name="username"
-          type="text"
-          component={InputFormGroup}
-          label="Username"
-          validate={required}/>
-        <Field 
-          name="password"
-          type="password"
-          component={InputFormGroup}
-          label="Password"
-          validate={required}/>
-        <Field 
-          name="email"
-          type="email"
-          component={InputFormGroup}
-          label="Email"
-          validate={required}/>
         <Field 
           name="firstName"
           type="text"
@@ -135,7 +146,7 @@ class EditUserForm extends Component {
           label="Last Name"
           validate={required}/>
         <Field 
-          name="mobileNumber"
+          name="phoneNumber"
           type="tel"
           component={InputFormGroup}
           label="Mobile Number"
@@ -143,9 +154,10 @@ class EditUserForm extends Component {
         <Field 
           name="addressSearch"
           type="text"
-          component={InputFormGroup}
+          component={GeosuggestFormGroup}
           label="Address Search"
-          placeholder="Enter address to search">
+          placeholder="Enter your address to search"
+          fillInAddress={(value) => this.fillInAddress(value)}>
         </Field>
         <Field 
           name="unitNumber"
@@ -210,7 +222,18 @@ EditUserForm.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-export default reduxForm({
-  form: 'EditUserForm',
-  destroyOnUnmount: false
-})(EditUserForm)
+EditUserForm = reduxForm({
+  form:  'EditUserForm',
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true
+})(EditUserForm);
+
+EditUserForm = connect(
+  state => {
+    return {initialValues: state.adminPages.formData}
+  },
+  { loadFormData: load }
+)(EditUserForm)
+
+export default EditUserForm;

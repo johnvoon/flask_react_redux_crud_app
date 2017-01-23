@@ -70,10 +70,10 @@ export const email = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
     'Invalid email address' : undefined;
 
-export const asyncValidate = (value) => {
-  console.log(value);
+export const asyncValidateUserIdentity = (value) => {
   return axios.post(
     'http://localhost:8000/api/users/validate', value)
+    .then(() => undefined) // important, otherwise will return uncaught in promise error on form submit
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 404 &&
@@ -90,5 +90,18 @@ export const asyncValidate = (value) => {
         Object.keys(value).includes('email')) {
         throw { email: data.email };
       } 
+    });
+}
+
+export const asyncValidatePostTitle = (value) => {
+  return axios.post(
+    'http://localhost:8000/api/posts/validate', value)
+    .then(() => undefined) // important, otherwise will return uncaught in promise error on form submit
+    .catch(({response, message}) => {
+      const { status, data } = response;
+      if (status === 404 && 
+        Object.keys(value).includes('title')) {
+        throw { title: data.title };
+      }
     });
 }

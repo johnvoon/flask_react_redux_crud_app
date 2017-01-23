@@ -6,7 +6,7 @@ import SelectFormGroup from './SelectFormGroup';
 import TextAreaFormGroup from './TextAreaFormGroup';
 import FileUploadFormGroup from './FileUploadFormGroup';
 import TextEditorFormGroup from './TextEditorFormGroup';
-import { required, maxLength, createOptionsList } from '../utils';
+import { required, maxLength, createOptionsList, asyncValidatePostTitle as asyncValidate } from '../utils';
 
 
 class AddPostForm extends Component { 
@@ -19,7 +19,6 @@ class AddPostForm extends Component {
 
   _handleSubmit(data) {
     const { onAdd, onHide, onJWTExpired } = this.props;
-    
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       key === 'file' && formData.append('file', data[key][0]);
@@ -74,7 +73,7 @@ class AddPostForm extends Component {
           name="summary"
           component={TextAreaFormGroup}
           label="Summary"
-          validate={[ required, maxLength(100) ]}
+          validate={[ required, maxLength(200) ]}
           rows="4"/>
         <Field 
           name="practiceArea"
@@ -121,5 +120,7 @@ AddPostForm.propTypes = {
 
 export default reduxForm({
   form: 'AddPostForm',
+  asyncValidate,
+  asyncBlurFields: ['title'],
   destroyOnUnmount: false
 })(AddPostForm);

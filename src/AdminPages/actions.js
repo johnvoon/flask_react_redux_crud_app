@@ -5,7 +5,8 @@ import {
   FILTER_ADMIN_DATA,
   RECORD_ADDED,
   RECORD_EDITED,
-  RECORD_DELETED
+  RECORD_DELETED,
+  LOAD_FORM_DATA
 } from '../constants/actionTypes';
 
 export function changePageLength(value) {
@@ -52,11 +53,17 @@ export function recordEdited(entities) {
   };
 }
 
-export function recordDeleted(remainingEntities, deletedRecord) {
+export function recordDeleted(deletedRecord, deletedRecordId) {
   return {
     type: RECORD_DELETED,
-    remainingEntities,
     deletedRecord,
+    deletedRecordId,
   };
 }
 
+export function loadFormData(formData) {
+  return {
+    type: LOAD_FORM_DATA,
+    formData
+  }
+}

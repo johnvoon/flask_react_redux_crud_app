@@ -10,10 +10,12 @@ export default class AddUser extends Component {
     return (
       <div>
         {!JWT && <GetJWTForm 
+                   onHide={onHide}
                    onGetJWT={onGetJWT}
                    JWTExpired={JWTExpired}/>}
         {JWT && <AddUserForm
                     onAdd={onAdd}
+                    onJWTExpired={onJWTExpired}
                     onHide={onHide}/>}
       </div>
     );

@@ -21,13 +21,14 @@ import { filterAdminData,
          sortData, 
          changePageLength, 
          changePageNumber } from './actions';
-import { selectPageData, selectTotalPages } from './selectors';
+import { selectData, selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
   const { blogEntities, adminPages } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
+    data: selectData(state),
     ...blogEntities,
     ...adminPages
   };
@@ -114,7 +115,7 @@ class AdminPosts extends Component {
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { posts, postAuthors, practiceAreas } = this.props;
-    const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
+    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
     const { currentRecord, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
@@ -159,7 +160,7 @@ class AdminPosts extends Component {
           sortBy={sortBy}
           onSort={onSort}
           pageData={pageData}
-          data={posts}/>
+          data={data}/>
         <ModalLarge 
           title="Add New Post"
           show={showAddModal} 

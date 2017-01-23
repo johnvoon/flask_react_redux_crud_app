@@ -10,7 +10,7 @@ const selectRecordIds = createSelector(
   (adminPages) => adminPages.recordIds
 )
 
-const selectData = createSelector(
+export const selectData = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.data
 )

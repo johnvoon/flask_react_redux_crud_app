@@ -5,6 +5,7 @@ import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
 import ModalLarge from '../components/ModalLarge';
+import GetJWTForm from '../components/GetJWTForm';
 import AddUser from '../components/AddUser';
 import EditUser from '../components/EditUser';
 import DeleteRecord from '../components/DeleteRecord';
@@ -20,22 +21,23 @@ import { filterAdminData,
          sortData, 
          changePageLength, 
          changePageNumber } from './actions';
-import { selectPageData, selectTotalPages } from './selectors';
+import { selectData, selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
   const { userEntities, adminPages } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
+    data: selectData(state),
     ...userEntities,
-    ...adminPages
+    ...adminPages,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchUsers: () => {
-      dispatch(fetchUsers());
+    onFetchUsers: (config) => {
+      dispatch(fetchUsers(config));
     },
 
     onGetJWT: (data) => {
@@ -46,16 +48,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeJWT());
     },
 
-    onAdd: (content) => {
-      return dispatch(addUser(content));
+    onAdd: (JWT, content) => {
+      return dispatch(addUser(JWT, content));
     },
 
-    onEdit: (content, id) => {
-      return dispatch(editUser(content, id));
+    onEdit: (JWT, content, id) => {
+      return dispatch(editUser(JWT, content, id));
     },
 
-    onDelete: (id) => {
-      return dispatch(deleteUser(id));
+    onDelete: (JWT, id) => {
+      return dispatch(deleteUser(JWT, id));
     },
 
     onFilter: ({target: {value}}) => {
@@ -80,6 +82,7 @@ class AdminUsers extends Component {
   constructor(props) {
     super(props);
     this.state = { 
+      showGetJWTModal: true,
       showUserInfoModal: false,
       showAddModal: false,
       showEditModal: false,
@@ -88,8 +91,14 @@ class AdminUsers extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.onFetchUsers();
+  componentDidUpdate() {
+    const { JWT } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+    JWT && this.props.onFetchUsers(config);
   }
 
   renderTableEditLink(val, row) {
@@ -126,8 +135,8 @@ class AdminUsers extends Component {
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { users } = this.props;
-    const { filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
+    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
+    const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -176,8 +185,18 @@ class AdminUsers extends Component {
           sortBy={sortBy}
           onSort={onSort}
           pageData={pageData}
-          data={users}
+          data={data}
         />
+        <ModalLarge
+          title="Load Users"
+          show={showGetJWTModal}
+          onHide={() => this.setState({showGetJWTModal: false})}>
+          <GetJWTForm
+            onGetJWT={onGetJWT}
+            JWTExpired={JWTExpired}
+            onHide={() => this.setState({showGetJWTModal: false})}
+            user={currentRecord}/>
+        </ModalLarge>
         <ModalLarge
           title="User Info"
           show={showUserInfoModal}
@@ -191,8 +210,8 @@ class AdminUsers extends Component {
           show={showAddModal} 
           onHide={() => this.setState({showAddModal: false})}>
           <AddUser
-            onGetJWT={onGetJWT.bind(null)}
-            onAdd={onAdd.bind(null)}
+            onGetJWT={onGetJWT}
+            onAdd={onAdd.bind(null, config)}
             onHide={() => this.setState({showAddModal: false})}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
@@ -204,9 +223,9 @@ class AdminUsers extends Component {
           onHide={() => this.setState({showEditModal: false})}>
           <EditUser
             user={currentRecord}
-            onEdit={onEdit.bind(null)}
+            onEdit={onEdit.bind(null, config)}
             onHide={() => this.setState({showEditModal: false})}
-            onGetJWT={onGetJWT.bind(null)}
+            onGetJWT={onGetJWT}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}/>
@@ -216,9 +235,9 @@ class AdminUsers extends Component {
           show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
           <DeleteRecord
-            onDelete={onDelete.bind(null, currentRecord.id)}
+            onDelete={onDelete.bind(null, config, currentRecord.id)}
             onHide={() => this.setState({showDeleteModal: false})}
-            onGetJWT={onGetJWT.bind(null)}
+            onGetJWT={onGetJWT}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}/>

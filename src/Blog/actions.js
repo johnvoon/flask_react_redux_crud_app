@@ -111,19 +111,11 @@ export function editPost(config, content, id) {
 }
 
 export function deletePost(config, id) {
-  console.log(config, id)
-  return (dispatch, getState) => {
+  return (dispatch) => {
     return axios.delete(`http://localhost:8000/api/posts/${id}`, config)
       .then(({data: {post}}) => {
-        const { posts } = getState().blogEntities;
-        const remainingPosts = _.omit(posts, post.id);
-        const remainingPostIds = sortByDate(
-          remainingPosts, 
-          Object.keys(remainingPosts), 
-          'descending'
-        );
         dispatch(recordDeleted(
-          remainingPosts,
+          post,
           post.id
         ));
       });

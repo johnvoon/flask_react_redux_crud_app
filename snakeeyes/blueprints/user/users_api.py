@@ -12,6 +12,7 @@ users_api = Api(Blueprint('users_api', __name__), decorators=[csrf.exempt])
 @users_api.resource('/users')
 class UsersAPI(Resource):
     @staticmethod
+    @jwt_required()
     def get():
         users = User.query.all()
         users = [user.to_json() for user in users]
@@ -24,19 +25,22 @@ class UsersAPI(Resource):
     @jwt_required()
     def post(): 
         content = request.form
-        username = content.get('username', None)
-        password = content.get('password', None)
-        email = content.get('email', None)
-        first_name = content.get('firstName', None)
-        middle_name = content.get('middleName', None)
-        last_name = content.get('lastName', None)
-        phone_number = content.get('phoneNumber', None)
-        unit_number = content.get('unitNumber', None)
-        street_address = content.get('streetAddress', None)
-        suburb = content.get('suburb', None)
-        state = content.get('state', None)
-        postcode = content.get('postcode', None)
-        country = content.get('country', None)
+        
+        user = User()
+        user.role = content.get('role', None)
+        user.username = content.get('username', None)
+        user.password = content.get('password', None)
+        user.email = content.get('email', None)
+        user.first_name = " ".join(word.capitalize() for word in content.get('firstName', None).split())
+        user.middle_name = " ".join(word.capitalize() for word in content.get('middleName', None).split())
+        user.last_name = " ".join(word.capitalize() for word in content.get('lastName', None).split())
+        user.phone_number = content.get('phoneNumber', None)
+        user.unit_number = content.get('unitNumber', None)
+        user.street_address = content.get('streetAddress', None)
+        user.suburb = content.get('suburb', None)
+        user.postcode = content.get('postcode', None)
+        user.state = content.get('state', None)
+        user.country = content.get('country', None)
 
         try: 
             user.save()
@@ -66,6 +70,8 @@ class UserValidationApi(Resource):
             return render_json(404, 
                 {'email': email_error})
 
+        return None
+
 @users_api.resource('/users/<int:user_id>')
 class UserApi(Resource):
     @staticmethod
@@ -80,15 +86,28 @@ class UserApi(Resource):
     @jwt_required()
     def put(user_id):
         content = request.form
-        image = request.files.get('file', None)
         user = User.query.get_or_404(user_id)
 
-        if user:
-            user.title = content['title']
-            user.author_id = content['author']
-            user.practice_area_id = content['practiceArea']
-            user.body = [content['body']]
-            user.summary = content['summary']
+        if user:        
+            user.role = content.get('role', None)
+            user.first_name = " ".join(word.capitalize() for word in content.get('firstName', None).split())
+            user.middle_name = " ".join(word.capitalize() for word in content.get('middleName', None).split())
+            user.last_name = " ".join(word.capitalize() for word in content.get('lastName', None).split())
+            user.phone_number = content.get('phoneNumber', None)
+            user.unit_number = content.get('unitNumber', None)
+            user.street_address = content.get('streetAddress', None)
+            user.suburb = content.get('suburb', None)
+            user.postcode = content.get('postcode', None)
+            user.state = content.get('state', None)
+            user.country = content.get('country', None)
+
+        try: 
+            user.save()
+        except:
+            return render_json(500, {'message': "An error occurred."})
+        
+        return render_json(200, {'user': user.to_json()})
+
         
         try: 
             user.save()

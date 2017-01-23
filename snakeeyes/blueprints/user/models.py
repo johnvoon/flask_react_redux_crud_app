@@ -80,13 +80,13 @@ class User(UserMixin, ResourceMixin, db.Model):
 
     @hybrid_property
     def first_last_name(self):
-        return self.first_name + ' ' + self.last_name        
+        return self.first_name + ' ' + self.last_name
 
     @hybrid_property
     def full_address(self):
-        street_address = self.unit_number + "/" + self.street_address if self.unit_number else self.street_address
-        addressElements = [street_address, self.suburb, self.postcode, self.state, self.country]
-        return ", ".join(addressElements)
+        street_address = self.unit_number + "/" + self.street_address if self.unit_number and self.street_address else self.street_address
+        address_elements = [street_address, self.suburb, self.postcode, self.state, self.country]
+        return ", ".join(address_elements) if None not in address_elements else None
 
     @classmethod
     def find_by_identity(cls, identity):

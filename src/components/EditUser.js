@@ -9,6 +9,7 @@ class EditUser extends Component {
     return (
       <div>
         {!JWT && <GetJWTForm 
+                   onHide={onHide}
                    onGetJWT={onGetJWT}
                    JWTExpired={JWTExpired}/>}
         {JWT && <EditUserForm

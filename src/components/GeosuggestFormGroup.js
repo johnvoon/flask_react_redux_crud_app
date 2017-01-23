@@ -1,7 +1,8 @@
 import React from 'react';
+import Geosuggest from 'react-geosuggest';
 
-const InputFormGroup = (field) => {
-  const { input, label, type, meta, placeholder } = field;
+const GeosuggestFormGroup = (field) => {
+  const { input, label, type, meta, placeholder, fillInAddress, geolocate } = field;
   const error = meta.touched && meta.error;
   
   return (
@@ -10,11 +11,12 @@ const InputFormGroup = (field) => {
         <b>{label}</b>
       </label>
       <div className="col-sm-10">
-        <input 
-          className="form-control"
-          id={input.name}
-          type={type}
+        <Geosuggest 
+          inputClassName="form-control"
+          types={["geocode"]}
+          country="AU"
           placeholder={placeholder}
+          onSuggestSelect={fillInAddress}
           {...input}/>
         {error && <span className="text-danger">{meta.error}</span>}
       </div>
@@ -22,4 +24,4 @@ const InputFormGroup = (field) => {
   );
 };
 
-export default InputFormGroup;
+export default GeosuggestFormGroup;

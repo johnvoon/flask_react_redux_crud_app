@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { sort, sortByDate, filter } from '../utils';
 import { POSTS_LOADED,
          USERS_LOADED,
          RECORD_ADDED,
@@ -10,7 +9,8 @@ import { POSTS_LOADED,
          CHANGE_PAGE_NUMBER, 
          CHANGE_PAGE_LENGTH,
          FILTER_ADMIN_DATA,
-         SORT_DATA } from '../constants/actionTypes';
+         SORT_DATA,
+         LOAD_FORM_DATA } from '../constants/actionTypes';
 
 const initialState = {
   data: {},
@@ -21,7 +21,8 @@ const initialState = {
   pageLength: 5,
   JWT: '',
   JWTExpired: false,
-  successMessage: ''
+  successMessage: '',
+  formData: {},
 };
 
 export default function adminPagesReducer(state = initialState, action) {
@@ -58,6 +59,9 @@ export default function adminPagesReducer(state = initialState, action) {
 
     case SORT_DATA:
       return sortData(state, action);
+
+    case LOAD_FORM_DATA:
+      return loadFormData(state, action);
   }
 
   return state;
@@ -112,15 +116,12 @@ function recordEdited(state, action) {
   }
 }
 
-function recordDeleted(state, { remainingEntities, deletedRecord }) {
+function recordDeleted(state, { deletedRecord, deletedRecordId }) {
   const { data, recordIds } = state;
-  const newData = _.assign({}, data, remainingEntities);
-  const newFilteredData = _.reject(recordIds, item => item === deletedRecord);
-
   return {
     ...state,
-    data: newData,
-    recordIds: newFilteredData,
+    data: _.omit(data, deletedRecordId),
+    recordIds: _.reject(recordIds, item => item === deletedRecordId),
     successMessage: "Record deleted successfully",
   }
 }
@@ -157,4 +158,8 @@ function filterAdminData(state, { value }) {
     filterValues: value,
     currentPage: 0,
   };
+}
+
+function loadFormData(state, { formData }) {
+  return _.merge({}, state, { formData: formData });
 }

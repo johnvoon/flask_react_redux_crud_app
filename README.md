@@ -62,7 +62,7 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Images uploaded with <b>React-dropzone</b>
 - JavaScript linting with <b>ESLint</b>
 - Fake data generated with <b>fake-factory</b>
-- Address form autocomplete using <b>Google Places API</b>
+- Address form autocomplete using <b>Google Places API</b> and [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest)
 
 ## Resources Consulted
 - Web Development (Steve Huffman, Udacity, https://www.udacity.com/course/web-development--cs253)

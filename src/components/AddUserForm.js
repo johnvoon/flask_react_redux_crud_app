@@ -1,11 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from  'redux-form';
 import ErrorAlert from './ErrorAlert';
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFormGroup';
+import GeosuggestFormGroup from './GeosuggestFormGroup';
 import AsyncValidationFormGroup from './AsyncValidationFormGroup';
-import { required, email, username, asyncValidate } from '../utils';
-
+import { required, email, username, asyncValidateUserIdentity as asyncValidate } from '../utils';
+import { loadFormData as load } from '../AdminPages/actions';
+import _ from 'lodash';
 
 class AddUserForm extends Component { 
   constructor(props) {
@@ -16,8 +19,8 @@ class AddUserForm extends Component {
   }
 
   _handleSubmit(data) {
+    console.log(data);
     const { onAdd, onHide, onJWTExpired } = this.props;
-      
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
@@ -40,8 +43,29 @@ class AddUserForm extends Component {
     });
   }
 
+  fillInAddress(value) {
+    const { loadFormData } = this.props;
+    const { gmaps } = value;
+    const { address_components } = gmaps;
+    const addressComponents = {}
+    address_components.forEach((component) => {
+      const addressType = component.types[0];
+      const value = component.long_name;
+      addressComponents[addressType] = value
+    });
+    const initData = {
+      unitNumber: _.get(addressComponents, 'subpremise', ''),
+      streetAddress: _.get(addressComponents, 'street_number', '') + ' ' + _.get(addressComponents, 'route', ''),
+      suburb: _.get(addressComponents, 'locality', ''),
+      postcode: _.get(addressComponents, 'postal_code', ''),
+      state: _.get(addressComponents, 'administrative_area_level_1', ''),
+      country: _.get(addressComponents, 'country', '')
+    };
+
+    loadFormData(initData);
+  }
+
   render() {
-    const { onAdd, onHide, onJWTExpired } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     const roleOptions = ["client - Client", "staff - Staff", "public - Public"];
@@ -90,7 +114,7 @@ class AddUserForm extends Component {
           label="Last Name"
           validate={required}/>
         <Field 
-          name="mobileNumber"
+          name="phoneNumber"
           type="tel"
           component={InputFormGroup}
           label="Mobile Number"
@@ -98,10 +122,10 @@ class AddUserForm extends Component {
         <Field 
           name="addressSearch"
           type="text"
-          component={InputFormGroup}
+          component={GeosuggestFormGroup}
           label="Address Search"
-          placeholder="Enter address to search"
-          validate={required}>
+          placeholder="Enter your address to search"
+          fillInAddress={(value) => this.fillInAddress(value)}>
         </Field>
         <Field 
           name="unitNumber"
@@ -164,9 +188,20 @@ AddUserForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
 };
 
-export default reduxForm({
+AddUserForm = reduxForm({
   form:  'AddUserForm',
   asyncValidate,
   asyncBlurFields: ['username', 'email'],
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true
 })(AddUserForm);
+
+AddUserForm = connect(
+  state => {
+    return {initialValues: state.adminPages.formData}
+  },
+  { loadFormData: load }
+)(AddUserForm)
+
+export default AddUserForm;

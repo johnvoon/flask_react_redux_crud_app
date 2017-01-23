@@ -13,7 +13,7 @@ class GetJWTForm extends Component {
   }
 
   render() {
-    const { onGetJWT, JWTExpired, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHide, onGetJWT, JWTExpired, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     if (JWTExpired) {
       this.setState(
@@ -51,6 +51,7 @@ class GetJWTForm extends Component {
             disabled={submitting}
             onClick={handleSubmit(data => {
               onGetJWT(data)
+              .then(() => onHide())
               .catch(({message, response}) => {
                 const { status, data } = response;
                 if (status === 401) {

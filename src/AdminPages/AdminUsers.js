@@ -135,7 +135,7 @@ class AdminUsers extends Component {
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
     const { users } = this.props;
-    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
+    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage, addedRecord } = this.props;
     const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
       headers: {
@@ -215,7 +215,8 @@ class AdminUsers extends Component {
             onHide={() => this.setState({showAddModal: false})}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
-            JWTExpired={JWTExpired}/>
+            JWTExpired={JWTExpired}
+            addedRecord={addedRecord}/>
         </ModalLarge>
         <ModalLarge
           title={`Edit This User (ID: ${currentRecord.id})`}

@@ -19,7 +19,6 @@ class AddUserForm extends Component {
   }
 
   _handleSubmit(data) {
-    console.log(data);
     const { onAdd, onHide, onJWTExpired } = this.props;
     let formData = new FormData();
     Object.keys(data).forEach((key) => {

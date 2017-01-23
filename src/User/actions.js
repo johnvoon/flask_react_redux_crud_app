@@ -31,7 +31,6 @@ export function fetchUsers(config) {
 }
 
 export function addUser(config, content) {
-  console.log(config, content);
   return (dispatch) => {
     return axios.post(
       'http://localhost:8000/api/users', content, config)

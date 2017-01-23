@@ -23,6 +23,7 @@ const initialState = {
   JWTExpired: false,
   successMessage: '',
   formData: {},
+  addedRecord: {}
 };
 
 export default function adminPagesReducer(state = initialState, action) {
@@ -106,6 +107,7 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) {
     data: _.merge({}, data, addedRecord),
     recordIds: [...recordIds, addedRecordId],
     successMessage: 'Record added successfully',
+    addedRecord
   }
 }
 

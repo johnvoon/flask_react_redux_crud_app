@@ -5,7 +5,7 @@ import AddUserForm from './AddUserForm';
 export default class AddUser extends Component {
   render() {
     const { onAdd, onHide, onGetJWT, onJWTExpired } = this.props;
-    const { JWT, JWTExpired } = this.props;
+    const { addedRecord, JWT, JWTExpired } = this.props;
     
     return (
       <div>
@@ -14,9 +14,17 @@ export default class AddUser extends Component {
                    onGetJWT={onGetJWT}
                    JWTExpired={JWTExpired}/>}
         {JWT && <AddUserForm
-                    onAdd={onAdd}
-                    onJWTExpired={onJWTExpired}
-                    onHide={onHide}/>}
+                  onAdd={onAdd}
+                  onJWTExpired={onJWTExpired}
+                  onHide={onHide}/>}
+        {addedUserRole === "staff" && <AddStaffForm
+                  onAddStaff={onAddStaff}
+                  onJWTExpired={onJWTExpired}
+                  onHide={onHide}/>}
+        {addedUserRole === "client" && <AddClientForm
+                  onAddClient={onAddClient}
+                  onJWTExpired={onJWTExpired}
+                  onHide={onHide}/>}
       </div>
     );
   }

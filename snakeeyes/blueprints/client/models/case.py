@@ -24,3 +24,15 @@ class Case(ResourceMixin, db.Model):
 
     def __init__(self, **kwargs):
         super(Case, self).__init__(**kwargs)
+
+    def to_json(self):
+        """
+        Convert Case instance to json
+        """
+        return {
+            'id': self.id,
+            'matter': self.author.to_json(),
+            'file_open': self.created_on,
+            'file_close': self.content,
+            'active': self.active
+        }

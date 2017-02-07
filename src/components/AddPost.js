@@ -8,18 +8,13 @@ export default class AddPost extends Component {
     const { postAuthors, practiceAreas, JWT, JWTExpired } = this.props;
 
     return (
-      <div>
-        {!JWT && <GetJWTForm 
-                   onHide={onHide}
-                   onGetJWT={onGetJWT}
-                   JWTExpired={JWTExpired}/>}
-        {JWT && <AddPostForm
-                  postAuthors={postAuthors}
-                  practiceAreas={practiceAreas}
-                  onJWTExpired={onJWTExpired}
-                  onAdd={onAdd}
-                  onHide={onHide}/>}
-      </div>
+      <AddPostForm
+        postAuthors={postAuthors}
+        practiceAreas={practiceAreas}
+        onJWTExpired={onJWTExpired}
+        onAdd={onAdd}
+        onHide={onHide}/>
+
     );
   }
 }

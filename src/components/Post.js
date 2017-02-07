@@ -19,10 +19,9 @@ export default class Post extends Component {
     });
 
     return (
-      <div>
-        <img className="img-responsive center-block" src={post.imgSrc} alt="img" />  
+      <div className="post">
         <h1>{post.title}</h1>
-        <p><a href="#">{post.author}</a> in <a href="#">{post.practiceArea}</a> on {postCreated}</p>
+        <p className="post-details"><a href="#">{post.author}</a> | <a href="#">{post.practiceArea}</a> | {postCreated}</p>
         <p>Last updated on {postUpdated}</p>
         {postBody}
       </div>

@@ -92,7 +92,7 @@ export default class Pagination extends Component {
     ]);
 
     return (
-      <ul className="pagination d-inline-block">
+      <ul className="pagination pull-right">
         {buttons}
       </ul>
     );

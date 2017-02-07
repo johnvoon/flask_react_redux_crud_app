@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
-import ModalLarge from '../components/ModalLarge';
+import ModalMedium from '../components/ModalMedium';
 import GetJWTForm from '../components/GetJWTForm';
 import AddUser from '../components/AddUser';
 import EditUser from '../components/EditUser';
@@ -16,20 +17,22 @@ import TableUserInfoLink from '../components/TableUserInfoLink';
 import TableHeading from '../components/TableHeading';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
-import { getJWT, fetchUsers, addUser, editUser, deleteUser } from '../User/actions';
+import { getJWT, removeJWT, fetchUsers, fetchPracticeAreas, addUser, editUser, deleteUser,
+         addStaff, addClient } from '../Entities/actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
-         changePageNumber } from './actions';
+         changePageNumber,
+         resetAddedRecord } from './actions';
 import { selectData, selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
-  const { userEntities, adminPages } = state;
+  const { entities, adminPages } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
     data: selectData(state),
-    ...userEntities,
+    ...entities,
     ...adminPages,
   };
 };
@@ -40,6 +43,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchUsers(config));
     },
 
+    onFetchPracticeAreas: () => {
+      dispatch(fetchPracticeAreas());
+    },
+
     onGetJWT: (data) => {
       return dispatch(getJWT(data));
     },
@@ -48,8 +55,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeJWT());
     },
 
-    onAdd: (JWT, content) => {
+    onAddUser: (JWT, content) => {
       return dispatch(addUser(JWT, content));
+    },
+
+    onAddStaff: (JWT, content) => {
+      return dispatch(addStaff(JWT, content));
+    },
+
+    onAddClient: (JWT, content) => {
+      return dispatch(addClient(JWT, content));
     },
 
     onEdit: (JWT, content, id) => {
@@ -74,6 +89,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onPageNumberChange: (value) => {
       dispatch(changePageNumber(value));
+    },
+
+    onResetAddedRecord: () => {
+      dispatch(resetAddedRecord());
     }
   };
 };
@@ -81,6 +100,7 @@ const mapDispatchToProps = (dispatch) => {
 class AdminUsers extends Component {
   constructor(props) {
     super(props);
+    this.handleClickAddButton = this.handleClickAddButton.bind(this);
     this.state = { 
       showGetJWTModal: true,
       showUserInfoModal: false,
@@ -91,14 +111,34 @@ class AdminUsers extends Component {
     };
   }
 
-  componentDidUpdate() {
-    const { JWT } = this.props;
+  componentWillMount() {
+    this.props.onFetchPracticeAreas()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { JWT, addedRecord } = nextProps;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
       }
     };
-    JWT && this.props.onFetchUsers(config);
+
+    if (!this.props.JWT && JWT) {
+      this.props.onFetchUsers(config);
+      this.setState({showGetJWTModal: false})
+    }
+
+    if (_.isEmpty(this.props.addedRecord) && 
+      addedRecord.role === 'public') {
+      this.setState({showAddModal: false});
+    }
+  }
+
+  renderTableCommentsLink(val, row) {
+    return (
+      <TableCommentsLink
+        data={row}/>
+    );
   }
 
   renderTableEditLink(val, row) {
@@ -132,9 +172,17 @@ class AdminUsers extends Component {
     );
   }
 
+  handleClickAddButton() {
+    const { onResetAddedRecord } = this.props;
+
+    onResetAddedRecord();
+    this.setState({showAddModal: true});
+    
+  }
+
   render() {
-    const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { users } = this.props;
+    const { onGetJWT, onJWTExpired, onAddUser, onAddStaff, onAddClient, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
+    const { users, practiceAreas } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage, addedRecord } = this.props;
     const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
@@ -144,29 +192,40 @@ class AdminUsers extends Component {
     };
 
     return (
-      <div className="container-fluid">
+      <main className="container-fluid">
         <h1>List of All Users</h1>
-        <button
-          className="btn btn-primary btn-lg sm-margin-top"
-          onClick={() => this.setState({showAddModal: true})}>
-          Add
-        </button>
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3 text-center">
+            <div className="form-group">
+              <button
+                className="btn btn-primary btn-block text-uppercase"
+                onClick={this.handleClickAddButton}>
+                Add a New User
+              </button>
+            </div> 
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-3">
+            <PageLengthMenu 
+              pageLengthOptions={[ 5, 10, 20]}
+              pageLength={pageLength}
+              onPageLengthChange={onPageLengthChange}/>
+          </div>
+          <div className="col-sm-5">
+            <SearchField 
+              filterValues={filterValues}
+              onFilter={onFilter}/> 
+          </div>
+          <div className="col-sm-4">
+            <Pagination
+              pageNavLength={3}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageNumberChange={onPageNumberChange}/>
+          </div>
+        </div>
         {successMessage && <SuccessAlert message={successMessage}/>}
-        <SearchField 
-          filterValues={filterValues}
-          onFilter={onFilter}
-        />
-        <Pagination
-          pageNavLength={5}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageNumberChange={onPageNumberChange}
-        />
-        <PageLengthMenu 
-          pageLengthOptions={[ 5, 10, 20]}
-          pageLength={pageLength}
-          onPageLengthChange={onPageLengthChange}
-        />
         <Table 
           columns={[
             { title: 'Created On', component: TableDate, prop: 'created' },
@@ -187,7 +246,7 @@ class AdminUsers extends Component {
           pageData={pageData}
           data={data}
         />
-        <ModalLarge
+        <ModalMedium
           title="Load Users"
           show={showGetJWTModal}
           onHide={() => this.setState({showGetJWTModal: false})}>
@@ -196,29 +255,32 @@ class AdminUsers extends Component {
             JWTExpired={JWTExpired}
             onHide={() => this.setState({showGetJWTModal: false})}
             user={currentRecord}/>
-        </ModalLarge>
-        <ModalLarge
+        </ModalMedium>
+        <ModalMedium
           title="User Info"
           show={showUserInfoModal}
           onHide={() => this.setState({showUserInfoModal: false})}>
           <UserInfo
             onHide={() => this.setState({showUserInfoModal: false})}
             user={currentRecord}/>
-        </ModalLarge>
-        <ModalLarge 
+        </ModalMedium>
+        <ModalMedium 
           title="Add New User" 
           show={showAddModal} 
           onHide={() => this.setState({showAddModal: false})}>
           <AddUser
+            practiceAreas={practiceAreas}
             onGetJWT={onGetJWT}
-            onAdd={onAdd.bind(null, config)}
+            onAddUser={onAddUser.bind(null, config)}
+            onAddStaff={onAddStaff.bind(null, config)}
+            onAddClient={onAddClient.bind(null, config)}
             onHide={() => this.setState({showAddModal: false})}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}
             addedRecord={addedRecord}/>
-        </ModalLarge>
-        <ModalLarge
+        </ModalMedium>
+        <ModalMedium
           title={`Edit This User (ID: ${currentRecord.id})`}
           show={showEditModal} 
           onHide={() => this.setState({showEditModal: false})}>
@@ -230,8 +292,8 @@ class AdminUsers extends Component {
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}/>
-        </ModalLarge>
-        <ModalLarge
+        </ModalMedium>
+        <ModalMedium
           title={`Delete User (ID: ${currentRecord.id})`}
           show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
@@ -242,8 +304,8 @@ class AdminUsers extends Component {
             onJWTExpired={onJWTExpired}
             JWT={JWT}
             JWTExpired={JWTExpired}/>
-        </ModalLarge>
-      </div>
+        </ModalMedium>
+      </main>
     );
   }
 }
@@ -251,7 +313,7 @@ class AdminUsers extends Component {
 AdminUsers.propTypes = {
   onFetchUsers: PropTypes.func.isRequired,
   onGetJWT: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired,
+  onAddUser: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,

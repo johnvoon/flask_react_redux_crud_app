@@ -1,21 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import PostCard from '../components/PostCard';
-import Link from '../components/Link';
+import FilterLink from '../components/FilterLink';
 import SearchField from '../components/SearchField';
-import { fetchBlogData } from '../Blog/actions';
+import DropdownMenu from '../components/DropdownMenu';
+import { fetchBlogData } from '../Entities/actions';
 import { showAllPosts,
+         sortPosts,
          filterPostsByKeyword, 
          filterByArea, 
          filterByAuthor, 
          loadMore } from './actions';
 
 const mapStateToProps = (state) => {
-  const { blogEntities, blogHome } = state;
+  const { entities, blogHome } = state;
   
   return {
-    ...blogEntities,
+    ...entities,
     ...blogHome
   };
 };
@@ -33,12 +36,16 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(showAllPosts());
   },
 
-  onAreaFilter: (posts, {target: {textContent}}) => {
-    dispatch(filterByArea(posts, textContent));
+  onSort: (posts, sortBy) => {
+    dispatch(sortPosts(posts, sortBy));
   },
 
-  onAuthorFilter: (posts, {target: {textContent}}) => {
-    dispatch(filterByAuthor(posts, textContent));
+  onAreaFilter: (posts, linkText) => {
+    dispatch(filterByArea(posts, linkText));
+  },
+
+  onAuthorFilter: (posts, linkText) => {
+    dispatch(filterByAuthor(posts, linkText));
   },
 
   onLoadMore: (allAvailablePosts) => {
@@ -49,12 +56,12 @@ const mapDispatchToProps = (dispatch) => ({
 class BlogHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      showAllMenu: true,
+    this.state = {
+      showSortMenu: false,
       showAreaMenu: false,
       showAuthorMenu: false
     };
-    this.toggleAllMenu = this.toggleAllMenu.bind(this);
+    this.toggleSortMenu = this.toggleSortMenu.bind(this);
     this.toggleAreaMenu = this.toggleAreaMenu.bind(this);
     this.toggleAuthorMenu = this.toggleAuthorMenu.bind(this);
   }
@@ -63,26 +70,23 @@ class BlogHome extends Component {
     this.props.onFetchBlogData();
   }
 
-  toggleAllMenu(event) {
-    event.preventDefault();
-    this.setState({showAllMenu: this.state.showAllMenu ? false : true})
+  toggleSortMenu() {
+    this.setState({showSortMenu: this.state.showSortMenu ? false : true})
   }
 
   toggleAreaMenu() {
-    event.preventDefault();
     this.setState({showAreaMenu: this.state.showAreaMenu ? false : true})
   }
 
   toggleAuthorMenu() {
-    event.preventDefault();
     this.setState({showAuthorMenu: this.state.showAuthorMenu ? false : true})
   }
 
   render() {
     const { posts, practiceAreas, postAuthors, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
-    const { onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
-    const { showAllMenu, showAreaMenu, showAuthorMenu } = this.state;
-    console.log(showAllMenu, showAreaMenu, showAuthorMenu);
+    const { onSort, onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
+    const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
+
     const postsList = visiblePosts.map((id) => {
       return (
         <PostCard
@@ -94,21 +98,28 @@ class BlogHome extends Component {
     
     const allPostsLink = () => {
       return (
-        <Link
+        <FilterLink
           linkText="All Posts"
-          data="All Posts"
           count={Object.keys(posts).length}
           dispatchEvent={onShowAll.bind(null)}
         />
       );
     };
 
+    const sortLinks = ["views", "title", "created", "author"].map(sortBy => {
+      return (
+        <FilterLink
+          key={sortBy}
+          linkText={_.capitalize(sortBy)}
+          dispatchEvent={onSort.bind(null, allAvailablePosts, sortBy)}/>
+      );
+    });
+
     const areaLinks = Object.keys(practiceAreas).map((id) => {
       return (
-        <Link
+        <FilterLink
           key={id}
           linkText={practiceAreas[id].area}
-          data={practiceAreas[id].area}
           count={practiceAreas[id].posts}
           dispatchEvent={onAreaFilter.bind(null, posts)}
         />
@@ -117,10 +128,9 @@ class BlogHome extends Component {
 
     const authorLinks = Object.keys(postAuthors).map((id) => {
       return (
-        <Link
+        <FilterLink
           key={id}
           linkText={postAuthors[id].name}
-          data={postAuthors[id].name}
           count={postAuthors[id].posts}
           dispatchEvent={onAuthorFilter.bind(null, posts)}
         />
@@ -128,62 +138,63 @@ class BlogHome extends Component {
     });
 
     return (
-      <div className="container-fluid">
-        <div className="jumbotron">
+      <main>
+        <div 
+          className="jumbotron"
+          style={{
+            backgroundImage: "url('http://localhost:8000/static/images/2000/coffee-smartphone.jpg')",
+            backgroundPosition: "top center",
+            backgroundSize: "cover",
+            backgroundAttachment: "fixed"
+          }}>
           <div className="container">
-            <h1>Blog Posts</h1>
-            <h3>Blog posts written by leading industry professionals</h3>
+            <h1 className="text-uppercase">Blog Posts</h1>
+            <h3>Written by leading industry professionals</h3>
           </div>
         </div>
-        <SearchField
-          filterValues={filterValues}
-          onFilter={onSearchFilter.bind(null, posts)}
-        />
         {(Object.keys(posts).length > 0) ? 
+        <div className="container-fluid">
           <div className="row">
             <div className="col-md-4">
-              <ul className={"list-group " + (showAllMenu ? "" : "hidden")}>
-                {allPostsLink()}
-              </ul>
-              <button 
-                className="btn btn-block btn-default"
-                onClick={this.toggleAreaMenu}>
-              <h4>Filter by Practice Area</h4>
-              </button>
-              <ul className={"list-group " + (showAreaMenu ? "" : "hidden")}>
-                {areaLinks}
-              </ul>
-              <button 
-                className="btn btn-block btn-default"
-                onClick={this.toggleAuthorMenu}>
-              <h4>Filter by Author</h4>
-              </button>
-              <ul className={"list-group " + (showAuthorMenu ? "" : "hidden")}>
-                {authorLinks}
-              </ul>            
+              <SearchField
+                filterValues={filterValues}
+                onFilter={onSearchFilter.bind(null, posts)}/>
+              <DropdownMenu
+                heading="Sort by"
+                handleClick={this.toggleSortMenu}
+                showMenu={showSortMenu}
+                links={sortLinks}/>
+              <DropdownMenu
+                heading="Filter by Practice Area"
+                handleClick={this.toggleAreaMenu}
+                showMenu={showAreaMenu}
+                showAllLink={allPostsLink()}
+                links={areaLinks}/>
+              <DropdownMenu
+                heading="Filter by Author"
+                handleClick={this.toggleAuthorMenu}
+                showMenu={showAuthorMenu}
+                showAllLink={allPostsLink()}
+                links={authorLinks}/>        
             </div>
             <div className="col-md-8">
-              {(currentFilter === "area") ? (
-                <h2>{filterValues}</h2>       
-              ) : (currentFilter === "author") ? (
-                <h2>Posts by {filterValues}</h2>
-              ) : (currentFilter === "keyword") ? (
-                <h2>Posts found: {allAvailablePosts.length}</h2>
-              ) : (
-                <h2>All Posts</h2>
-              )}
+              <h2 className="no-margin-top">{
+                (currentFilter === "area") ? filterValues :
+                (currentFilter === "author") ? `Posts by ${filterValues}` :
+                (currentFilter === "keyword") ? `Posts found: ${allAvailablePosts.length}` :
+                "All Posts"}</h2>
               <InfiniteScroll 
                 pageStart={0}
                 allAvailablePosts={allAvailablePosts}
                 loadMore={onLoadMore.bind(null, allAvailablePosts)}
                 hasMore={hasMore}
-                loader={<div className="loader">Loading...</div>}
                 threshold={0}>
                 {postsList}
               </InfiniteScroll>
             </div>
-          </div> : <div className="loader">Loading...</div>}
-      </div>
+          </div>
+        </div> : <div/>}
+      </main>
     );
   }
 }

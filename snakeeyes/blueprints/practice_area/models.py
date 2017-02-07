@@ -17,6 +17,7 @@ class PracticeArea(ResourceMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     area = db.Column(db.String(128), nullable=False, index=True)
     img_src = db.Column(db.String(200))
+    description = db.Column(db.String(300))
 
     @classmethod
     def find_by_area(cls, area):
@@ -61,5 +62,6 @@ class PracticeArea(ResourceMixin, db.Model):
             'id': self.id,
             'area': self.area,
             'imgSrc': self.img_src,
-            'posts': self.posts.count()
+            'posts': self.posts.count(),
+            'description': self.description
         }

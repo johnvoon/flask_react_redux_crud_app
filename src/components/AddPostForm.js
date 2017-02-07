@@ -6,6 +6,7 @@ import SelectFormGroup from './SelectFormGroup';
 import TextAreaFormGroup from './TextAreaFormGroup';
 import FileUploadFormGroup from './FileUploadFormGroup';
 import TextEditorFormGroup from './TextEditorFormGroup';
+import RaisedButton from 'material-ui/RaisedButton';
 import { required, maxLength, createOptionsList, asyncValidatePostTitle as asyncValidate } from '../utils';
 
 
@@ -50,25 +51,32 @@ class AddPostForm extends Component {
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
 
     return (
-      <form className="form-horizontal">
+      <form>
         <Field 
           name="title"
           type="text"
           component={InputFormGroup}
           label="Title"
           validate={required}/>
-        <Field 
-          name="author"
-          component={SelectFormGroup}
-          label="Author"
-          validate={required}
-          options={postAuthorOptions}>
-        </Field>
-        <Field 
-          name="body"
-          component={TextEditorFormGroup}
-          label="Body"
-          validate={required}/>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="author"
+              component={SelectFormGroup}
+              label="Author"
+              validate={required}
+              options={postAuthorOptions}>
+            </Field>
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="practiceArea"
+              component={SelectFormGroup}
+              label="Practice Area"
+              validate={required}
+              options={practiceAreaOptions}/>
+          </div>
+        </div>
         <Field 
           name="summary"
           component={TextAreaFormGroup}
@@ -76,11 +84,10 @@ class AddPostForm extends Component {
           validate={[ required, maxLength(200) ]}
           rows="4"/>
         <Field 
-          name="practiceArea"
-          component={SelectFormGroup}
-          label="Practice Area"
-          validate={required}
-          options={practiceAreaOptions}/>
+          name="body"
+          component={TextEditorFormGroup}
+          label="Body"
+          validate={required}/>
         <Field 
           name="file"
           component={FileUploadFormGroup}
@@ -88,13 +95,13 @@ class AddPostForm extends Component {
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
-            className="btn btn-primary pull-right" 
+            className="btn btn-danger pull-right" 
             type="button" 
             disabled={pristine || submitting} 
             onClick={reset}>
             Reset
           </button>
-          <button
+          <button 
             className="btn btn-primary pull-right" 
             type="submit"
             disabled={submitting}

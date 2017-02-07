@@ -8,8 +8,7 @@ class EditPost extends Component {
     
     return (
       <div>
-        {!JWT && <GetJWTForm 
-                    onHide={onHide}
+        {!JWT && <GetJWTForm
                     onGetJWT={onGetJWT}
                     JWTExpired={JWTExpired}/>}
         {JWT && <EditPostForm

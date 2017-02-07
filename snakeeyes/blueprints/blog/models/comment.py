@@ -38,7 +38,9 @@ class Comment(ResourceMixin, db.Model):
         """
         return {
             'id': self.id,
-            'author': self.author.to_json(),
+            'postId': self.post.id,
+            'authorName': self.author.full_name,
+            'authorUsername': self.author.username,
             'created': self.created_on,
             'content': self.content,
             'visible': self.visible

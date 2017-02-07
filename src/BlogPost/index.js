@@ -3,19 +3,14 @@ import { connect } from 'react-redux';
 import Post from '../components/Post';
 import RelatedPost from '../components/RelatedPost';
 import Comment from '../components/Comment';
-import { fetchPostData } from '../Blog/actions';
+import { fetchPostData } from '../Entities/actions';
 
 const mapStateToProps = (state) => {
-  const { blogEntities, blogPost } = state;
-  const { posts, comments, commentAuthors } = blogEntities;
-  const { currentPost, relatedPosts, currentPostComments } = blogPost;
+  const { entities, blogPost } = state;
+
   return {
-    relatedPosts,
-    posts,
-    comments,
-    commentAuthors,
-    currentPost,
-    currentPostComments
+    ...entities,
+    ...blogPost
   };
 };
 
@@ -72,31 +67,40 @@ class BlogPost extends Component {
       }) : null;
 
     return (
-      <div className="container-fluid">
-        <div className="jumbotron">
-          <div className="container">
-            <h1>Our Blog</h1>
-            <h2>Keep up to date with the latest developments</h2>
-          </div>
+      <main>
+        <div 
+          className="hero"
+          style={{
+            backgroundImage: `url("${currentPost.imgSrc}")`,
+            backgroundPosition: 'top center',
+            backgroundSize: 'cover',
+            backgroundAttachment: 'fixed'
+          }}>
         </div>
-        <div className="row">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-sm-5 col-sm-offset-3">
+              {post()}
+            </div>
+          </div>
           <div>
-            {post()}
             <h3>Related Reads</h3>
             <div className="container-fluid no-padding">
               {postsList}
             </div>
           </div>
-          <div>
-            {currentPostComments.length === 1 ? (
-              <h3>{currentPostComments.length} comment</h3>  
-            ) : (
-              <h3>{currentPostComments.length} comments</h3>
-            )}
-            {commentsList}
+          <div className="row">
+            <div className="col-sm-6 col-sm-offset-3">
+              {currentPostComments.length === 1 ? (
+                <h3>{currentPostComments.length} comment</h3>  
+              ) : (
+                <h3>{currentPostComments.length} comments</h3>
+              )}
+              {commentsList}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 }

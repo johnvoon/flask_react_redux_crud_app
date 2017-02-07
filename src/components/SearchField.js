@@ -2,14 +2,16 @@ import React, { PropTypes } from 'react';
 
 const SearchField = ({ filterValues, onFilter }) => {
   return (
-    <div>
-      <input
-        className="form-control"
-        type="search"
-        value={filterValues}
-        onChange={onFilter}
-        placeholder="Search blog posts by keyword"
-      />
+    <div className="form-group">
+      <div className="input-group">
+        <input
+          className="form-control"
+          type="search"
+          value={filterValues}
+          onChange={onFilter}
+          placeholder="Search blog posts by keyword"/>
+        <span className="input-group-addon search"></span>        
+      </div>
     </div>    
   );
 };

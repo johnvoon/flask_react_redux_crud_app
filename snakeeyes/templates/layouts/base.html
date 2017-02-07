@@ -1,5 +1,3 @@
-{% import 'macros/flash.html' as flash with context %}
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,159 +10,16 @@
 
     <title>{% block title %}{% endblock %}</title>
 
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/vendor/bootstrap.min.css') }}">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/main.css') }}">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/vendor/font-awesome.min.css') }}">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/vendor/eonasdan-bootstrap-datetimepicker.4.13.30.min.css') }}">
     <script
       src="https://code.jquery.com/jquery-1.12.2.min.js"
       integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
       crossorigin="anonymous"></script>
-    <script src="https://js.stripe.com/v2/"></script>
-
-    {% if config['ANALYTICS_GOOGLE_UA'] %}
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', "{{ config['ANALYTICS_GOOGLE_UA'] }}", 'auto');
-        ga('send', 'pageview');
-      </script>
-    {% endif %}
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed"
-                  data-toggle="collapse" data-target=".navbar-collapse"
-                  aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="{{ url_for('page.home') }}">
-            <img src="{{ url_for('static', filename='images/concept-logo.png') }}"
-                 class="img-fluid"
-                 title="Concept Law Firm" 
-                 alt="Concept Law Firm"/>
-          </a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="{{ url_for('page.home') }}">Home</a></li>
-            <li><a href="{{ url_for('page.about') }}">About</a></li>
-            <li><a href="{{ url_for('page.people') }}">People</a></li>
-            <li><a href="{{ url_for('blog.home') }}">Blog</a></li>
-            <li><a href="{{ url_for('contact.index') }}">Contact</a></li>
-            <li><a href="{{ url_for('user.login') }}">Login</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <nav class="navbar navbar-default practice-areas">
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav text-uppercase">
-          <li><a href="{{ url_for('page.home') }}">Family Law</a></li>
-          <li><a href="{{ url_for('page.about') }}">Dispute Resolution</a></li>
-          <li><a href="{{ url_for('page.people') }}">Notary Public</a></li>
-          <li><a href="{{ url_for('blog.home') }}">Criminal Law</a></li>
-          <li><a href="{{ url_for('blog.home') }}">Mergers & Acquisitions</a></li>
-          <li><i class="fa fa-close"></i></li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="panel">
-      <div class="wrapper">
-        <div class="title">Family Law</div>
-        <div class="description">
-          <h3>We encourage settlements to arrive at the most cost-effective and time-saving solution whilst protecting your legal rights.
-          </h3>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="wrapper">
-        <div class="title">Dispute Resolution</div>
-        <div class="description">
-          <p>Our lawyers are industry leaders with a reputation for achieving successful outcomes in dispute resolution and professional negligence cases.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="wrapper">
-        <div class="title">Notary Public</div>
-        <div class="description">
-          <p>Our lawyers are industry leaders with a reputation for achieving successful outcomes in dispute resolution and professional negligence cases.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="wrapper">
-        <div class="title">Criminal Law</div>
-        <div class="description">
-          <p>Our lawyers are industry leaders with a reputation for achieving successful outcomes in dispute resolution and professional negligence cases.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="wrapper">
-        <div class="title">Mergers & Acquisition</div>
-        <div class="description">
-          <p>Our lawyers are industry leaders with a reputation for achieving successful outcomes in dispute resolution and professional negligence cases.
-          </p>
-        </div>
-      </div>
-    </div>
-    {% block hero %}{% endblock %}
-    
-    <main>
-      {{ flash.render() }}
-      <div id="root"></div>
-
-      <div class="md-margin-top">{% block heading %}{% endblock %}</div>
-      {% block body %}{% endblock %}
-    </main>
-    <footer class="footer text-center">
-      <div class="container">
-        <ul class="list-inline">
-          <li class="text-muted">Concept Law Firm &copy; 2017</li>
-          <li><a href="{{ url_for('contact.index') }}">Contact</a></li>
-          <li><a href="{{ url_for('page.privacy') }}">Privacy Policy</a></li>
-          <li><a href="{{ url_for('page.terms') }}">Terms of Service</a></li>
-        </ul>
-      </div>
-    </footer>
-
-    <script
-      src="{{ url_for('static', filename='scripts/vendor/bootstrap.min.js') }}">
-    </script>
-    <script
-      src="{{ url_for('static', filename='scripts/vendor/moment.min.js') }}">
-    </script>
-    <script
-      src="{{ url_for('static', filename='scripts/vendor/eonasdan-bootstrap-datetimepicker.4.14.30.min.js') }}">
-    </script>
+    <div id="root"></div>
+    {% block body %}{% endblock %}
     <script
       src="http://localhost:8080/static/scripts/bundle.js">
-    </script>
-    <script
-      src="{{ url_for('static', filename='scripts/main.js') }}">
     </script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhf-Omk8aZqFOvSrw0nSW0HAUe0DXY-6k&libraries=places">

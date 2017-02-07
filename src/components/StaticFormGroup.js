@@ -5,8 +5,8 @@ const StaticFormGroup = (props) => {
   
   return (
     <div className="form-group">
-      <label className="col-sm-2">
-        <strong>{label}</strong>
+      <label className="input-label col-sm-2">
+        {label}
       </label>
       <p className="col-sm-10 form-control-static">
         {text}

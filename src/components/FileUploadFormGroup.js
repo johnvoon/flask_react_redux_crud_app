@@ -1,36 +1,41 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
+import classNames from 'classnames';
 
 const FileUploadFormGroup = (field) => {
-  const { input, label, type, meta } = field;
+  const { input, label, meta } = field;
   const error = meta.touched && meta.error;
   const files = input.value;
 
   return (
-    <div className={"form-group " + (error && "has-error has-feedback")}>
-      <label className="col-sm-2" htmlFor={input.name}>
-        <b>{label}</b>
+    <div className="form-group">
+      <label className={classNames(
+        "input-label",
+        {"text-error": error})}>
+        {label}
+        <span/>
       </label>
-      <div className="col-sm-10">
-        <Dropzone
-          name={input.name}
-          multiple={false}
-          onDrop={(files) => input.onChange(files)}>
-          <p>Drop an image file or click to select a file to upload.</p>
-        </Dropzone>
+      <Dropzone
+        className="dropzone"
+        activeClassName="dropzone-active"
+        name={input.name}
+        multiple={false}
+        onDrop={(files) => input.onChange(files)}>
+        <div>
+          Drop a file here or click to browse
+        </div>
         {files && (
-          <ul className="list-group">
-            {files.map((file, idx) => (
-              <li className="list-group-item" key={idx}>
-                <img className="img-responsive" src={file.preview} alt="file preview"/>
-                {file.name}
-              </li>
-            ))}
-          </ul>
+          <div className="dropzone-image-container">
+            <img
+              className="dropzone-image img-responsive img-thumbnail"
+              src={files[0].preview} 
+              alt="file preview"/>
+            <div className="image-filename"><span>{files[0].name}</span></div>
+          </div>
         )}
-        {error && <span className="text-danger">{meta.error}</span>}
-      </div>
-    </div>
+      </Dropzone>
+    {error && <span className="text-error">{meta.error}</span>}
+  </div>
   );
 };
 

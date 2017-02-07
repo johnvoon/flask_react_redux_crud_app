@@ -1,22 +1,26 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const TextAreaFormGroup = (field) => {
-  const { input, label, type, meta, rows } = field;
+  const { input, label, meta, rows, placeholder } = field;
   const error = meta.touched && meta.error;
 
   return (
-    <div className={"form-group " + (error && "has-error has-feedback")}>
-      <label className="col-sm-2" htmlFor={input.name}>
-        <b>{label}</b>
+    <div className="form-group">
+      <label className={classNames(
+        "input-label",
+        {"text-error": error})}>
+        {label}
+        <span/>
       </label>
-      <div className="col-sm-10">
-        <textarea 
-          className="form-control"
-          id={input.name}
-          rows={rows}
-          {...input}/>
-        {error && <span className="text-danger">{meta.error}</span>}
-      </div>
+      <textarea
+        className={classNames(
+          "form-control",
+          {"bg-error": error})}
+        rows={rows}
+        placeholder={placeholder}
+        {...input}/>
+      {error && <span className="text-error">{meta.error}</span>}
     </div>
   );
 };

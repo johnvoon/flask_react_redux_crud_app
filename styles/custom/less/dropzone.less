@@ -1,0 +1,32 @@
+.dropzone, .dropzone-active {
+  text-align: center;
+  cursor: pointer;
+  width: 50%;
+  min-height: 200px;
+  border: 2px dashed #609dff;
+}
+
+.dropzone-active {
+  background: #ededed;
+}
+
+.dropzone-image-container {
+  position: relative;
+}
+
+.image-filename {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  color: #fff;
+  height: 100%;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.dropzone-image-container:hover .image-filename {
+  visibility: visible;
+  background: rgba(29,106,154,0.5);
+}

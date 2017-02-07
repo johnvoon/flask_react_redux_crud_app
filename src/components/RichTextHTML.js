@@ -1,5 +1,5 @@
 import React, { Component, PropType } from 'react';
-import RichTextEditor, { createValueFromString, createEmptyValue } from 'react-rte';
+import RichTextEditor, { createEmptyValue } from 'react-rte';
 
 export default class RichTextHTML extends Component {
   currentValue: '';
@@ -50,9 +50,10 @@ export default class RichTextHTML extends Component {
 
   render() {
     return (
-      <RichTextEditor 
+      <RichTextEditor
         value={this.state.editorValue}
-        onChange={this.handleChange}/>
+        onChange={this.handleChange}
+        placeholder="Type new post content here"/>
     )
   }
 }

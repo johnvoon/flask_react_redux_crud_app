@@ -1,6 +1,6 @@
 # Concept Law Firm Website
 
-A modern law firm website I would enjoy using.
+A modern law firm website with custom content management system.
 
 <strong>LIVE AT: TBA</strong>
 
@@ -10,22 +10,40 @@ A modern law firm website I would enjoy using.
 
 ## Overview
 
-A law firm website 
+A concept law firm website I built from the back- to front-end to learn Flask and React. 
 
 ## Instructions
 
 Login with username: "admin", password: "devpassword" for access to account with admin privileges.
 
 ## Features
-- Designed and developed with UX in mind
 - Mobile responsive
-- Blog index page with instantaneous filters (by keyword, practice area or author) and infinite scrolling
-- General public user account allows scheduling appointments and commenting on posts
-- Individual client and staff accounts can only be created by a user with admin privileges
-- Individual blog posts show list of related posts and comments
-- Admin pages with instantaneous keyword search filter, column sorting and full CRUD functionality 
-- Forms feature client-side field validation, server-side async validation, image file uploading, address autocomplete and RichTextEditor input.
-- Forms prompt different information for adding different types of users, e.g. (staff, clients or public users)
+- Custom content management system
+
+### Blog Posts Index Page
+- Instantaneous filters (by keyword, practice area or author)
+- Infinite scrolling for loading more posts
+
+### Blog Post Page
+- Displays related posts
+- Displays comments and comment form
+
+### Admin Pages
+- Instantaneous keyword search filter
+- Column sort and CRUD functionality
+
+### Admin User Page
+- Individual client and staff user accounts can only be created by a user with admin privileges
+- "Add User" and "Edit User" forms feature client- and server-side field validation, address autocomplete.
+- If added user role is "staff", "Add Staff" form will be automatically displayed.
+- If added user role is "client", "Add Client" form will be automatically displayed.
+- "Add Staff" form features client-side field validation, datepicker, image uploading, multiselect fields.
+- "Add Client" form features
+
+### Admin Posts Page
+- "Add Post" and "Edit Post" forms feature client- and server-side field validation, image file uploading and RichTextEditor input. 
+
+
 - Admin dashboard and pages are protected and require authentication and admin user privileges
 - Certain admin operations (e.g. POST, PUT, DELETE requests) additionally require a JWT (obtained client-side from admin pages).
 - On expiry of JWT, user is redirected back to JWT request page (inputted data is automatically saved)
@@ -37,30 +55,31 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Website hosted on <b>Digital Ocean</b>
 - <b>Gunicorn</b> web server
 - <b>Nginx</b> reverse proxy
-- <b>Bootstrap</b> for CSS
+- <b>Bootstrap</b> (customized using LESS) CSS framework
 - User authentication with <b>Flask</b> and <b>Flask-Login</b>
 - Password hashing using <b>Bcrypt</b>
 - Automated emails generated with and <b>Flask-Mail</b> and <b>Celery</b>
-- Back-end API built using <b>Flask-RESTful</b>
-- API endpoints protected using <b>Flask-JWT</b>
-- Interactive user interface with <b>React</b> (code written in ES6)
+- Back-end API built using [<b>Flask-RESTful</b>](http://flask-restful-cn.readthedocs.io/en/0.3.4/)
+- API endpoints protected using [<b>Flask-JWT</b>](https://pythonhosted.org/Flask-JWT/)
+- Interactive user interface with [<b>React</b>](https://facebook.github.io/react/) (code written in ES6)
 - Application state management with <b>Redux</b>
-- <b>Redux-Thunk</b> middleware for dispatching Redux actions
-- Front-end routing with <b>React-Router</b>
-- Form state management and validation using <b>Redux-Form</b>
-- Date-time formatting with <b>Moment.js</b> 
-- JSON data normalization with <b>Normalizr</b>
-- HTTP requests with <b>Axios</b>
-- Memoized selectors with <b>Reselect</b>
+- [<b>Redux-Thunk</b>](https://github.com/gaearon/redux-thunk) middleware for dispatching Redux actions
+- Front-end routing with [<b>React-Router</b>](https://github.com/ReactTraining/react-router)
+- Form state management and validation using [<b>Redux-Form</b>](http://redux-form.com/)
+- Date-time formatting with [<b>Moment.js</b>](https://momentjs.com/) 
+- JSON data normalization with [<b>Normalizr</b>](https://github.com/paularmstrong/normalizr)
+- HTTP requests with [<b>Axios</b>](https://github.com/mzabriskie/axios)
+- Memoized selectors with [<b>Reselect</b>](https://github.com/reactjs/reselect)
 - Modal implementation with <b>React-Bootstrap</b>
 - Infinite scrolling with <b>Redux Infinite Scroll</b>
-- RichTextEditor element using <b>React-RTE</b>
-- <b>Lodash</b> JavaScript helper functions
-- Front-end module bundling with <b>Webpack</b>
-- <b>Docker</b> for containerization
-- <b>PostgreSQL</b> database with <b>SQLAlchemy</b> ORM
-- Images uploaded with <b>React-dropzone</b>
-- JavaScript linting with <b>ESLint</b>
+- RichTextEditor element from [<b>React-RTE</b>](https://github.com/sstur/react-rte)
+- Select controls from [<p>React-Select</p>](https://github.com/JedWatson/react-select)
+- [<b>Lodash</b>](https://lodash.com/) JavaScript helper functions
+- Front-end module bundling with [<b>Webpack</b>](https://webpack.github.io/)
+- [<b>Docker</b>](https://www.docker.com/) for containerization
+- <b>PostgreSQL</b> database with [<b>SQLAlchemy</b>](http://www.sqlalchemy.org/) ORM
+- Images uploaded with [<b>React-dropzone</b>](https://github.com/okonet/react-dropzone)
+- JavaScript linting with [<b>ESLint</b>](http://eslint.org/)
 - Fake data generated with <b>fake-factory</b>
 - Address form autocomplete using <b>Google Places API</b> and [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest)
 

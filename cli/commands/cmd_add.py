@@ -78,6 +78,7 @@ def practice_areas():
     
     data = []
     practice_areas = ["Dispute Resolution", "Criminal Law", "Family Law", "Mergers & Acquisitions"]
+    description = "We encourage settlements to arrive at the most cost-effective and time-saving solution whilst protecting your legal rights."
     with app.app_context():
         img_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
                     url_for('static', filename='images/400/building.jpg'),
@@ -90,7 +91,8 @@ def practice_areas():
         img_src = random.choice(img_srcs)
         params = {
             'area': area,
-            'img_src': img_src
+            'img_src': img_src,
+            'description': description
         }
 
         data.append(params)
@@ -255,6 +257,7 @@ def posts():
     img_srcs = itertools.cycle(img_srcs)
     author_ids = db.session.query(Staff.id).all()
     practice_area_ids = db.session.query(PracticeArea.id).all()
+    views_counts = list(range(11))
 
     for title in random_titles:
         fake_datetime = fake.date_time_between(
@@ -267,6 +270,7 @@ def posts():
         img_src = img_srcs.next()
         body = list(fake.paragraphs(nb=20))
         summary = fake.sentence(nb_words=10)
+        view_count = random.choice(views_counts)
 
         params = {
             'created_on': created_on,
@@ -277,7 +281,8 @@ def posts():
             'img_src': img_src,
             'summary': summary,
             'author_id': author_id,
-            'practice_area_id': practice_area_id
+            'practice_area_id': practice_area_id,
+            'view_count': view_count
         }
 
         data.append(params)

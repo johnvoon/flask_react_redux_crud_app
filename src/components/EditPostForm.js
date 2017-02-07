@@ -75,7 +75,7 @@ class EditPostForm extends Component {
     const postUpdated = moment(post.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
 
     return (
-      <form className="form-horizontal">
+      <form>
         <StaticFormGroup 
           label="Created"
           text={postCreated}/>
@@ -88,16 +88,24 @@ class EditPostForm extends Component {
           component={InputFormGroup}
           label="Title"
           validate={required}/>
-        <Field 
-          name="author"
-          component={SelectFormGroup}
-          label="Author"
-          validate={required}
-          options={postAuthorOptions}/>
-        <Field 
-          name="body"
-          component={TextEditorFormGroup}
-          label="Body"/>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="author"
+              component={SelectFormGroup}
+              label="Author"
+              validate={required}
+              options={postAuthorOptions}/>            
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="practiceArea"
+              component={SelectFormGroup}
+              label="Practice Area"
+              validate={required}
+              options={practiceAreaOptions}/>
+          </div>
+        </div>
         <Field 
           name="summary"
           component={TextAreaFormGroup}
@@ -105,11 +113,9 @@ class EditPostForm extends Component {
           validate={[ required, maxLength(100) ]}
           rows="4"/>
         <Field 
-          name="practiceArea"
-          component={SelectFormGroup}
-          label="Practice Area"
-          validate={required}
-          options={practiceAreaOptions}/>
+          name="body"
+          component={TextEditorFormGroup}
+          label="Body"/>
         <Field 
           name="file"
           component={FileUploadFormGroup}
@@ -117,7 +123,7 @@ class EditPostForm extends Component {
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
-            className="btn btn-primary pull-right" 
+            className="btn btn-danger pull-right" 
             type="button" 
             disabled={pristine || submitting} 
             onClick={reset}>

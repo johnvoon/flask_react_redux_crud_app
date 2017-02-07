@@ -9,20 +9,23 @@ export default class PageLengthMenu extends Component {
     } = this.props;
 
     return (
-      <div>
-        <label htmlFor="page-menu">Results per page: </label> 
-        <select
-          id="page-menu"
-          value={pageLength}
-          onChange={onPageLengthChange}
-        >
-          {pageLengthOptions.map(opt =>
-            <option key={opt} value={opt}>
-              {opt === 0 ? 'All' : opt}
-            </option>
-          )}
-        </select>
-      </div>    
+      <form className="form-inline">
+        <div className="form-group">
+          <label>
+            Page length:
+          </label>
+          <select
+            className="form-control"
+            value={pageLength}
+            onChange={onPageLengthChange}>
+            {pageLengthOptions.map(option =>
+              <option key={option} value={option}>
+                {option === 0 ? 'All' : option}
+              </option>
+            )}
+          </select>
+        </div>
+      </form>    
     );
   }
 }

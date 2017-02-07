@@ -1,24 +1,27 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const AsyncValidationFormGroup = (field) => {
   const { input, label, type, meta, placeholder } = field;
   const error = meta.touched && meta.error;
 
   return (
-    <div className={"form-group " + (error && "has-error has-feedback")}>
-      <label className="col-sm-2" htmlFor={input.name}>
-        <b>{label}</b>
+    <div className={classNames(
+      {"async-validating": meta.asyncValidating})}>
+      <label className={classNames(
+        "input-label",
+        {"text-error": error})}>
+        {label}
+        <span/>
       </label>
-      <div className={"col-sm-10 " + (meta.asyncValidating ? 'async-validating' : '')}>
-        <input 
-          className="form-control"
-          id={input.name}
-          type={type}
-          value={input.value}
-          placeholder={placeholder}
-          {...input}/>
-        {error && <span className="text-danger">{meta.error}</span>}
-      </div>
+      <input
+        className={classNames(
+          "form-control",
+          {"bg-error": error})}
+        placeholder={placeholder}
+        type={type}
+        {...input}/>
+      {error && <span className="text-error">{meta.error}</span>}
     </div>
   );
 };

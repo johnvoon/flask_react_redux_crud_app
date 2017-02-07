@@ -1,35 +1,53 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
+import sr from './ScrollReveal';
 
-const PostCard = ({post}) => {
-  const postCreated = moment(post.created, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
+export default class PostCard extends Component {
+  componentDidMount() {
+    const config = {
+      duration: 1000,
+      scale: 1,
+      distance: 0
+    }
 
-  return (
-    <div className="post-container clearfix">
-      <div className="img-fixed-width">
-        <img className="img-fixed" src={post.thumbnailSrc} alt="img" />
+    sr.reveal(this.postCard, config)
+    sr.reveal(this.postCardImage, config);
+  }  
+
+  render() {
+    const { post } = this.props;
+    const postCreated = moment(post.created, "ddd DD-MMM-YYYY HH:mm:ss").format('D MMMM YYYY');
+    
+    return (
+      <div 
+        className="post-card clearfix"
+        ref={div => this.postCard = div}>
+        <div className="post-card-img">
+          <img 
+            src={post.thumbnailSrc} 
+            alt="img" 
+            ref={img => this.postCardImage = img}/>
+        </div>
+        <div className="container-fluid text-fluid">
+          <h2 className="no-margin-top">
+            <Link to={`/blog/${post.id}`}>{post.title}</Link>
+          </h2>
+          <p className="post-details">
+            <a href="#">{post.author}</a> | <a href="#">{post.practiceArea}</a> | {postCreated}
+          </p>
+          <p>{post.summary}</p>
+          <Link 
+            to={"/blog/" + post.id} 
+            className="btn btn-primary text-uppercase">
+            Read More
+          </Link>
+        </div>
       </div>
-      <div className="container-fluid text-fluid">
-        <h2>
-          <Link to={`/blog/${post.id}`}>{post.title}</Link>
-        </h2>
-        <p>
-          By <a href="#">{post.author}</a> in <a href="#">{post.practiceArea}</a> on {postCreated}
-        </p>
-        <p>{post.summary}</p>
-        <Link 
-          to={"/blog/" + post.id} 
-          className="btn btn-primary btn-lg border-square">
-          Read More
-        </Link>
-      </div>
-    </div>
-  );
-};
+    );    
+  }
+}
 
 PostCard.propTypes = {
   post: PropTypes.object.isRequired
 };
-
-export default PostCard;

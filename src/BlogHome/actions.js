@@ -1,5 +1,6 @@
 import {
   SHOW_ALL_POSTS,
+  SORT_POSTS,
   FILTER_POSTS_BY_KEYWORD,
   FILTER_BY_AREA,
   FILTER_BY_AUTHOR,
@@ -10,6 +11,14 @@ export function showAllPosts() {
   return {
     type: SHOW_ALL_POSTS
   };
+}
+
+export function sortPosts(posts, sortBy) {
+  return {
+    type: SORT_POSTS,
+    posts,
+    sortBy
+  }
 }
 
 export function filterPostsByKeyword(value, posts) {

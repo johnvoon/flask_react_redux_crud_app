@@ -136,10 +136,5 @@ class Post(ResourceMixin, db.Model):
             'thumbnailSrc': self.thumbnail_src,
             'created': self.created_on,
             'updated': self.updated_on,
-        }
-
-    def to_json_short(self):
-        return {
-            'id': self.id,
-            'title': self.title
+            'views': self.view_count
         }

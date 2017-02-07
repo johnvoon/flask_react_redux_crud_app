@@ -10,7 +10,8 @@ import { POSTS_LOADED,
          CHANGE_PAGE_LENGTH,
          FILTER_ADMIN_DATA,
          SORT_DATA,
-         LOAD_FORM_DATA } from '../constants/actionTypes';
+         LOAD_FORM_DATA,
+         RESET_ADDED_RECORD } from '../constants/actionTypes';
 
 const initialState = {
   data: {},
@@ -63,6 +64,9 @@ export default function adminPagesReducer(state = initialState, action) {
 
     case LOAD_FORM_DATA:
       return loadFormData(state, action);
+
+    case RESET_ADDED_RECORD:
+      return resetAddedRecord(state, action);
   }
 
   return state;
@@ -107,7 +111,7 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) {
     data: _.merge({}, data, addedRecord),
     recordIds: [...recordIds, addedRecordId],
     successMessage: 'Record added successfully',
-    addedRecord
+    addedRecord: addedRecord[addedRecordId]
   }
 }
 
@@ -164,4 +168,11 @@ function filterAdminData(state, { value }) {
 
 function loadFormData(state, { formData }) {
   return _.merge({}, state, { formData: formData });
+}
+
+function resetAddedRecord(state, action) {
+  return {
+    ...state,
+    addedRecord: {}
+  }
 }

@@ -103,7 +103,7 @@ class EditUserForm extends Component {
     const roleOptions = ["admin - Admin", "client - Client", "staff - Staff", "public - Public"]
     
     return (
-      <form className="form-horizontal">
+      <form>
         <StaticFormGroup 
           label="Created"
           text={userCreated}/>
@@ -116,41 +116,59 @@ class EditUserForm extends Component {
         <StaticFormGroup 
           label="Email"
           text={user.email}/>
-        <Field 
-          name="active"
-          component={SelectFormGroup}
-          label="Status"
-          validate={required}
-          options={activeOptions}/>   
-        <Field 
-          name="role"
-          component={SelectFormGroup}
-          label="Role"
-          validate={required}
-          options={roleOptions}/>        
-        <Field 
-          name="firstName"
-          type="text"
-          component={InputFormGroup}
-          label="First Name"
-          validate={required}/>
-        <Field 
-          name="middleName"
-          type="text"
-          component={InputFormGroup}
-          label="Middle Name"/>
-        <Field 
-          name="lastName"
-          type="text"
-          component={InputFormGroup}
-          label="Last Name"
-          validate={required}/>
-        <Field 
-          name="phoneNumber"
-          type="tel"
-          component={InputFormGroup}
-          label="Mobile Number"
-          validate={required}/>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="active"
+              component={SelectFormGroup}
+              label="Status"
+              validate={required}
+              options={activeOptions}/>
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="role"
+              component={SelectFormGroup}
+              label="Role"
+              validate={required}
+              options={roleOptions}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="lastName"
+              type="text"
+              component={InputFormGroup}
+              label="Last Name"
+              validate={required}/>
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="firstName"
+              type="text"
+              component={InputFormGroup}
+              label="First Name"
+              validate={required}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="middleName"
+              type="text"
+              component={InputFormGroup}
+              label="Middle Name"/>
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="phoneNumber"
+              type="tel"
+              component={InputFormGroup}
+              label="Mobile Number"
+              validate={required}/>
+          </div>
+        </div>
         <Field 
           name="addressSearch"
           type="text"
@@ -159,40 +177,56 @@ class EditUserForm extends Component {
           placeholder="Enter your address to search"
           fillInAddress={(value) => this.fillInAddress(value)}>
         </Field>
-        <Field 
-          name="unitNumber"
-          type="text"
-          component={InputFormGroup}
-          label="Unit Number"/>
-        <Field 
-          name="streetAddress"
-          type="text"
-          component={InputFormGroup}
-          label="Street Address"/>
-        <Field 
-          name="suburb"
-          type="text"
-          component={InputFormGroup}
-          label="Suburb"/>
-        <Field 
-          name="postcode"
-          type="text"
-          component={InputFormGroup}
-          label="Postcode"/>
-        <Field 
-          name="state"
-          type="text"
-          component={InputFormGroup}
-          label="State"/>
-        <Field 
-          name="country"
-          type="text"
-          component={InputFormGroup}
-          label="Country"/>
+        <div className="row">
+          <div className="col-sm-2">
+            <Field 
+              name="unitNumber"
+              type="text"
+              component={InputFormGroup}
+              label="Unit Number"/>
+          </div>
+          <div className="col-sm-5">
+            <Field 
+              name="streetAddress"
+              type="text"
+              component={InputFormGroup}
+              label="Street Address"/>
+          </div>
+          <div className="col-sm-5">
+            <Field 
+              name="suburb"
+              type="text"
+              component={InputFormGroup}
+              label="Suburb"/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-2">
+            <Field 
+              name="postcode"
+              type="text"
+              component={InputFormGroup}
+              label="Postcode"/>
+          </div>
+          <div className="col-sm-5">
+            <Field 
+              name="state"
+              type="text"
+              component={InputFormGroup}
+              label="State"/>
+          </div>
+          <div className="col-sm-5">
+            <Field 
+              name="country"
+              type="text"
+              component={InputFormGroup}
+              label="Country"/>
+          </div>
+        </div>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
-            className="btn btn-primary pull-right" 
+            className="btn btn-danger pull-right" 
             type="button" 
             disabled={ pristine || submitting} 
             onClick={reset}>

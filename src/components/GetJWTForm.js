@@ -22,24 +22,28 @@ class GetJWTForm extends Component {
     } 
     
     return (
-      <form className="form-horizontal">
+      <form>
         <p>Please enter your username and password:</p>
-        <Field 
-          name="username"
-          type="text"
-          component={InputFormGroup}
-          label="Username or Email"
-          validate={required}/>
-        <Field 
-          name="password"
-          type="password"
-          component={InputFormGroup}
-          label="Password"
-          validate={required}/>
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3">
+            <Field 
+              name="username"
+              type="text"
+              component={InputFormGroup}
+              label="Username or Email"
+              validate={required}/>
+            <Field 
+              name="password"
+              type="password"
+              component={InputFormGroup}
+              label="Password"
+              validate={required}/>
+          </div>       
+        </div>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
-            className="btn btn-primary pull-right" 
+            className="btn btn-danger pull-right" 
             type="button" 
             disabled={pristine || submitting} 
             onClick={reset}>
@@ -51,7 +55,6 @@ class GetJWTForm extends Component {
             disabled={submitting}
             onClick={handleSubmit(data => {
               onGetJWT(data)
-              .then(() => onHide())
               .catch(({message, response}) => {
                 const { status, data } = response;
                 if (status === 401) {

@@ -1,13 +1,15 @@
 import _ from 'lodash';
-import { filter } from '../utils';
+import { filter, sort, sortByDate } from '../utils';
 import { POSTS_LOADED,
          SHOW_ALL_POSTS,
+         SORT_POSTS,
          FILTER_POSTS_BY_KEYWORD,
          FILTER_BY_AREA,
          FILTER_BY_AUTHOR,
          LOAD_MORE } from '../constants/actionTypes';
 
 const initialState = { 
+  data: {},
   // all posts from database
   allPosts: [],
   // visible and hidden posts (can be made visible by scrolling)
@@ -27,6 +29,8 @@ export default function blogHomeReducer(state = initialState, action) {
       return postsLoaded(state, action);
     case SHOW_ALL_POSTS:
       return showAllPosts(state, action);
+    case SORT_POSTS:
+      return sortPosts(state, action);
     case FILTER_POSTS_BY_KEYWORD:
       return filterPostsByKeyword(state, action);
     case FILTER_BY_AREA:
@@ -40,15 +44,33 @@ export default function blogHomeReducer(state = initialState, action) {
   return state;
 }
 
-function postsLoaded(state, { posts }) {
+function postsLoaded(state, { entities, posts }) {
   return {
     ...state,
+    data: entities.posts,
     allPosts: posts,
     allAvailablePosts: posts,
     visiblePosts: posts.slice(0, 5),
     cursorStart: 0,
     cursorEnd: 5
   };
+}
+
+function sortPosts(state, { posts, sortBy }) {
+  const { data } = state;
+  console.log(data, posts, sortBy);
+  let sortedPosts;
+  if (sortBy === "created") {
+    sortedPosts = sortByDate(data, posts, "descending")
+  } else {
+    sortedPosts = sort(data, posts, sortBy, "ascending")  
+  }
+
+  return {
+    ...state,
+    allAvailablePosts: sortedPosts,
+    visiblePosts: sortedPosts.slice(0, 5),
+  }
 }
 
 function filterPostsByKeyword(state, {value, posts}) {

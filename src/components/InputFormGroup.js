@@ -1,23 +1,26 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const InputFormGroup = (field) => {
   const { input, label, type, meta, placeholder } = field;
   const error = meta.touched && meta.error;
   
   return (
-    <div className={"form-group " + (error && "has-error has-feedback")}>
-      <label className="col-sm-2" htmlFor={input.name}>
-        <b>{label}</b>
+    <div className="form-group">
+      <label className={classNames(
+        "input-label",
+        {"text-error": error})}>
+        {label}
+        <span/>
       </label>
-      <div className="col-sm-10">
-        <input 
-          className="form-control"
-          id={input.name}
-          type={type}
-          placeholder={placeholder}
-          {...input}/>
-        {error && <span className="text-danger">{meta.error}</span>}
-      </div>
+      <input
+        className={classNames(
+          "form-control",
+          {"bg-error": error})}
+        placeholder={placeholder}
+        type={type}
+        {...input}/>
+      {error && <span className="text-error">{meta.error}</span>}
     </div>
   );
 };

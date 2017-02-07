@@ -6,7 +6,8 @@ import {
   RECORD_ADDED,
   RECORD_EDITED,
   RECORD_DELETED,
-  LOAD_FORM_DATA
+  LOAD_FORM_DATA,
+  RESET_ADDED_RECORD
 } from '../constants/actionTypes';
 
 export function changePageLength(value) {
@@ -67,3 +68,10 @@ export function loadFormData(formData) {
     formData
   }
 }
+
+export function resetAddedRecord() {
+  return {
+    type: RESET_ADDED_RECORD
+  }
+}
+

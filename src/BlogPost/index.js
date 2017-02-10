@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class BlogPost extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchPost(this.props.params.id);
   }
 
@@ -32,12 +32,11 @@ class BlogPost extends Component {
     const { posts, relatedPosts, comments, commentAuthors, currentPost,
             onChangeCurrentPost, currentPostComments } = this.props;
 
-    const postsList = relatedPosts.map((id) => {
-      const post = posts[id];
+    const relatedPostsList = relatedPosts.map((id) => {
       return (
         <RelatedPost 
           key={id}
-          post={post}
+          post={posts[id]}
           dispatchEvent={onChangeCurrentPost.bind(null, id)}
         /> 
       );
@@ -53,23 +52,19 @@ class BlogPost extends Component {
       } else return null;
     };
 
-    const commentsList = currentPostComments ?
-      currentPostComments.map(id => {
-        const comment = comments[id];
-        const author = commentAuthors[comment.author];
-        return (
-          <Comment
-            key={id}
-            comment={comment}
-            author={author}
-          />
-        );
-      }) : null;
+    const commentsList = (currentPostComments || []).map(id => {
+      return (
+        <Comment
+          key={id}
+          comment={comments[id]}
+        />
+      );
+    });
 
     return (
-      <main>
+      <main className="post">
         <div 
-          className="hero"
+          className="jumbotron"
           style={{
             backgroundImage: `url("${currentPost.imgSrc}")`,
             backgroundPosition: 'top center',
@@ -78,26 +73,19 @@ class BlogPost extends Component {
           }}>
         </div>
         <div className="container-fluid">
-          <div className="row">
-            <div className="col-sm-5 col-sm-offset-3">
-              {post()}
-            </div>
+          {post()}
+        </div>
+        <div className="related-items">
+          <div className="related-posts">
+            {relatedPostsList}
           </div>
-          <div>
-            <h3>Related Reads</h3>
-            <div className="container-fluid no-padding">
-              {postsList}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-6 col-sm-offset-3">
-              {currentPostComments.length === 1 ? (
-                <h3>{currentPostComments.length} comment</h3>  
-              ) : (
-                <h3>{currentPostComments.length} comments</h3>
-              )}
-              {commentsList}
-            </div>
+          <div className="comments">
+            {currentPostComments.length === 1 ? (
+              <h3>{currentPostComments.length} comment</h3>  
+            ) : (
+              <h3>{currentPostComments.length} comments</h3>
+            )}
+            {commentsList}
           </div>
         </div>
       </main>

@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'cheap-eval-source-map',
+  devtool: 'eval',
   entry: './src/index.js',
   output: {
     // path on web server

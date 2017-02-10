@@ -12,7 +12,8 @@ export default class Sidebar extends Component {
         <Link
           key={idx}
           className="list-group-item"
-          to={endpoint}>
+          to={endpoint}
+          onClick={window.location.reload}>
           {linkText}
         </Link>
       );

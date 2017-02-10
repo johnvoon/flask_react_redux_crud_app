@@ -24,12 +24,13 @@ export default class PostCard extends Component {
         className="post-card clearfix"
         ref={div => this.postCard = div}>
         <div className="post-card-img">
-          <img 
+          <img
+            className="img-responsive"
             src={post.thumbnailSrc} 
             alt="img" 
             ref={img => this.postCardImage = img}/>
         </div>
-        <div className="container-fluid text-fluid">
+        <div className="post-card-content">
           <h2 className="no-margin-top">
             <Link to={`/blog/${post.id}`}>{post.title}</Link>
           </h2>

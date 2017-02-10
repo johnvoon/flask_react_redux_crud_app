@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
@@ -13,6 +14,7 @@ import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate';
 import TablePostLink from '../components/TablePostLink';
 import TableHeading from '../components/TableHeading';
+import TableCommentsLink from '../components/TableCommentsLink';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
 import { fetchBlogData, addPost, editPost, deletePost, loadImage } from '../Entities/actions';
@@ -89,8 +91,15 @@ class AdminPosts extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchBlogData();
+  }
+
+  renderTableCommentsLink(val, row) {
+    return (
+      <TableCommentsLink
+        data={row}/>
+    );
   }
 
   renderTableEditLink(val, row) {
@@ -164,6 +173,9 @@ class AdminPosts extends Component {
             { title: 'Title', component: TablePostLink, prop: 'title'},
             { title: 'Author', component: TableHeading, prop: 'author'},
             { title: 'Practice Area', component: TableHeading, prop: 'practiceArea'},
+            { title: '',
+              component: (val, row) => this.renderTableCommentsLink(val, row),
+              className: 'text-center' },
             { title: '', 
               component: (val, row) => this.renderTableEditLink(val, row),
               className: 'text-center' },

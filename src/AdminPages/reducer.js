@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import { POSTS_LOADED,
          USERS_LOADED,
+         COMMENTS_LOADED,
          RECORD_ADDED,
          RECORD_EDITED,
          RECORD_DELETED,
+         COMMENT_VISIBILITY_CHANGED,
          JWT_LOADED,
          REMOVE_JWT,
          CHANGE_PAGE_NUMBER, 
@@ -35,6 +37,9 @@ export default function adminPagesReducer(state = initialState, action) {
     case USERS_LOADED:
       return usersLoaded(state, action);
 
+    case COMMENTS_LOADED:
+      return commentsLoaded(state, action);
+
     case JWT_LOADED:
       return JWTLoaded(state, action);
 
@@ -49,6 +54,9 @@ export default function adminPagesReducer(state = initialState, action) {
 
     case RECORD_DELETED:
       return recordDeleted(state, action);
+
+    case COMMENT_VISIBILITY_CHANGED:
+      return commentVisibilityChanged(state, action);
     
     case CHANGE_PAGE_NUMBER:
       return changePageNumber(state, action);
@@ -103,6 +111,14 @@ function usersLoaded(state, { entities, users }) {
   };  
 }
 
+function commentsLoaded(state, { entities, comments }) {
+  return {
+    ...state,
+    data: entities.comments || {},
+    recordIds: comments
+  }
+}
+
 function recordAdded(state, { entities, addedRecord, addedRecordId }) {
   const { data, recordIds } = state;
 
@@ -119,6 +135,16 @@ function recordEdited(state, action) {
   return {
     ...state,
     successMessage: "Record edited successfully"
+  }
+}
+
+function commentVisibilityChanged(state, { entities, commentId }) {
+  console.log(entities.comments[commentId], typeof commentId);
+  const visibility = entities.comments[commentId].visible ? "visible" : "hidden" 
+
+  return {
+    ...state,
+    successMessage: `Comment ${commentId} now ${visibility}`
   }
 }
 

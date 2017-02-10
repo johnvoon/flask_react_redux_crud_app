@@ -98,6 +98,8 @@ Login with username: "admin", password: "devpassword" for access to account with
 - BBB/dropzone-redux-form-example(https://github.com/BBB/dropzone-redux-form-example)
 
 ## Todo
+- Migrate to Node.js
+- Enable server-side rendering
 - Staff portal for viewing appointment diary, sending invoices/receipts and case status updates
 - Client portal for receiving invoices/receipts and case status updates
 - Instant chat pop-up for answering enquiries from website visitors

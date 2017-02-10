@@ -9,7 +9,8 @@ import { postSchema,
 import { sortByDate } from '../utils';
 import { recordAdded, 
          recordEdited, 
-         recordDeleted } from '../AdminPages/actions';
+         recordDeleted,
+         commentVisibilityChanged } from '../AdminPages/actions';
 import { POSTS_LOADED,
          POST_LOADED,
          PRACTICE_AREAS_LOADED,
@@ -74,9 +75,10 @@ export function fetchPostAuthors() {
 
 export function fetchPostData(id) {
   return (dispatch, getState) => {
-    dispatch(fetchPost(id))
+    dispatch(fetchPosts())
+      .then(() => dispatch(fetchPost(id)))
       .then(() => {
-        const post = getState().blogEntities.posts[id];
+        const post = getState().entities.posts[id];
         const practiceArea = post.practiceArea;
         dispatch(fetchRelatedPosts(id, practiceArea));
         dispatch(fetchComments(id));
@@ -167,6 +169,19 @@ export function fetchComments(id) {
   };  
 }
 
+export function changeCommentVisibility(id, formData, config) {
+  return (dispatch) => {
+    return axios.put(`http://localhost:8000/api/comments/${id}`, formData, config)
+      .then(({data: {comment}}) => {
+        const normalized = normalize(comment, commentSchema);
+        dispatch(commentVisibilityChanged(
+          normalized.entities,
+          String(id)
+        ));
+      });
+  };
+}
+
 export function getJWT(data) {
   return dispatch => {
     return axios.post('http://localhost:8000/auth', data)
@@ -246,6 +261,19 @@ export function deleteUser(config, id) {
         ));
       });
   };
+}
+
+export function deleteComment(config, id) {
+  return (dispatch) => {
+    return axios.delete(`http://localhost:8000/api/comment/${id}`, config)
+      .then(({data: {comment}}) => {
+        const normalized = normalize(comment, commentSchema)
+        dispatch(recordDeleted(
+          normalized,
+          comment.id
+        ));
+      });    
+  }
 }
 
 export function postsLoaded(entities, posts) {

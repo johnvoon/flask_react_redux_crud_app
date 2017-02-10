@@ -78,7 +78,6 @@ def practice_areas():
     
     data = []
     practice_areas = ["Dispute Resolution", "Criminal Law", "Family Law", "Mergers & Acquisitions"]
-    description = "We encourage settlements to arrive at the most cost-effective and time-saving solution whilst protecting your legal rights."
     with app.app_context():
         img_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
                     url_for('static', filename='images/400/building.jpg'),
@@ -89,6 +88,7 @@ def practice_areas():
 
     for area in practice_areas:
         img_src = random.choice(img_srcs)
+        description = list(fake.paragraphs(nb=20))
         params = {
             'area': area,
             'img_src': img_src,
@@ -108,6 +108,8 @@ def users():
 
     data = []
     random_usernames = []
+    with app.app_context():
+        placeholder_user = url_for('static', filename='images/64/placeholder-user.png')
 
     for i in range(0, 99):
         random_usernames.append(fake.user_name())
@@ -147,7 +149,8 @@ def users():
             'current_sign_in_on': created_on,
             'current_sign_in_ip': fake.ipv4(),
             'last_sign_in_on': created_on,
-            'last_sign_in_ip': fake.ipv4()
+            'last_sign_in_ip': fake.ipv4(),
+            'photo': placeholder_user
         }
 
         if username == app.config['SEED_ADMIN_USERNAME']:

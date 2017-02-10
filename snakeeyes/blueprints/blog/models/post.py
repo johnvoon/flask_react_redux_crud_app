@@ -136,5 +136,6 @@ class Post(ResourceMixin, db.Model):
             'thumbnailSrc': self.thumbnail_src,
             'created': self.created_on,
             'updated': self.updated_on,
-            'views': self.view_count
+            'views': self.view_count,
+            'authorPhoto': self.author.user.photo
         }

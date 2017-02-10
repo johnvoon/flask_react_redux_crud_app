@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import Avatar from './Avatar';
 import { Link } from 'react-router';
 
 export default class RelatedPost extends Component {
@@ -18,26 +17,27 @@ export default class RelatedPost extends Component {
     const { post } = this.props;
 
     return (
-      <div className="col-md-4">
-        <Card>
-          <CardHeader
-            title={"By " + post.author} 
-            avatar={post.thumbnailSrc}/>
-          <CardMedia>
-            <img src={post.imgSrc} alt="img"/>    
-          </CardMedia>
-          <CardTitle>
-            <Link to={`/blog/${post.id}`} onClick={this.handleClick}>{post.title}</Link>
-          </CardTitle>
-          <CardText>
-            {post.summary}
-          </CardText>
-          <CardActions>
-            <RaisedButton>
-              <Link to={`/blog/${post.id}`} onClick={this.handleClick}>Read More</Link>
-            </RaisedButton>
-          </CardActions>
-        </Card>
+      <div className="col-sm-4">
+        <div className="thumbnail">
+          <div 
+            className="thumbnail-image"
+            style={{
+              backgroundImage: `url('${post.imgSrc}')`
+            }}/>
+          <div className="caption">
+            <p>More on {post.practiceArea}</p>
+            <h4>
+              <Link 
+                to={`/blog/${post.id}`}
+                onClick={this.handleClick}>
+                {post.title}
+              </Link>
+            </h4>
+            <Avatar
+              avatarPhoto={post.authorPhoto}
+              avatarName={post.author}/>
+          </div>
+        </div>
       </div>
     );
   }

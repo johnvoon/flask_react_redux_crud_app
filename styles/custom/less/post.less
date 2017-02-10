@@ -1,5 +1,53 @@
 .post {
+  .jumbotron {
+    height: 260px;
+  }
+
+  @media (min-width: @screen-sm-min) {
+    .jumbotron {
+      height: 400px;  
+    }
+  }
+
+  @media (min-width: @screen-md-min) {
+    .jumbotron {
+      height: 600px;
+    }
+  }
+
   .post-details {
     font-size: @font-size-small;
+  }
+
+  .thumbnail {
+    > .caption {
+      height: 140px;
+    }
+
+    > .thumbnail-image {
+      background-position: center center;
+      background-size: cover;
+      height: 100px;
+    }
+  }
+}
+
+.related-items {
+  background-color: #fafafa;
+  padding-top: 40px;
+}
+
+@media (min-width: @screen-sm-min) {
+  .post-content,
+  .related-posts {
+    margin: 0 auto;
+  }
+
+  .post-content {
+    max-width: 700px;
+  }
+
+  .related-posts {
+    max-width: 1000px;
   }
 }

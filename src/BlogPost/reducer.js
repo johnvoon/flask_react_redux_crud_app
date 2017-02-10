@@ -38,6 +38,7 @@ function postLoaded(state, { entities, postId }) {
 }
 
 function commentsLoaded(state, { comments }) {
+  console.log(comments);
   return {
     ...state,
     currentPostComments: comments

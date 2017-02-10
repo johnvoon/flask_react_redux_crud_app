@@ -9,13 +9,13 @@ export default class Link extends Component {
   }
 
   render() {
-    const clickEvent = this.onClick.bind(this);
+    this.onClick = this.onClick.bind(this);
     const { linkText, count } = this.props;
 
     return (
       <a 
         className="list-group-item"
-        onClick={() => clickEvent(linkText)}>
+        onClick={this.onClick}>
         {linkText}
         {count ? <span className="badge">{count}</span> : null}
       </a>

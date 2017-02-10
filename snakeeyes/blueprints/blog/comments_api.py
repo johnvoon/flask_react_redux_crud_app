@@ -38,17 +38,30 @@ class CommentsAPI(Resource):
 @comments_api.resource('/comments/<int:comment_id>')
 class CommentAPI(Resource):
     @staticmethod
-    def get(post_id):
-        post = Post.query.get_or_404(post_id)
-        if post:
-            return render_json(200, {'post': post.to_json()})
+    def get(comment_id):
+        comment = Comment.query.get_or_404(comment_id)
+        if comment:
+            return render_json(200, {'comment': comment.to_json()})
 
-        return render_json(404, {'message': 'No posts found'})
+        return render_json(404, {'message': 'No comment found'})
 
     @staticmethod
-    def delete(post_id):
-        post = Post.query.get_or_404(post_id)
-        if post: 
-            post.delete()
+    def put(comment_id):
+        comment = Comment.query.get_or_404(comment_id)
+        if comment:
+            comment.visible = request.form.get('visible')
+        try: 
+            comment.save()
+            return render_json(200, {'comment': comment.to_json()})
+        except:
+            return render_json(500, {'message': "An error occurred."})
 
-        return render_json(200, post.to_json())
+        return render_json(404, {'message': 'No comment with ID {} found'.format(comment_id)})
+
+    @staticmethod
+    def delete(comment_id):
+        comment = Comment.query.get_or_404(comment_id)
+        if comment: 
+            comment.delete()
+
+        return render_json(200, comment.to_json())

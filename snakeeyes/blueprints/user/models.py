@@ -54,6 +54,7 @@ class User(UserMixin, ResourceMixin, db.Model):
     state = db.Column(db.String(128))
     country = db.Column(db.String(128))
     phone_number = db.Column(db.String(128), nullable=False)
+    photo = db.Column(db.String(256))
 
     # Activity tracking.
     sign_in_count = db.Column(db.Integer, nullable=False, default=0)
@@ -76,7 +77,7 @@ class User(UserMixin, ResourceMixin, db.Model):
         if self.middle_name:
             return self.last_name.upper() + ', ' + self.first_name + ' ' + self.middle_name 
         else:
-            return self.last_name.upper() + ', ' + self.first_name 
+            return self.last_name.upper() + ', ' + self.first_name
 
     @hybrid_property
     def first_last_name(self):
@@ -283,5 +284,6 @@ class User(UserMixin, ResourceMixin, db.Model):
             'state': self.state,
             'country': self.country,
             'fullAddress': self.full_address,
-            'role': self.role
+            'role': self.role,
+            'photo': self.photo
         }

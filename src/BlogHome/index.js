@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import PostCard from '../components/PostCard';
 import FilterLink from '../components/FilterLink';
 import SearchField from '../components/SearchField';
@@ -41,6 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   onAreaFilter: (posts, linkText) => {
+    console.log(linkText);
     dispatch(filterByArea(posts, linkText));
   },
 
@@ -66,7 +68,7 @@ class BlogHome extends Component {
     this.toggleAuthorMenu = this.toggleAuthorMenu.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchBlogData();
   }
 
@@ -86,7 +88,7 @@ class BlogHome extends Component {
     const { posts, practiceAreas, postAuthors, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
     const { onSort, onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
     const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
-
+    console.log(allAvailablePosts);
     const postsList = visiblePosts.map((id) => {
       return (
         <PostCard
@@ -101,8 +103,14 @@ class BlogHome extends Component {
         <FilterLink
           linkText="All Posts"
           count={Object.keys(posts).length}
-          dispatchEvent={onShowAll.bind(null)}
-        />
+          dispatchEvent={() => {
+            onShowAll();
+            scrollIntoViewIfNeeded(
+              this._postsContainer, 
+              false, 
+              {duration: 400}
+            );
+          }}/>
       );
     };
 
@@ -111,7 +119,14 @@ class BlogHome extends Component {
         <FilterLink
           key={sortBy}
           linkText={_.capitalize(sortBy)}
-          dispatchEvent={onSort.bind(null, allAvailablePosts, sortBy)}/>
+          dispatchEvent={() => {
+            onSort(allAvailablePosts, sortBy);
+            scrollIntoViewIfNeeded(
+              this._postsContainer, 
+              false, 
+              {duration: 400}
+            );
+          }}/>
       );
     });
 
@@ -121,8 +136,14 @@ class BlogHome extends Component {
           key={id}
           linkText={practiceAreas[id].area}
           count={practiceAreas[id].posts}
-          dispatchEvent={onAreaFilter.bind(null, posts)}
-        />
+          dispatchEvent={() => {
+            onAreaFilter(posts, practiceAreas[id].area);
+            scrollIntoViewIfNeeded(
+              this._postsContainer, 
+              false, 
+              {duration: 400}
+            );
+          }}/>
       );
     });
 
@@ -132,8 +153,14 @@ class BlogHome extends Component {
           key={id}
           linkText={postAuthors[id].name}
           count={postAuthors[id].posts}
-          dispatchEvent={onAuthorFilter.bind(null, posts)}
-        />
+          dispatchEvent={() => {
+            onAuthorFilter(posts, postAuthors[id].name);
+            scrollIntoViewIfNeeded(
+              this._postsContainer, 
+              false, 
+              {duration: 400}
+            );
+          }}/>
       );
     });
 
@@ -177,7 +204,9 @@ class BlogHome extends Component {
                 showAllLink={allPostsLink()}
                 links={authorLinks}/>        
             </div>
-            <div className="col-md-8">
+            <div 
+              className="col-md-8"
+              ref={node => this._postsContainer = node}>
               <h2 className="no-margin-top">{
                 (currentFilter === "area") ? filterValues :
                 (currentFilter === "author") ? `Posts by ${filterValues}` :
@@ -185,10 +214,9 @@ class BlogHome extends Component {
                 "All Posts"}</h2>
               <InfiniteScroll 
                 pageStart={0}
-                allAvailablePosts={allAvailablePosts}
                 loadMore={onLoadMore.bind(null, allAvailablePosts)}
                 hasMore={hasMore}
-                threshold={0}>
+                threshold={100}>
                 {postsList}
               </InfiniteScroll>
             </div>

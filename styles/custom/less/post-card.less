@@ -1,15 +1,51 @@
 .post-card {
-  margin-top: 30px;
+  margin-top: 30px; 
+}
 
-  .post-card-img {
-    width: 300px;
-    float: left;
-    > img {
-      width: 300px;
-    }
+.post-card-content {
+  overflow: hidden;
+}
+
+.post-details {
+  font-size: @font-size-small;
+}
+
+@media (min-width: 576px) {
+  .post-card-img,
+  .post-card-img > img {
+    width: 250px;
   }
 
-  .post-details {
-    font-size: @font-size-small;
+  .post-card-img {
+    float: left;
+  }
+
+  .post-card-content {
+    padding-left: 15px;
+    overflow: hidden;
+    
+    > h2 {
+      font-size: @font-size-h3;
+    }
+  }    
+}
+
+@media (min-width: @screen-sm-min) {
+  .post-card-img,
+  .post-card-img > img {
+    width: 300px;
+  }
+
+  .post-card-img {
+    float: left;
+  }
+
+  .post-card-content {
+    padding-left: 15px;
+    overflow: hidden;
+
+    > h2 {
+      font-size: @font-size-h2;
+    }
   }
 }

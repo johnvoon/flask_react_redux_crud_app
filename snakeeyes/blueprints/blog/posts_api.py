@@ -1,13 +1,12 @@
 import os
 from PIL import Image
-from flask import Blueprint, request, url_for
+from flask import Blueprint, request, url_for, current_app, render_template
 from werkzeug.utils import secure_filename
 from flask_restful import Api, Resource
 from flask_jwt import jwt_required
 from snakeeyes.blueprints.blog.models.post import Post
 from lib.util_json import render_json
 from snakeeyes.extensions import csrf
-from flask import current_app
 
 posts_api = Api(Blueprint('posts_api', __name__), decorators=[csrf.exempt])
 
@@ -20,7 +19,7 @@ class PostsAPI(Resource):
         if posts:
             return render_json(200, {'posts': posts})
 
-        return render_json(404, {'message': 'No posts found'})
+        return (404, {'message': 'No posts found'})
 
     @staticmethod
     @jwt_required()

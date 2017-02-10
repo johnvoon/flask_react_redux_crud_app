@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description"
           content="{% block meta_description %}{% endblock %}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,7 +16,7 @@
       crossorigin="anonymous"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root" class="root"></div>
     {% block body %}{% endblock %}
     <script
       src="http://localhost:8080/static/scripts/bundle.js">

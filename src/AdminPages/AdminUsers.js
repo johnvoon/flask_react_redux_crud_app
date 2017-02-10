@@ -111,7 +111,7 @@ class AdminUsers extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchPracticeAreas()
   }
 

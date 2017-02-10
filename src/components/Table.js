@@ -55,7 +55,7 @@ export default class Table extends Component {
         </th>
       );
     });
-    const rows = pageData.map(id => {
+    const rows = (pageData || []).map(id => {
       return (
         <tr key={id}>
           {columns.map((column, idx) =>

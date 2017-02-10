@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import moment from 'moment';
 
 export default class Post extends Component {
@@ -17,11 +18,16 @@ export default class Post extends Component {
         );
       }
     });
+    const practiceAreaEndpoint = (post.practiceArea || '').split(/[^A-Za-z]+/).join('-').toLowerCase();
 
     return (
-      <div className="post">
+      <div className="post-content">
         <h1>{post.title}</h1>
-        <p className="post-details"><a href="#">{post.author}</a> | <a href="#">{post.practiceArea}</a> | {postCreated}</p>
+        <p className="post-details">
+          <a href="#">{post.author}</a> | 
+          <Link to={`/practice-areas/${practiceAreaEndpoint}`}>{post.practiceArea}</Link> | 
+          {postCreated}
+        </p>
         <p>Last updated on {postUpdated}</p>
         {postBody}
       </div>

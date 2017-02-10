@@ -35,11 +35,6 @@ class HomePage extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.onFetchPracticeAreas();
-    this.props.onFetchPosts();
-  }
-
   componentDidMount() {
     const config = {
       duration: 2000,
@@ -77,25 +72,17 @@ class HomePage extends Component {
     });
 
     return (
-      <main className="home">
-        <div className="hero-container">
-          <Slider
-            slidesToShow={1}
-            slidesToScroll={1}
-            swipeToSlide={true}
-            dots={true}
-            infinite={true}
-            speed={500}
-            autoplay={true}
-            autoplaySpeed={1000}>
-            <div><Hero
-              index={0}
-              currentIndex={currentIndex}
-              prevIndex={prevIndex}
-              buttonText="Make an appointment today"
-              heroClass="home"/></div>
-            {heroComponents}
-          </Slider>
+      <main>
+        <div 
+          className="jumbotron"
+          style={{backgroundImage: "url('http://localhost:8000/static/images/2000/home.jpg')"}}>
+          <div className="container text-center">
+            <button 
+              type="button" 
+              className="btn btn-primary btn-home">
+              Make an appointment today
+            </button>
+          </div>
         </div>
         <div className="container-fluid">
           <div 

@@ -1,18 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
 import ModalMedium from '../components/ModalMedium';
+import GetJWTForm from '../components/GetJWTForm';
 import DeleteRecord from '../components/DeleteRecord';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate';
-import TablePostLink from '../components/TablePostLink';
 import TableHeading from '../components/TableHeading';
 import TableDeleteLink from '../components/TableDeleteLink';
-import { fetchComments, hideComment, deleteComment } from '../Entities/actions';
-import { getJWT, removeJWT } from '../Entities/actions';
+import { getJWT, 
+         removeJWT, 
+         fetchComments, 
+         changeCommentVisibility, 
+         deleteComment } from '../Entities/actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -32,8 +36,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchComments: () => {
-      dispatch(fetchComments());
+    onFetchComments: (id) => {
+      dispatch(fetchComments(id));
+    },
+
+    onChangeCommentVisibility: (id, formData) => {
+      dispatch(changeCommentVisibility(id, formData));
     },
 
     onGetJWT: (data) => {
@@ -45,7 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onDelete: (JWT, id) => {
-      return dispatch(deletePost(JWT, id));
+      return dispatch(deleteComment(JWT, id));
     },
 
     onFilter: ({target: {value}}) => {
@@ -66,17 +74,96 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-class AdminPosts extends Component {
+class AdminComments extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      errorMessage: '',
       showDeleteModal: false,
+      showGetJWTModal: false,
       currentRecord: {}
     };
   }
 
-  componentWillMount() {
-    this.props.onFetchComments();
+  componentDidMount() {
+    this.props.onFetchComments(this.props.params.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { JWT } = nextProps;
+    const { visibilityChangePending, commentId, commentVisibility } = this.state;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+
+    if (visibilityChangePending && !this.props.JWT && JWT) {
+      this.props.onChangeCommentVisibility(commentId, commentVisibility, config);
+      this.setState({
+        visibilityChangePending: false,
+        showGetJWTModal: false
+      })
+    }
+  }
+
+  handleChange(id, {target: {value, name}}) {
+    const { JWT, onJWTExpired, JWTExpired, onChangeCommentVisibility } = this.props;
+
+    this.setState({
+      visibilityChangePending: true,
+      commentId: id,
+      commentVisibility: value,
+      [name]: value
+    });
+
+    if (!JWT || JWTExpired) {
+      this.setState({showGetJWTModal: true});
+    } else {
+      const config = {
+        headers: {
+          'Authorization': `JWT ${JWT}`
+        }
+      };
+      let formData = new FormData();
+      formData.append('visible', value);
+      onChangeCommentVisibility(id, formData, config)
+        .catch(({response, message}) => {
+          const { status, data } = response;
+          if (status === 401) {
+            onJWTExpired();
+            this.setState({showGetJWTModal: true});
+          } else if (status === 404) {
+            this.setState({
+              errorMessage: data.message
+            })
+          } else {
+            this.setState({
+              errorMessage: message
+            })
+          }
+        });
+      this.setState({
+        visibilityChangePending: false,
+        commentId: '',
+        commentVisibility: ''
+      });
+    }
+  }
+
+  renderSelectField(val, row) {
+    this.handleChange = this.handleChange.bind(this);
+    
+    return (
+      <select
+        name={row.id}
+        value={this.state[row.id] ? this.state[row.id] : (row.visible ? "1" : "0")}
+        className="form-control"
+        onChange={this.handleChange.bind(null, row.id)}>
+        <option value="1">Visible</option>
+        <option value="0">Hide</option>
+      </select>
+    );
   }
 
   renderTableDeleteLink(val, row) {
@@ -90,9 +177,8 @@ class AdminPosts extends Component {
 
   render() {
     const { onGetJWT, onJWTExpired, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { comments } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord, showDeleteModal } = this.state;
+    const { currentRecord, showGetJWTModal, showDeleteModal, errorMessage } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -102,6 +188,7 @@ class AdminPosts extends Component {
     return (
       <main className="container-fluid">
         <h1>{`Comments for Post ${this.props.params.id}`}</h1>
+        <Link to="/admin/posts">Back to Posts</Link>
         <div className="row">
           <div className="col-sm-3">
             <PageLengthMenu 
@@ -122,13 +209,15 @@ class AdminPosts extends Component {
               onPageNumberChange={onPageNumberChange}/>
           </div>
         </div>
+        {errorMessage && <ErrorAlert message={errorMessage}/>}
         {successMessage && <SuccessAlert message={successMessage}/>}
         <Table 
           columns={[
+            { title: 'ID', component: TableHeading, prop: 'id'},
             { title: 'Created On', component: TableDate, prop: 'created' },
             { title: 'Content', component: TableHeading, prop: 'content'},
             { title: 'Author Username', component: TableHeading, prop: 'authorUsername'},
-            { title: 'Author Name', component: TableHeading, prop: 'authorName'},
+            { title: 'Author Name', component: TableHeading, prop: 'authorFullName'},
             { title: 'Visibility', 
               component: (val, row) => this.renderSelectField(val, row),
               className: 'text-center' },
@@ -140,6 +229,15 @@ class AdminPosts extends Component {
           onSort={onSort}
           pageData={pageData}
           data={data}/>
+        <ModalMedium
+          title="Change Comment Visibility"
+          show={showGetJWTModal}
+          onHide={() => this.setState({showGetJWTModal: false})}>
+          <GetJWTForm
+            onGetJWT={onGetJWT}
+            JWTExpired={JWTExpired}
+            onHide={() => this.setState({showGetJWTModal: false})}/>
+        </ModalMedium>
         <ModalMedium
           title={`Delete Comment (ID: ${currentRecord.id})`}
           show={showDeleteModal} 
@@ -157,7 +255,7 @@ class AdminPosts extends Component {
   }
 }
 
-AdminPosts.propTypes = {
+AdminComments.propTypes = {
   onFetchComments: PropTypes.func.isRequired,
   onGetJWT: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
@@ -181,4 +279,4 @@ AdminPosts.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdminPosts);
+)(AdminComments);

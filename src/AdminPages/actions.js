@@ -6,6 +6,7 @@ import {
   RECORD_ADDED,
   RECORD_EDITED,
   RECORD_DELETED,
+  COMMENT_VISIBILITY_CHANGED,
   LOAD_FORM_DATA,
   RESET_ADDED_RECORD
 } from '../constants/actionTypes';
@@ -60,6 +61,14 @@ export function recordDeleted(deletedRecord, deletedRecordId) {
     deletedRecord,
     deletedRecordId,
   };
+}
+
+export function commentVisibilityChanged(entities, commentId) {
+  return {
+    type: COMMENT_VISIBILITY_CHANGED,
+    entities,
+    commentId
+  }
 }
 
 export function loadFormData(formData) {

@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: './src/index.js',
   output: {
     // path on web server
@@ -45,7 +45,7 @@ module.exports = {
         test: /\.(jpg|jpeg|png|gif)$/,
         loader: 'file-loader',
         options: {
-          name: './snakeeyes/static/images/[name].[ext]'
+          name: './server/static/images/[name].[ext]'
         }
       }
     ]

@@ -5,10 +5,10 @@ const StaticFormGroup = (props) => {
   
   return (
     <div className="form-group">
-      <label className="input-label col-sm-2">
+      <label className="input-label">
         {label}
       </label>
-      <p className="col-sm-10 form-control-static">
+      <p className="form-control-static">
         {text}
       </p>
     </div>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import { Scrollbars } from 'react-custom-scrollbars';
 import PostCard from '../components/PostCard';
 import FilterLink from '../components/FilterLink';
 import SearchField from '../components/SearchField';

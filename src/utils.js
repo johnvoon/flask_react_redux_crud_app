@@ -39,16 +39,13 @@ export function sortByDate(data, ids, order) {
 // Filter data
 
 export function filter(filterValues, data) {
-  return Object.keys(data).filter((id) => {
-    return _.some(data[id], containsIgnoreCase.bind(null, filterValues));
+  const keywords = String(filterValues).toLowerCase().trim().split(" ");
+  return Object.keys(data).filter(id => {
+    const recordTerms = Object.values(data[id]).join(" ").split(" ");
+    return keywords.every(keyword => {
+      return recordTerms.includes(keyword);
+    });
   });
-}
-
-export function containsIgnoreCase(filterValues, record) {
-  filterValues = String(filterValues).toLowerCase().trim();
-  record = String(record).toLowerCase().trim();
-
-  return record.indexOf(filterValues) >= 0;
 }
 
 // Form Validations
@@ -69,6 +66,9 @@ export const username = value =>
 export const email = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
     'Invalid email address' : undefined;
+
+export const passwordMatch = password => value =>
+  value && password !== value ? "Passwords don't match" : undefined;
 
 export const asyncValidateUserIdentity = (value) => {
   return axios.post(

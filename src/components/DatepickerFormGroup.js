@@ -22,7 +22,7 @@ const DatePickerFormGroup = (field) => {
       </label>    
       <DatePicker
         className="form-control"
-        textFieldStyle={{height: '100%', "border-width": "0"}}
+        textFieldStyle={{height: '100%', "borderWidth": "0"}}
         container="inline"
         fullWidth={true}
         formatDate={dateTimeFormat}

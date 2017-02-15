@@ -6,15 +6,15 @@ from datetime import datetime
 from faker import Faker
 from flask import url_for
 
-from snakeeyes.app import create_app
-from snakeeyes.extensions import db
-from snakeeyes.blueprints.user.models import User
-from snakeeyes.blueprints.blog.models.post import Post
-from snakeeyes.blueprints.blog.models.comment import Comment
-from snakeeyes.blueprints.practice_area.models import PracticeArea
-from snakeeyes.blueprints.staff.models import Staff
-from snakeeyes.blueprints.client.models.client import Client
-from snakeeyes.blueprints.client.models.case import Case
+from server.app import create_app
+from server.extensions import db
+from server.blueprints.user.models import User
+from server.blueprints.blog.models.post import Post
+from server.blueprints.blog.models.comment import Comment
+from server.blueprints.practice_area.models import PracticeArea
+from server.blueprints.staff.models import Staff
+from server.blueprints.client.models.client import Client
+from server.blueprints.client.models.matter import Matter
 
 # Create an app context for the database connection.
 app = create_app()
@@ -325,43 +325,43 @@ def comments():
     _bulk_insert(Comment, data, 'comments')
 
 @click.command()
-def cases():
+def matters():
     """
-    Generate fake cases.
+    Generate fake matters.
     """
     click.echo('Working...')
 
     data = []
     clients = db.session.query(Client).all()
     practice_area_ids = db.session.query(PracticeArea.id).all()
-    matters = ['HCA 2232/2015', 
+    descriptions = ['HCA 2232/2015', 
                'Acquisition of business', 
                'Issue of demand letter against X company', 
                'Visa application', 
                'Sale of business',
                'Preparation of mortgage']
 
-    for idx, matter in enumerate(matters):
+    for idx, description in enumerate(descriptions):
         fake_datetime = fake.date_time_between(
             start_date='-1y', end_date='now').strftime('%s')
         file_open = datetime.utcfromtimestamp(
             float(fake_datetime)).strftime('%Y-%m-%d')
         params = {
-            'matter': matter,
+            'description': description,
             'file_open': file_open,
             'practice_area_id': random.choice(practice_area_ids)
         }
 
         data.append(params)
 
-    _bulk_insert(Case, data, 'cases')
+    _bulk_insert(Matter, data, 'matters')
 
-    cases = db.session.query(Case).all()
+    matters = db.session.query(Matter).all()
 
     for client in clients:
-        case = random.choice(cases)
-        case.clients.append(client)
-        db.session.add(case)
+        matter = random.choice(matters)
+        matter.clients.append(client)
+        db.session.add(matter)
         db.session.commit()
 
 @click.command()
@@ -379,7 +379,7 @@ def all(ctx):
     ctx.invoke(clients)
     ctx.invoke(posts)
     ctx.invoke(comments)
-    ctx.invoke(cases)
+    ctx.invoke(matters)
 
     return None
 
@@ -389,5 +389,5 @@ cli.add_command(staff)
 cli.add_command(clients)
 cli.add_command(posts)
 cli.add_command(comments)
-cli.add_command(cases)
+cli.add_command(matters)
 cli.add_command(all)

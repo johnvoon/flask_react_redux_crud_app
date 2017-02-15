@@ -25,8 +25,7 @@ const MultiselectFormGroup = (field) => {
         options={multiselectOptions}
         multi={true}
         clearable={true}
-        joinValues={true}
-        delimiter=", "
+        simpleValue
         onChange={(value) => input.onChange(value)}
         onBlur={() => input.onBlur(input.value)}
         {...inputProps}/>

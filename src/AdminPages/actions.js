@@ -4,6 +4,7 @@ import {
   SORT_DATA,
   FILTER_ADMIN_DATA,
   RECORD_ADDED,
+  SECONDARY_RECORD_ADDED,
   RECORD_EDITED,
   RECORD_DELETED,
   COMMENT_VISIBILITY_CHANGED,
@@ -46,6 +47,13 @@ export function recordAdded(entities, addedRecord, addedRecordId) {
     addedRecord,
     addedRecordId
   };
+}
+
+export function secondaryRecordAdded() {
+  console.log("triggered");
+  return {
+    type: SECONDARY_RECORD_ADDED
+  }
 }
 
 export function recordEdited(entities) {

@@ -29,10 +29,11 @@ Login with username: "admin", password: "devpassword" for access to account with
 - Displays comments and comment form
 
 ### Admin Pages
-- Instantaneous keyword search filter
-- Column sort and CRUD functionality
+- Instantaneous keyword search filter and column sort
+- CRUD functionality with instantaneous success and error feedback.
 
 ### Admin User Page
+- Integrated user management system where clients and staff can be managed in one place. No need for time-wasting switching between routes. 
 - Individual client and staff user accounts can only be created by a user with admin privileges
 - "Add User" and "Edit User" forms feature client- and server-side field validation, address autocomplete.
 - If added user role is "staff", "Add Staff" form will be automatically displayed.

@@ -2,7 +2,7 @@ import datetime
 from sqlalchemy import DateTime
 from sqlalchemy.types import TypeDecorator
 from lib.util_datetime import tzaware_datetime
-from snakeeyes.extensions import db
+from server.extensions import db
 
 
 class AwareDateTime(TypeDecorator):

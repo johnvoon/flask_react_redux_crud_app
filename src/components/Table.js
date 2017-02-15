@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const buildSortProps = (data, column, sortBy, onSort) => {
   // set order (ascending or descending) if:
@@ -68,19 +69,25 @@ export default class Table extends Component {
     });
 
     return (
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            {headers}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length ? rows : (
+      <Scrollbars
+        style={{
+          height: '425px',
+          width: '100%'
+        }}>
+        <table className="table table-striped table-hover">
+          <thead>
             <tr>
-              <td colSpan={columns.length} className="text-center">No data to display</td>
-            </tr>)}
-        </tbody>
-      </table>       
+              {headers}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length ? rows : (
+              <tr>
+                <td colSpan={columns.length} className="text-center">No data to display</td>
+              </tr>)}
+          </tbody>
+        </table>
+      </Scrollbars>    
     );
   }  
 }

@@ -4,7 +4,7 @@ from flask import url_for
 
 def assert_status_with_message(status_code=200, response=None, message=None):
     """
-    Check to see if a message is contained within a response.
+    Check to see if message contained within response.
 
     :param status_code: Status code that defaults to 200
     :type status_code: int
@@ -20,8 +20,7 @@ def assert_status_with_message(status_code=200, response=None, message=None):
 
 class ViewTestMixin(object):
     """
-    Automatically load in a session and client, this is common for a lot of
-    tests that work with views.
+    Automatically load session and client.
     """
 
     @pytest.fixture(autouse=True)

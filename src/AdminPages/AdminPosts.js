@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
+import AddPost from './AddPost';
+import EditPost from './EditPost';
+import DeleteRecord from './DeleteRecord';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
 import ModalSmall from '../components/ModalSmall';
 import ModalMedium from '../components/ModalMedium';
-import AddPost from '../components/AddPost';
-import EditPost from '../components/EditPost';
-import DeleteRecord from '../components/DeleteRecord';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate';
 import TablePostLink from '../components/TablePostLink';
@@ -18,7 +18,7 @@ import TableCommentsLink from '../components/TableCommentsLink';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
 import { fetchBlogData, addPost, editPost, deletePost, loadImage } from '../Entities/actions';
-import { getJWT, removeJWT } from '../Entities/actions';
+import { getJWT, removeJWT } from './actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 

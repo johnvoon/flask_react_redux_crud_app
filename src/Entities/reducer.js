@@ -6,7 +6,10 @@ const initialState = {
   comments: {},
   commentAuthors: {},
   practiceAreas: {},
-  users: {}
+  users: {},
+  matters: {},
+  staff: {},
+  clients: {}
 };
 
 export default function entitiesReducer(state = initialState, action) {

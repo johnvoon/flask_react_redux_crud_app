@@ -1,6 +1,6 @@
 import click
 
-from snakeeyes.app import create_app
+from server.app import create_app
 
 app = create_app()
 
@@ -8,7 +8,7 @@ app = create_app()
 @click.command()
 def cli():
     """
-    List all of the available routes.
+    List available routes.
 
     :return: str
     """

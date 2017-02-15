@@ -10,34 +10,61 @@ export default class UserInfo extends Component {
     const userUpdated = moment(user.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
 
     return (
-      <form className="form-horizontal">
-        <StaticFormGroup 
-          label="Created"
-          text={userCreated}/>
-        <StaticFormGroup 
-          label="Updated"
-          text={userUpdated}/>
-        <StaticFormGroup 
-          label="Status"
-          text={user.active}/>
-        <StaticFormGroup 
-          label="Role"
-          text={user.role}/>
-        <StaticFormGroup 
-          label="Username"
-          text={user.username}/>
-        <StaticFormGroup 
-          label="Email"
-          text={user.email}/>
-        <StaticFormGroup 
-          label="First Name"
-          text={user.firstName}/>
-        <StaticFormGroup 
-          label="Middle Name"
-          text={user.middleName}/>
-        <StaticFormGroup 
-          label="Last Name"
-          text={user.lastName}/>
+      <form>
+        <div>
+          <img src={user.photo} alt="User photo"/>
+        </div>
+        <div className="row">
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Created"
+              text={userCreated}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Updated"
+              text={userUpdated}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Status"
+              text={user.active}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Role"
+              text={user.role}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Username"
+              text={user.username}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Email"
+              text={user.email}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Last Name"
+              text={user.lastName}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="First Name"
+              text={user.firstName}/>
+          </div>
+          <div className="col-sm-4">
+            <StaticFormGroup 
+              label="Middle Name"
+              text={user.middleName}/>
+          </div>
+        </div>
         <StaticFormGroup 
           label="Phone Number"
           text={user.phoneNumber}/>

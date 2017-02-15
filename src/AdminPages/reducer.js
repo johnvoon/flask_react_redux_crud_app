@@ -3,6 +3,7 @@ import { POSTS_LOADED,
          USERS_LOADED,
          COMMENTS_LOADED,
          RECORD_ADDED,
+         SECONDARY_RECORD_ADDED,
          RECORD_EDITED,
          RECORD_DELETED,
          COMMENT_VISIBILITY_CHANGED,
@@ -48,6 +49,9 @@ export default function adminPagesReducer(state = initialState, action) {
 
     case RECORD_ADDED:
       return recordAdded(state, action);
+
+    case SECONDARY_RECORD_ADDED:
+      return secondaryRecordAdded(state, action);
 
     case RECORD_EDITED:
       return recordEdited(state, action);
@@ -121,6 +125,7 @@ function commentsLoaded(state, { entities, comments }) {
 
 function recordAdded(state, { entities, addedRecord, addedRecordId }) {
   const { data, recordIds } = state;
+  console.log(entities, addedRecord, typeof addedRecordId);
 
   return {
     ...state,
@@ -128,6 +133,16 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) {
     recordIds: [...recordIds, addedRecordId],
     successMessage: 'Record added successfully',
     addedRecord: addedRecord[addedRecordId]
+  }
+}
+
+function secondaryRecordAdded(state, action) {
+  const { addedRecord } = state;
+  console.log("hello")
+  
+  return {
+    ...state,
+    successMessage: `${addedRecord.role} added successfully`
   }
 }
 

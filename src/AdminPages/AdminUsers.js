@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import GetJWTForm from './GetJWTForm';
+import AddUser from './AddUser';
+import EditUser from './EditUser';
+import DeleteRecord from './DeleteRecord';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
 import ModalMedium from '../components/ModalMedium';
-import GetJWTForm from '../components/GetJWTForm';
-import AddUser from '../components/AddUser';
-import EditUser from '../components/EditUser';
-import DeleteRecord from '../components/DeleteRecord';
 import UserInfo from '../components/UserInfo';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate'; 
@@ -18,7 +18,7 @@ import TableHeading from '../components/TableHeading';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
 import { getJWT, removeJWT, fetchUsers, fetchPracticeAreas, addUser, editUser, deleteUser,
-         addStaff, addClient } from '../Entities/actions';
+         addStaff, addClient, addMatter, fetchMatters } from '../Entities/actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -45,6 +45,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onFetchPracticeAreas: () => {
       dispatch(fetchPracticeAreas());
+    },
+
+    onFetchMatters: (config) => {
+      dispatch(fetchMatters(config));
     },
 
     onGetJWT: (data) => {
@@ -111,10 +115,6 @@ class AdminUsers extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.onFetchPracticeAreas()
-  }
-
   componentWillReceiveProps(nextProps) {
     const { JWT, addedRecord } = nextProps;
     const config = {
@@ -125,6 +125,8 @@ class AdminUsers extends Component {
 
     if (!this.props.JWT && JWT) {
       this.props.onFetchUsers(config);
+      this.props.onFetchPracticeAreas();
+      this.props.onFetchMatters(config);
       this.setState({showGetJWTModal: false})
     }
 
@@ -132,13 +134,6 @@ class AdminUsers extends Component {
       addedRecord.role === 'public') {
       this.setState({showAddModal: false});
     }
-  }
-
-  renderTableCommentsLink(val, row) {
-    return (
-      <TableCommentsLink
-        data={row}/>
-    );
   }
 
   renderTableEditLink(val, row) {
@@ -173,16 +168,13 @@ class AdminUsers extends Component {
   }
 
   handleClickAddButton() {
-    const { onResetAddedRecord } = this.props;
-
-    onResetAddedRecord();
+    this.props.onResetAddedRecord();
     this.setState({showAddModal: true});
-    
   }
 
   render() {
     const { onGetJWT, onJWTExpired, onAddUser, onAddStaff, onAddClient, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { users, practiceAreas } = this.props;
+    const { users, matters, practiceAreas } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage, addedRecord } = this.props;
     const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
@@ -270,6 +262,7 @@ class AdminUsers extends Component {
           onHide={() => this.setState({showAddModal: false})}>
           <AddUser
             practiceAreas={practiceAreas}
+            matters={matters}
             onGetJWT={onGetJWT}
             onAddUser={onAddUser.bind(null, config)}
             onAddStaff={onAddStaff.bind(null, config)}

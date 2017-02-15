@@ -31,6 +31,9 @@ stripe==1.32.0
 fake-factory==0.5.7
 Pillow==4.0.0
 
+# Password hashing.
+bcrypt==3.1.2
+
 # Extensions.
 flask-debugtoolbar==0.10.0
 Flask-Mail==0.9.1

@@ -2,11 +2,11 @@ import click
 
 from sqlalchemy_utils import database_exists, create_database
 
-from snakeeyes.app import create_app
-from snakeeyes.extensions import db
-from snakeeyes.blueprints.practice_area.models import PracticeArea
-from snakeeyes.blueprints.user.models import User
-from snakeeyes.blueprints.blog.models.post import Post
+from server.app import create_app
+from server.extensions import db
+from server.blueprints.practice_area.models import PracticeArea
+from server.blueprints.user.models import User
+from server.blueprints.blog.models.post import Post
 
 # Create an app context for the database connection.
 app = create_app()

@@ -4,10 +4,10 @@ import click
 
 
 @click.command()
-@click.argument('path', default='snakeeyes')
+@click.argument('path', default='server')
 def cli(path):
     """
-    Run a test coverage report.
+    Run test coverage report.
 
     :param path: Test coverage path
     :return: Subprocess call result

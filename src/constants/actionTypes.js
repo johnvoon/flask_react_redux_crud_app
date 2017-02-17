@@ -31,3 +31,6 @@ export const FETCH_ENTITY = 'FETCH_ENTITY';
 export const DELETE_ENTITY = 'DELETE_ENTITY';
 export const DATA_LOADING_ERROR = 'DATA_LOADING_ERROR';
 export const CHANGE_PRACTICE_AREA = 'CHANGE_PRACTICE_AREA';
+
+// BlogPost/actions
+export const COMMENT_ADDED = 'COMMENT_ADDED';

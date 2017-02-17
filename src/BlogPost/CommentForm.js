@@ -15,10 +15,11 @@ class CommentForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddComment } = this.props;
+    const { onAddComment, postId } = this.props;
     let formData = new FormData();
 
-    formData.append('comment', data.comment);
+    formData.append('content', data.content);
+    formData.append('postId', postId);
     onAddComment(formData)
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -41,7 +42,7 @@ class CommentForm extends Component {
     return (
       <form>
         <Field 
-          name="comment"
+          name="content"
           component={TextAreaFormGroup}
           rows={3}
           label=""/>

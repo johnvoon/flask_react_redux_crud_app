@@ -135,7 +135,10 @@ class BlogPost extends Component {
               onClick={this.showCommentTextArea}
               onBlur={this.hideCommentTextArea}>
               {_.isEmpty(currentUser) ? (
-                <Link to="/login">
+                <Link to={{
+                  pathname: '/login',
+                  query: { next: `/blog/${currentPost.id}`}
+                }}>
                   <Avatar
                     iconClassName="comment"
                     avatarText="Log in to leave a comment..."/>
@@ -152,6 +155,7 @@ class BlogPost extends Component {
                   <CommentForm
                     name={currentUser.name}
                     onAddComment={onAddComment}
+                    postId={currentPost.id}
                     ref={textArea => this.textArea = textArea}/>}
               </VelocityTransitionGroup>
             </div>

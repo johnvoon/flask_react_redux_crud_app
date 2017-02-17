@@ -4,9 +4,9 @@ import classNames from 'classnames';
 
 class ListItemLink extends Component {
   render() {
-    const { router, linkText, endpoint, index } = this.props;
-    const isActive = router.isActive(endpoint);
-    
+    const { router, linkText, endpoint, index, onlyActiveOnIndex } = this.props;
+    const isActive = router.isActive(endpoint, true);
+
     return (
       <li className={classNames({"active": isActive})}>
         {index ? (

@@ -1,6 +1,7 @@
 import { POSTS_LOADED,
          POST_LOADED,
-         COMMENTS_LOADED } from '../constants/actionTypes';
+         COMMENTS_LOADED,
+         COMMENT_ADDED } from '../constants/actionTypes';
 
 const initialState = { 
   currentPost: {},
@@ -16,6 +17,8 @@ export default function blogPostReducer(state = initialState, action) {
       return postLoaded(state, action);
     case COMMENTS_LOADED:
       return commentsLoaded(state, action);
+    case COMMENT_ADDED:
+      return commentAdded(state, action);
   }
 
   return state;
@@ -38,9 +41,15 @@ function postLoaded(state, { entities, postId }) {
 }
 
 function commentsLoaded(state, { comments }) {
-  console.log(comments);
   return {
     ...state,
     currentPostComments: comments
   };
+}
+
+function commentAdded(state, { commentId }) {
+  return {
+    ...state,
+    currentPostComments: [...state.currentPostComments, commentId]
+  }
 }

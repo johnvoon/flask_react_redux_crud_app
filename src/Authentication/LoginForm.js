@@ -22,9 +22,9 @@ class LoginForm extends Component {
     });
     onLoginUser(formData)
     .then(() => {
-      location ? 
-        router.push(location.query.next) : 
-        router.push('/admin')
+      location.query.next ? 
+      router.push(location.query.next) : 
+      router.push('/admin')
     })
     .then(() => onFetchCurrentUser())
     .catch(({response, message}) => {

@@ -15,6 +15,7 @@ import { recordAdded,
          recordEdited, 
          recordDeleted,
          commentVisibilityChanged } from '../AdminPages/actions';
+import { commentAdded } from '../BlogPost/actions';
 import { POSTS_LOADED,
          POST_LOADED,
          PRACTICE_AREAS_LOADED,
@@ -214,6 +215,20 @@ export function changeCommentVisibility(id, formData, config) {
       ));
     });
   };
+}
+
+export function addComment(content) {
+  return (dispatch) => {
+    return axios.post(
+      'http://localhost:8000/api/comments', 
+      content
+    )
+    .then(
+    ({data: {comment}}) => {
+      const normalized = normalize(comment, commentSchema);
+      return dispatch(commentAdded(normalized.entities, comment.id));
+    });
+  };  
 }
 
 export function getJWT(data) {

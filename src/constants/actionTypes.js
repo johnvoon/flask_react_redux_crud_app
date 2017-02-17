@@ -1,4 +1,5 @@
 export const SORT_DATA = 'SORT_DATA';
+export const CURRENT_USER_LOADED = 'CURRENT_USER_LOADED';
 export const POSTS_LOADED = 'POSTS_LOADED';
 export const POST_LOADED = 'POST_LOADED';
 export const RECORD_ADDED = 'RECORD_ADDED';

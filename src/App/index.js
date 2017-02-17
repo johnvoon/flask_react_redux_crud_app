@@ -7,17 +7,24 @@ import PracticeAreaNavbar from '../components/PracticeAreaNavbar';
 import PracticeAreaPanel from '../components/PracticeAreaPanel';
 import Sidebar from '../components/Sidebar';
 import { fetchPracticeAreas } from '../Entities/actions';
+import { fetchCurrentUser } from '../Authentication/actions';
 import { VelocityTransitionGroup } from 'velocity-react';
+import _ from 'lodash';
 
 const mapStateToProps = (state) => {
-  const { entities } = state;
-
+  const { entities, authentication } = state;
+  console.log(entities, authentication);
   return {
     ...entities,
+    ...authentication
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  onFetchCurrentUser: () => {
+    dispatch(fetchCurrentUser());
+  },
+
   onFetchPracticeAreas: () => {
     dispatch(fetchPracticeAreas());
   }
@@ -32,6 +39,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.props.onFetchCurrentUser();
     this.props.onFetchPracticeAreas();
   }
 
@@ -44,14 +52,15 @@ class App extends Component {
   render() {
     this.handleClick = this.handleClick.bind(this);
     const { showSidebar } = this.state;
-    const { practiceAreas } = this.props;
+    const { currentUser, practiceAreas } = this.props;
+    console.log(currentUser);
     const links = [
       ["Home", "/", "index"],
       ["Practice Areas", "/practice-areas"],
       ["People", "/people"],
       ["Blog", "/blog"],
       ["Contact", "/contact"],
-      ["Login", "/login"]
+      (_.isEmpty(currentUser) ? ["Login", "/login"] : ["Logout", "/logout"])
     ];
 
     return (

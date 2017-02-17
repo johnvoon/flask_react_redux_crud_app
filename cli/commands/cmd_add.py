@@ -16,7 +16,7 @@ from server.blueprints.staff.models import Staff
 from server.blueprints.client.models.client import Client
 from server.blueprints.client.models.matter import Matter
 
-# Create an app context for the database connection.
+# Create app context for database connection.
 app = create_app()
 db.app = app
 

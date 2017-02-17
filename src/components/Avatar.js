@@ -1,18 +1,30 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const Avatar = (props) => {
-  const { avatarPhoto, avatarName } = props;
+  const { avatarPhoto, iconClassName, avatarText } = props;
   
   return (
-    <div className="media">
-      <div className="media-left">
-        <a href="#">
-          <img className="media-object" src={avatarPhoto} alt="User avatar"/>
+    <div className="avatar-frame">
+      <div className={classNames(
+        "avatar-img", {
+        comment: iconClassName
+      })}>
+        <a>
+          {iconClassName ? (
+            <span 
+              className={classNames({
+                comment: iconClassName
+              })}/>
+          ) : avatarPhoto ? (
+            <img 
+              className="img-responsive" src={avatarPhoto} alt="User avatar"/>
+          ) : null}
         </a>
       </div>
-      <div className="media-body">
-        <p className="media-heading">
-          {avatarName}
+      <div className="avatar-text">
+        <p>
+          {avatarText}
         </p>
       </div>
     </div>

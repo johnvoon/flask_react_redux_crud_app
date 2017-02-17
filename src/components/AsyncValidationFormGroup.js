@@ -8,12 +8,14 @@ const AsyncValidationFormGroup = (field) => {
   return (
     <div className={classNames(
       {"async-validating": meta.asyncValidating})}>
-      <label className={classNames(
-        "input-label",
-        {"text-error": error})}>
-        {label}
-        <span/>
-      </label>
+      {label ? (
+        <label className={classNames(
+          "input-label",
+          {"text-error": error})}>
+          {label}
+          <span/>
+        </label>
+      ) : null}
       <input
         className={classNames(
           "form-control",

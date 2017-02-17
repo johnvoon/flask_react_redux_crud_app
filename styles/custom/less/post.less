@@ -21,7 +21,29 @@
 
   .thumbnail {
     > .caption {
-      height: 140px;
+      height: 170px;
+      position: relative;
+
+      > h4 {
+        height: @font-size-h4 * @headings-line-height * 2;
+        overflow: hidden;
+      }
+
+      > h4:after {
+        content: '';
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 70%;
+        height: @font-size-h4 * @headings-line-height;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+      }
+
+      > .avatar-frame {
+        position: absolute;
+        bottom: 9px;
+      }
     }
 
     > .thumbnail-image {

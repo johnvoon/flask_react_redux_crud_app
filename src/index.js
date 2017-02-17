@@ -15,6 +15,8 @@ import AdminComments from './AdminPages/AdminComments';
 import BlogPost from './BlogPost/index';
 import PracticeAreas from './PracticeAreas/index';
 import PracticeArea from './PracticeArea/index';
+import Login from './Authentication/Login';
+import Logout from './Authentication/Logout';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import fetchPracticeAreas from './Entities/actions';
@@ -37,6 +39,8 @@ ReactDOM.render(
           <Route path="/blog/:id" component={BlogPost}/>
           <Route path="/practice-areas" component={PracticeAreas}/>
           <Route path="/practice-areas/:practiceArea" component={PracticeArea} onEnter={fetchPracticeAreas}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/logout" component={Logout}/>
         </Route>
       </Router>
     </Provider>

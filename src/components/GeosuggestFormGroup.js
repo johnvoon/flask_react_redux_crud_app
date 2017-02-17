@@ -8,12 +8,14 @@ const GeosuggestFormGroup = (field) => {
   
   return (
     <div className="form-group">
-      <label className={classNames(
-        "input-label",
-        {"text-error": error})}>
-        {label}
-        <span/>
-      </label>      
+      {label ? (
+        <label className={classNames(
+          "input-label",
+          {"text-error": error})}>
+          {label}
+          <span/>
+        </label>
+      ) : null}      
       <Geosuggest 
         inputClassName="form-control"
         types={["geocode"]}

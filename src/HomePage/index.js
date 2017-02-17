@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import sr from '../components/ScrollReveal';
 import { Link } from 'react-router';
 import Animate from 'rc-animate';
@@ -61,18 +62,25 @@ class HomePage extends Component {
       const practiceAreaClass = practiceArea.split(' ')[0].toLowerCase();
       
       return (
-        <div><Hero
-          key={id}
-          index={Number(id)}
-          currentIndex={currentIndex}
-          prevIndex={prevIndex}
-          buttonText={practiceArea}
-          heroClass={practiceAreaClass}/></div>
+        <div>
+          <Hero
+            key={id}
+            index={Number(id)}
+            currentIndex={currentIndex}
+            prevIndex={prevIndex}
+            buttonText={practiceArea}
+            heroClass={practiceAreaClass}/>
+        </div>
       );
     });
 
     return (
       <main>
+        <Helmet
+          title="Concept Law Firm"
+          meta={[
+            { name: 'description', content: 'A firm that serves that community.'}
+          ]}/>
         <div 
           className="jumbotron"
           style={{backgroundImage: "url('http://localhost:8000/static/images/2000/home.jpg')"}}>

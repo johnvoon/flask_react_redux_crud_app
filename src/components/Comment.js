@@ -40,7 +40,7 @@ export default class Comment extends Component {
         <li className={classNames(
           "media",
           {hidden: !comment.visible && !showCollapsedComment})}>
-          <div className="media-left">
+          <div className="media-left media-middle">
             <Link to="#">
               <img className="media-object" src={comment.userPhoto} alt="User thumbnail photo"/>
             </Link>

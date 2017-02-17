@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import _ from 'lodash';
 import GetJWTForm from './GetJWTForm';
 import AddUser from './AddUser';
@@ -185,6 +186,11 @@ class AdminUsers extends Component {
 
     return (
       <main className="container-fluid">
+        <Helmet
+          title="Admin - Users"
+          meta={[
+            { name: 'description', content: "List of users." }
+        ]}/>
         <h1>List of All Users</h1>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">

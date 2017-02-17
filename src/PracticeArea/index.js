@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { Scrollbars } from 'react-custom-scrollbars';
 import sr from '../components/ScrollReveal';
 import { Link, withRouter } from 'react-router';
@@ -81,6 +82,11 @@ class PracticeArea extends Component {
 
     return (
       <main className="practice-area">
+        <Helmet
+          title={practiceAreaName}
+          meta={[
+            { name: 'description', content: practiceAreaName }
+          ]}/>
         <div 
           className="jumbotron hidden-md hidden-lg"
           style={{backgroundImage: `url('http://localhost:8000/static/images/2000/${imgFilename}.jpg')`}}>

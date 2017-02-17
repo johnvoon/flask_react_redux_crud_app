@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import sr from './ScrollReveal';
 
 class ButtonLink extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    const config = {
+      duration: 1000,
+      scale: 1,
+      distance: 0
+    };
+    
+    sr.reveal(this.button, config, 100);
   }
 
   handleClick() {
@@ -26,7 +37,8 @@ class ButtonLink extends Component {
           onClick={this.handleClick}
           style={{
             backgroundImage: `url('http://localhost:8000/static/images/2000/${imgFilename}.jpg')`
-          }}>
+          }}
+          ref={button => this.button = button}>
           {text}
         </button>
       </div>

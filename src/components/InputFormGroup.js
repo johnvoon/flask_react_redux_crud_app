@@ -7,12 +7,14 @@ const InputFormGroup = (field) => {
   
   return (
     <div className="form-group">
-      <label className={classNames(
-        "input-label",
-        {"text-error": error})}>
-        {label}
-        <span/>
-      </label>
+      {label ? (
+        <label className={classNames(
+          "input-label",
+          {"text-error": error})}>
+          {label}
+          <span/>
+        </label>
+      ) : null}
       <input
         className={classNames(
           "form-control",

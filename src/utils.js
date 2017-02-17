@@ -39,11 +39,11 @@ export function sortByDate(data, ids, order) {
 // Filter data
 
 export function filter(filterValues, data) {
-  const keywords = String(filterValues).toLowerCase().trim().split(" ");
+  const keywords = String(filterValues).toLowerCase().trim().split(/\s+/);
   return Object.keys(data).filter(id => {
-    const recordTerms = Object.values(data[id]).join(" ").split(" ");
+    const recordTerms = _.values(data[id]).join(" ").toLowerCase();
     return keywords.every(keyword => {
-      return recordTerms.includes(keyword);
+      return recordTerms.indexOf(keyword) >= 0;
     });
   });
 }
@@ -52,6 +52,9 @@ export function filter(filterValues, data) {
 
 export const required = value => 
   value ? undefined : 'Required';
+
+export const passwordRequired = value =>
+  value ? undefined : 'Please enter your password.'
 
 export const maxLength = max => value => 
   value && value.length > max ? `Must be ${max} characters or less` : undefined;

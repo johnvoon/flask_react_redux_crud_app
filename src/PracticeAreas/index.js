@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { fetchPracticeAreas } from '../Entities/actions';
 import ButtonLink from '../components/ButtonLink';
-import sr from '../components/ScrollReveal';
 import { changePracticeArea } from './actions';
+import { VelocityTransitionGroup } from 'velocity-react';
 
 const mapStateToProps = (state) => {
   const { entities } = state;
@@ -23,21 +24,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 class PracticeAreas extends Component {
   componentDidMount() {
-    const config = {
-      duration: 1000,
-      scale: 1,
-      distance: 0
-    };
     this.props.onFetchPracticeAreas();
-    sr.reveal(this._buttonLink, config);
-  }
-
-  handleClick(endpoint, practiceAreaId) {
-    console.log(endpoint, practiceAreaId)
   }
 
   render() {
-    this.handleClick = this.handleClick.bind(this);
     const { practiceAreas } = this.props;
     const buttonLinks = Object.keys(practiceAreas).map(id => {
       const practiceArea = practiceAreas[id].area;
@@ -45,12 +35,11 @@ class PracticeAreas extends Component {
       const imgFilename = practiceArea.split(' ')[0].toLowerCase();
 
       return (
-        <div 
+        <div
           key={id}
-          className="col-sm-6"
-          ref={div => this._buttonLink = div}>
+          className="col-sm-6">
           <ButtonLink
-            handleClick={this.handleClick.bind(this, endpoint, id)}
+            key={id}
             id={id}
             text={practiceArea}
             endpoint={`/practice-areas/${endpoint}`}
@@ -62,6 +51,11 @@ class PracticeAreas extends Component {
 
     return (
       <main>
+        <Helmet
+          title="Our Practice Areas"
+          meta={[
+            { name: 'description', content: "Our firm's practice areas." }
+          ]}/>
         <div 
           className="jumbotron"
           style={{backgroundImage: "url('http://localhost:8000/static/images/2000/home.jpg')"}}>

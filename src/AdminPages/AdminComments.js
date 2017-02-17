@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
@@ -187,6 +188,11 @@ class AdminComments extends Component {
 
     return (
       <main className="container-fluid">
+        <Helmet
+          title={`Admin - Commments for Post ${this.props.params.id}`}
+          meta={[
+            { name: 'description', content: `List of comments for post ${this.props.params.id}` }
+          ]}/>
         <h1>{`Comments for Post ${this.props.params.id}`}</h1>
         <Link to="/admin/posts">Back to Posts</Link>
         <div className="row">

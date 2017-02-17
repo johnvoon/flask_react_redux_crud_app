@@ -7,7 +7,8 @@ import { postSchema,
          userSchema,
          mattersSchema,
          staffSchema,
-         clientSchema } from '../constants/Schemas';
+         clientSchema,
+         currentUserSchema } from '../constants/Schemas';
 import { sortByDate } from '../utils';
 import { recordAdded,
          secondaryRecordAdded, 
@@ -23,7 +24,6 @@ import { POSTS_LOADED,
          USERS_LOADED,
          JWT_LOADED,
          REMOVE_JWT } from '../constants/actionTypes';
-
 
 export function fetchBlogData() {
   return dispatch => {
@@ -71,7 +71,6 @@ export function fetchMatters(config) {
       config
     )
     .then(({data: {matters}}) => {
-      console.log(matters);
       const normalized = normalize(matters, arrayOf(mattersSchema));
       dispatch(mattersLoaded(
         normalized.entities,
@@ -108,7 +107,6 @@ export function fetchPostData(id) {
 }
 
 export function fetchPost(id) {
-  console.log(id);
   return (dispatch) => {
     return axios.get(`http://localhost:8000/api/posts/${id}`)
     .then(({data: {post}}) => {

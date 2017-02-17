@@ -35,7 +35,7 @@ export default class RelatedPost extends Component {
             </h4>
             <Avatar
               avatarPhoto={post.authorPhoto}
-              avatarName={post.author}/>
+              avatarText={post.author}/>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
@@ -167,6 +168,11 @@ class BlogHome extends Component {
 
     return (
       <main>
+        <Helmet
+          title="Our Blog"
+          meta={[
+            { name: 'description', content: "Our firm's latest blog posts written by industry professionals." }
+          ]}/>
         <div 
           className="jumbotron"
           style={{

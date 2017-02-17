@@ -1,16 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import Helmet from 'react-helmet';
+import { VelocityTransitionGroup } from 'velocity-react';
 import Post from '../components/Post';
 import RelatedPost from '../components/RelatedPost';
 import Comment from '../components/Comment';
-import { fetchPostData } from '../Entities/actions';
+import Avatar from '../components/Avatar';
+import CommentForm from './CommentForm';
+import { fetchPostData, addComment } from '../Entities/actions';
+import { fetchCurrentUser } from '../Authentication/actions';
+import _ from 'lodash';
 
 const mapStateToProps = (state) => {
-  const { entities, blogPost } = state;
-
+  const { entities, blogPost, authentication } = state;
+  console.log(entities);
   return {
     ...entities,
-    ...blogPost
+    ...blogPost,
+    ...authentication
   };
 };
 
@@ -18,20 +26,55 @@ const mapDispatchToProps = (dispatch) => ({
   onFetchPost: (postId) => {
     dispatch(fetchPostData(postId));
   },
+  
   onChangeCurrentPost: (postId) => {
     dispatch(fetchPostData(postId));
+  },
+  
+  onFetchCurrentUser: () => {
+    dispatch(fetchCurrentUser());
+  },
+
+  onAddComment: (formData) => {
+    dispatch(addComment(formData));
   }
 });
 
 class BlogPost extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showCommentTextArea: false
+    }
+  }
+
   componentDidMount() {
+    this.props.onFetchCurrentUser()
     this.props.onFetchPost(this.props.params.id);
   }
 
-  render() {
-    const { posts, relatedPosts, comments, commentAuthors, currentPost,
-            onChangeCurrentPost, currentPostComments } = this.props;
+  componentDidUpdate() {
+    console.log(this.textArea);
+  }
 
+  showCommentTextArea() {
+    this.setState({
+      showCommentTextArea: true
+    })
+  }
+
+  hideCommentTextArea() {
+    this.setState({
+      showCommentTextArea: false
+    })
+  }
+
+  render() {
+    this.showCommentTextArea = this.showCommentTextArea.bind(this);
+    this.hideCommentTextArea = this.hideCommentTextArea.bind(this);
+    const { posts, relatedPosts, comments, commentAuthors, currentPost,
+            onChangeCurrentPost, currentPostComments, currentUser, onAddComment } = this.props;
+    const { showCommentTextArea } = this.state;
     const relatedPostsList = relatedPosts.map((id) => {
       return (
         <RelatedPost 
@@ -63,6 +106,11 @@ class BlogPost extends Component {
 
     return (
       <main className="post">
+        <Helmet
+          title={currentPost.title}
+          meta={[
+            { name: 'description', content: currentPost.summary }
+          ]}/>
         <div 
           className="jumbotron"
           style={{
@@ -76,10 +124,37 @@ class BlogPost extends Component {
           {post()}
         </div>
         <div className="related-items">
-          <div className="related-posts">
-            {relatedPostsList}
+          <div className="container-fluid related-posts">
+            <div className="row">
+              {relatedPostsList}
+            </div>
           </div>
           <div className="comments">
+            <div 
+              className="comment-form"
+              onClick={this.showCommentTextArea}
+              onBlur={this.hideCommentTextArea}>
+              {_.isEmpty(currentUser) ? (
+                <Link to="/login">
+                  <Avatar
+                    iconClassName="comment"
+                    avatarText="Log in to leave a comment..."/>
+                </Link>
+              ) : (
+                <Avatar
+                  avatarPhoto={currentUser.photo}
+                  avatarText={showCommentTextArea ? currentUser.name : "Leave a Comment"}/>
+              )}
+              <VelocityTransitionGroup 
+                enter={{animation: "slideDown"}}
+                leave={{animation: "slideUp"}}>
+                {_.isEmpty(currentUser) || !showCommentTextArea ? null : 
+                  <CommentForm
+                    name={currentUser.name}
+                    onAddComment={onAddComment}
+                    ref={textArea => this.textArea = textArea}/>}
+              </VelocityTransitionGroup>
+            </div>
             {currentPostComments.length === 1 ? (
               <h3>{currentPostComments.length} comment</h3>  
             ) : (

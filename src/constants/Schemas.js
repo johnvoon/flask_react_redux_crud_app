@@ -8,7 +8,8 @@ const commentAuthor = new Schema('commentAuthors');
 const user = new Schema('users');
 const staff = new Schema('staff');
 const client = new Schema('clients');
-const matters = new Schema('matters');
+const matter = new Schema('matters');
+const currentUser = new Schema('currentUser');
 
 comment.define({
   author: commentAuthor,
@@ -22,4 +23,5 @@ export const commentAuthorSchema = commentAuthor;
 export const userSchema = user;
 export const staffSchema = staff;
 export const clientSchema = client;
-export const matterSchema = matters;
+export const matterSchema = matter;
+export const currentUserSchema = currentUser;

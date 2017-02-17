@@ -1,4 +1,5 @@
 import React from 'react';
+import TextArea from 'react-textarea-autosize';
 import classNames from 'classnames';
 
 const TextAreaFormGroup = (field) => {
@@ -7,18 +8,20 @@ const TextAreaFormGroup = (field) => {
 
   return (
     <div className="form-group">
-      <label className={classNames(
-        "input-label",
-        {"text-error": error})}>
-        {label}
-        <span/>
-      </label>
-      <textarea
+      {label ? (
+        <label className={classNames(
+          "input-label",
+          {"text-error": error})}>
+          {label}
+          <span/>
+        </label>
+      ) : null}
+      <TextArea
         className={classNames(
           "form-control",
           {"bg-error": error})}
-        rows={rows}
-        placeholder={placeholder}
+        minRows={rows}
+        defaultValue={placeholder}
         {...input}/>
       {error && <span className="text-error">{meta.error}</span>}
     </div>

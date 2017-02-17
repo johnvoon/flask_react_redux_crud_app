@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 import { Scrollbars } from 'react-custom-scrollbars';
 import AddPost from './AddPost';
 import EditPost from './EditPost';
@@ -134,6 +135,11 @@ class AdminPosts extends Component {
 
     return (
       <main className="container-fluid">
+        <Helmet
+          title="Admin - Posts"
+          meta={[
+            { name: 'description', content: "List of blog posts" }
+          ]}/>
         <h1>List of All Posts</h1>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">

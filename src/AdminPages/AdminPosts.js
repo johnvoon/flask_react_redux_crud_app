@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { Scrollbars } from 'react-custom-scrollbars';
 import AddPost from './AddPost';
 import EditPost from './EditPost';
 import DeleteRecord from './DeleteRecord';
@@ -9,7 +8,6 @@ import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
-import ModalSmall from '../components/ModalSmall';
 import ModalMedium from '../components/ModalMedium';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate';
@@ -18,8 +16,7 @@ import TableHeading from '../components/TableHeading';
 import TableCommentsLink from '../components/TableCommentsLink';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
-import { fetchBlogData, addPost, editPost, deletePost, loadImage } from '../Entities/actions';
-import { getJWT, removeJWT } from './actions';
+import { getJWT, removeJWT, fetchBlogData, addPost, editPost, deletePost } from '../Entities/actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -124,7 +121,7 @@ class AdminPosts extends Component {
 
   render() {
     const { onGetJWT, onJWTExpired, onAdd, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { posts, postAuthors, practiceAreas } = this.props;
+    const { posts, staff, practiceAreas } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
     const { currentRecord, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
@@ -198,7 +195,7 @@ class AdminPosts extends Component {
           show={showAddModal} 
           onHide={() => this.setState({showAddModal: false})}>
           <AddPost
-            postAuthors={postAuthors}
+            staff={staff}
             practiceAreas={practiceAreas}
             onGetJWT={onGetJWT}
             onAdd={onAdd.bind(null, config)}
@@ -212,7 +209,7 @@ class AdminPosts extends Component {
           show={showEditModal} 
           onHide={() => this.setState({showEditModal: false})}>
           <EditPost
-            postAuthors={postAuthors}
+            staff={staff}
             practiceAreas={practiceAreas}
             post={currentRecord}
             onEdit={onEdit.bind(null, config)}
@@ -250,7 +247,7 @@ AdminPosts.propTypes = {
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
   posts: PropTypes.object.isRequired,
-  postAuthors: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,

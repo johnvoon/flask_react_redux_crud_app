@@ -87,7 +87,7 @@ class BlogHome extends Component {
   }
 
   render() {
-    const { posts, practiceAreas, postAuthors, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
+    const { posts, practiceAreas, staff, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
     const { onSort, onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
     const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
     console.log(allAvailablePosts);
@@ -149,14 +149,14 @@ class BlogHome extends Component {
       );
     });
 
-    const authorLinks = Object.keys(postAuthors).map((id) => {
+    const authorLinks = Object.keys(staff).map((id) => {
       return (
         <FilterLink
           key={id}
-          linkText={postAuthors[id].name}
-          count={postAuthors[id].posts}
+          linkText={staff[id].name}
+          count={staff[id].posts}
           dispatchEvent={() => {
-            onAuthorFilter(posts, postAuthors[id].name);
+            onAuthorFilter(posts, staff[id].name);
             scrollIntoViewIfNeeded(
               this._postsContainer, 
               false, 
@@ -243,7 +243,7 @@ BlogHome.propTypes = {
   onLoadMore: PropTypes.func.isRequired,
   posts: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
-  postAuthors: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
   visiblePosts: PropTypes.array.isRequired,
   filterValues: PropTypes.string.isRequired,
   currentFilter: PropTypes.string.isRequired

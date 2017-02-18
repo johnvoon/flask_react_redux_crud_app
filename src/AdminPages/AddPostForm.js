@@ -43,10 +43,10 @@ class AddPostForm extends Component {
   }
 
   render() {
-    const { postAuthors, practiceAreas } = this.props; 
+    const { staff, practiceAreas } = this.props; 
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
-    const postAuthorOptions = createOptionsList(postAuthors, "name");
+    const postAuthorOptions = createOptionsList(staff, "name");
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
 
     return (
@@ -120,7 +120,7 @@ AddPostForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
-  postAuthors: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired
 };
 

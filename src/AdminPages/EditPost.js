@@ -4,7 +4,7 @@ import EditPostForm from './EditPostForm';
 
 class EditPost extends Component {
   render() {
-    const { post, postAuthors, practiceAreas, onEdit, onHide, onGetJWT, onJWTExpired, JWT, JWTExpired } = this.props;
+    const { post, staff, practiceAreas, onEdit, onHide, onGetJWT, onJWTExpired, JWT, JWTExpired } = this.props;
     
     return (
       <div>
@@ -12,7 +12,7 @@ class EditPost extends Component {
                     onGetJWT={onGetJWT}
                     JWTExpired={JWTExpired}/>}
         {JWT && <EditPostForm
-                    postAuthors={postAuthors}
+                    staff={staff}
                     practiceAreas={practiceAreas}
                     onJWTExpired={onJWTExpired}
                     onEdit={onEdit}
@@ -29,7 +29,7 @@ EditPost.propTypes = {
   onGetJWT: PropTypes.func.isRequired,  
   onJWTExpired: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  postAuthors: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
   JWT: PropTypes.string.isRequired,
   JWTExpired: PropTypes.bool.isRequired

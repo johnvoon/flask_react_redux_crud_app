@@ -5,7 +5,7 @@ export function fetchCurrentUser() {
   return dispatch => {
     return axios.get('http://localhost:8000/api/current-user')
     .then(({data: {currentUser}}) => {
-      dispatch(currentUserLoaded(
+      return dispatch(currentUserLoaded(
         currentUser
       ));
     });

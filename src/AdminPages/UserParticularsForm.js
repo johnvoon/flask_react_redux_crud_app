@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from  'redux-form';
+import { Field } from  'redux-form';
 import ErrorAlert from '../components/ErrorAlert';
 import InputFormGroup from '../components/InputFormGroup';
 import SelectFormGroup from '../components/SelectFormGroup';

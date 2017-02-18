@@ -158,7 +158,10 @@ def users():
 
             params['role'] = 'admin'
             params['password'] = password
-            params['email'] = 'dev@local.host'
+            params['email'] = 'admin@conceptlawfirm.co.au'
+            params['first_name'] = 'Admin'
+            params['middle_name'] = ''
+            params['last_name'] = 'User'
 
         data.append(params)
 
@@ -196,13 +199,15 @@ def staff():
             start_date='-1y', end_date='now').strftime('%s')
         date_joined = datetime.utcfromtimestamp(
             float(fake_datetime)).strftime('%Y-%m-%d')
+        description = list(fake.paragraphs(nb=5))
 
         params = {
             'date_joined': date_joined,
             'position': random.choice(positions),
             'img_src': random.choice(img_srcs),
             'user_id': user.id,
-            'practice_area_id': random.choice(practice_area_ids)
+            'practice_area_id': random.choice(practice_area_ids),
+            'description': description
         }
 
         data.append(params)

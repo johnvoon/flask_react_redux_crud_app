@@ -24,13 +24,14 @@ class EditPostForm extends Component {
   }
 
   handleInitialize() {
-    const { post, postAuthors, practiceAreas } = this.props;
+    const { post, staff, practiceAreas } = this.props;
     const { initialize } = this.props;
-    const postBody = (post.body || []).map((paragraph) => 
-      paragraph).join('\n\n');
+    const postBody = (post.body || []).map((paragraph) => {
+      return `<p>${paragraph}</p>`;
+    }).join('\n')
     const initData = {
       "title": post.title,
-      "author": _.findKey(postAuthors, (val) => val.name === post.author),
+      "author": _.findKey(staff, (val) => val.name === post.author),
       "body": postBody,
       "summary": post.summary,
       "practiceArea": _.findKey(practiceAreas, (val) => val.name === practiceAreas.area)
@@ -66,11 +67,11 @@ class EditPostForm extends Component {
   }
 
   render() {
-    const { post, postAuthors, practiceAreas } = this.props;
+    const { post, staff, practiceAreas } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
-    const postAuthorOptions = createOptionsList(postAuthors, "name");
+    const postAuthorOptions = createOptionsList(staff, "name");
     const postCreated = moment(post.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const postUpdated = moment(post.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
 
@@ -151,7 +152,7 @@ EditPostForm.propTypes = {
   reset: PropTypes.object.isRequired,
   submitting: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
-  postAuthors: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired
 };
 

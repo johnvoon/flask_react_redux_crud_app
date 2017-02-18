@@ -26,6 +26,7 @@ const MultiselectFormGroup = (field) => {
         multi={true}
         clearable={true}
         simpleValue
+        tabSelectsValue={false}
         onChange={(value) => input.onChange(value)}
         onBlur={() => input.onBlur(input.value)}
         {...inputProps}/>

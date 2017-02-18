@@ -15,18 +15,23 @@ class LoginForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onFetchCurrentUser, onLoginUser, router, location } = this.props;
+    const { currentUser, onFetchCurrentUser, onLoginUser, router, location } = this.props;
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
     onLoginUser(formData)
-    .then(() => {
-      location.query.next ? 
-      router.push(location.query.next) : 
-      router.push('/admin')
-    })
     .then(() => onFetchCurrentUser())
+    .then(({currentUser}) => {
+      if (location.query.next) {
+        router.push(location.query.next)  
+      }
+      if (currentUser.role === 'admin') {
+        router.push('/admin')
+      } else {
+        router.push('/portal')
+      }
+    })
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status >= 400 && status < 500) {

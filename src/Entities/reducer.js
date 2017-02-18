@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 const initialState = {
   posts: {},
-  postAuthors: {},
   comments: {},
   commentAuthors: {},
   practiceAreas: {},

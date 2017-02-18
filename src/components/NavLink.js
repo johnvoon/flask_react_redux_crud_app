@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link, withRouter } from 'react-router';
 import classNames from 'classnames';
 
-class ListItemLink extends Component {
+class NavLink extends Component {
   render() {
     const { router, linkText, endpoint, index, onlyActiveOnIndex } = this.props;
     const isActive = router.isActive(endpoint, true);
@@ -21,11 +21,11 @@ class ListItemLink extends Component {
   }
 }
 
-ListItemLink.propTypes = {
+NavLink.propTypes = {
   linkText: PropTypes.string.isRequired,
   endpoint: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired
 };
 
-export default withRouter(ListItemLink)
+export default withRouter(NavLink)

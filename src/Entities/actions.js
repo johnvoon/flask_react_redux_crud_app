@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
 import { postSchema, 
-         practiceAreaSchema, 
-         postAuthorSchema,
+         practiceAreaSchema,
          commentSchema,
          userSchema,
-         mattersSchema,
+         matterSchema,
          staffSchema,
          clientSchema,
          currentUserSchema } from '../constants/Schemas';
@@ -20,7 +19,7 @@ import { POSTS_LOADED,
          POST_LOADED,
          PRACTICE_AREAS_LOADED,
          MATTERS_LOADED,
-         POST_AUTHORS_LOADED,
+         STAFF_LOADED,
          COMMENTS_LOADED,
          USERS_LOADED,
          JWT_LOADED,
@@ -30,7 +29,7 @@ export function fetchBlogData() {
   return dispatch => {
     dispatch(fetchPosts());
     dispatch(fetchPracticeAreas());
-    dispatch(fetchPostAuthors());
+    dispatch(fetchStaff());
   };
 }
 
@@ -72,24 +71,21 @@ export function fetchMatters(config) {
       config
     )
     .then(({data: {matters}}) => {
-      const normalized = normalize(matters, arrayOf(mattersSchema));
+      const normalized = normalize(matters, arrayOf(matterSchema));
       dispatch(mattersLoaded(
         normalized.entities,
-        normalized
+        normalized.result
       ));
     });      
   }
 }
 
-export function fetchPostAuthors() {
+export function fetchStaff() {
   return dispatch => {
     return axios.get('http://localhost:8000/api/staff')
     .then(({data: {staff}}) => {
-      const normalized = normalize(
-        staff, 
-        arrayOf(postAuthorSchema)
-      );
-      dispatch(postAuthorsLoaded(normalized.entities));
+      const normalized = normalize(staff, arrayOf(staffSchema));
+      dispatch(staffLoaded(normalized.entities, normalized.result));
     });
   };
 }
@@ -295,8 +291,8 @@ export function addMatter(config, content) {
       content, 
       config
     )
-    .then(({data: {matters}}) => {
-        const normalized = normalize(matters, mattersSchema);
+    .then(({data: {matter}}) => {
+        const normalized = normalize(matter, matterSchema);
         dispatch(recordAdded(normalized.entities, normalized.entities.matters, matters.id))
       }
     );
@@ -397,9 +393,9 @@ export function practiceAreasLoaded(entities, practiceAreas) {
   };
 }
 
-export function postAuthorsLoaded(entities) {
+export function staffLoaded(entities) {
   return {
-    type: POST_AUTHORS_LOADED,
+    type: STAFF_LOADED,
     entities
   };
 }

@@ -19,7 +19,7 @@ import TableHeading from '../components/TableHeading';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
 import { getJWT, removeJWT, fetchUsers, fetchPracticeAreas, addUser, editUser, deleteUser,
-         addStaff, addClient, addMatter, fetchMatters } from '../Entities/actions';
+         addStaff, addClient, addMatter, fetchMatters, fetchStaff } from '../Entities/actions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -50,6 +50,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onFetchMatters: (config) => {
       dispatch(fetchMatters(config));
+    },
+
+    onFetchStaff: (config) => {
+      dispatch(fetchStaff(config));
     },
 
     onGetJWT: (data) => {
@@ -128,6 +132,7 @@ class AdminUsers extends Component {
       this.props.onFetchUsers(config);
       this.props.onFetchPracticeAreas();
       this.props.onFetchMatters(config);
+      this.props.onFetchStaff(config);
       this.setState({showGetJWTModal: false})
     }
 
@@ -175,7 +180,7 @@ class AdminUsers extends Component {
 
   render() {
     const { onGetJWT, onJWTExpired, onAddUser, onAddStaff, onAddClient, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { users, matters, practiceAreas } = this.props;
+    const { users, matters, practiceAreas, staff, clients } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage, addedRecord } = this.props;
     const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
     const config = {
@@ -285,6 +290,10 @@ class AdminUsers extends Component {
           onHide={() => this.setState({showEditModal: false})}>
           <EditUser
             user={currentRecord}
+            matters={matters}
+            practiceAreas={practiceAreas}
+            staff={staff}
+            clients={clients}
             onEdit={onEdit.bind(null, config)}
             onHide={() => this.setState({showEditModal: false})}
             onGetJWT={onGetJWT}

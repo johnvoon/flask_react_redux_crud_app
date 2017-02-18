@@ -4,7 +4,8 @@ import EditUserForm from './EditUserForm';
 
 class EditUser extends Component {
   render() {
-    const { user, onEdit, onHide, onGetJWT, onJWTExpired, JWT, JWTExpired } = this.props;
+    const { user, practiceAreas, matters, staff, clients,
+      onEdit, onHide, onGetJWT, onJWTExpired, JWT, JWTExpired } = this.props;
     
     return (
       <div>
@@ -12,10 +13,14 @@ class EditUser extends Component {
                    onGetJWT={onGetJWT}
                    JWTExpired={JWTExpired}/>}
         {JWT && <EditUserForm
-                    onJWTExpired={onJWTExpired}
-                    onEdit={onEdit}
-                    user={user}
-                    onHide={onHide}/>}
+                  onJWTExpired={onJWTExpired}
+                  onEdit={onEdit}
+                  user={user}
+                  staff={staff}
+                  clients={clients}
+                  practiceAreas={practiceAreas}
+                  matters={matters}
+                  onHide={onHide}/>}
       </div>
     );
   }

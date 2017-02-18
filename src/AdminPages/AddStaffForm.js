@@ -91,7 +91,7 @@ class AddStaffForm extends Component {
     const { practiceAreas, matters, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
-    const matterOptions = createOptionsList(matters, "matter");
+    const matterOptions = createOptionsList(matters, "description");
     
     return (
       <div>

@@ -1,32 +1,37 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from  'redux-form';
-import InputFormGroup from '../components/InputFormGroup';
-import SelectFormGroup from '../components/SelectFormGroup';
-import StaticFormGroup from '../components/StaticFormGroup';
-import AsyncValidationFormGroup from '../components/AsyncValidationFormGroup';
-import GeosuggestFormGroup from '../components/GeosuggestFormGroup';
+import EditUserFormParticulars from './EditUserFormParticulars';
+import EditUserFormAddress from './EditUserFormAddress';
+import EditUserFormStaffDetails from './EditUserFormStaffDetails';
 import ErrorAlert from '../components/ErrorAlert';
+import NavTab from '../components/NavTab';
 import { required, email, username, asyncValidateUserIdentity as asyncValidate } from '../utils';
 import { loadFormData as load } from './actions';
-import moment from 'moment';
 import _ from 'lodash';
 
 class EditUserForm extends Component { 
   constructor(props) {
     super(props);
     this.state = {
-      errorMessage: ''
+      errorMessage: '',
+      currentTab: 'Particulars'
     }
   }
 
   componentDidMount() {
-    this.handleInitialize();
+    const { user } = this.props;
+
+    this.handleInitializeUserData();
+    if (user.role === 'staff') {
+      this.handleInitializeStaffData();
+    } else if (user.role === 'client') {
+      this.handleInitializeClientData();
+    }
   }
 
-  handleInitialize() {
-    const { user } = this.props;
-    const { loadFormData } = this.props;
+  handleInitializeUserData() {
+    const { user, loadFormData } = this.props;
     const initData = {
       "active": user.active === "Active" ? "1" : "0",
       "role": user.role,
@@ -43,6 +48,41 @@ class EditUserForm extends Component {
     };
 
     loadFormData(initData);
+  }
+
+  handleInitializeStaffData() {
+    const { user, staff, matters, practiceAreas, loadFormData } = this.props;
+    const staffUser = staff[user.staffId];
+    console.log(staffUser);
+    const mattersList = staffUser.mattersHandled.map(id => {
+      return {
+        value: String(id), 
+        label: matters[id].area
+      }
+    });
+    const practiceAreasList = staffUser.practiceAreas.map(id => {
+      return {
+        value: String(id), 
+        label: practiceAreas[id].area
+      }
+    });
+    const description = (staffUser.description || []).map((paragraph) => {
+      return paragraph;
+    }).join('\n\n')
+
+    const initData = {
+      "dateJoined": staffUser.dateJoined,
+      "matters": mattersList,
+      "position": staffUser.position,
+      "description": description,
+      "practiceAreas": practiceAreasList
+    };
+
+    loadFormData(initData);    
+  }
+
+  handleInitializeClientData() {
+    console.log("under construction");
   }
 
   fillInAddress(value) {
@@ -68,161 +108,47 @@ class EditUserForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { user, onEdit, onHide, onJWTExpired } = this.props;
-      
-    let formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-    onEdit(formData, user.id)
-    .then(() => onHide())
-    .catch(({response, message}) => {
-      const { status, data } = response;
-      if (status === 401) {
-        onJWTExpired();
-      } else if (status === 404) {
-        this.setState({
-          errorMessage: data.message
-        })
-      } else {
-        this.setState({
-          errorMessage: message
-        })
-      }
+    console.log(data);
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    this.setState({
+      currentTab: event.target.textContent
     });
   }
 
   render() {
-    const { user } = this.props;
+    this.handleClick = this.handleClick.bind(this);
+    const { user, practiceAreas, matters, staff } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
-    const { errorMessage } = this.state;
-    
-    const userCreated = moment(user.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
-    const userUpdated = moment(user.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
-    const activeOptions = ["1 - Active", "2 - Disabled"]
-    const roleOptions = ["admin - Admin", "client - Client", "staff - Staff", "public - Public"]
-    
+    const { errorMessage, currentTab } = this.state;
+    const tabLabels = ["Particulars", "Address", "Staff Details"];
+    const navTabs = tabLabels.map((tab, idx) => {
+      return (
+        <NavTab
+          key={idx}
+          isActive={currentTab === tab}
+          text={tab}
+          handleClick={this.handleClick}/>
+      );
+    });
+
     return (
       <form>
-        <StaticFormGroup 
-          label="Created"
-          text={userCreated}/>
-        <StaticFormGroup 
-          label="Updated"
-          text={userUpdated}/>
-        <StaticFormGroup 
-          label="Username"
-          text={user.username}/>
-        <StaticFormGroup 
-          label="Email"
-          text={user.email}/>
-        <div className="row">
-          <div className="col-sm-6">
-            <Field 
-              name="active"
-              component={SelectFormGroup}
-              label="Status"
-              validate={required}
-              options={activeOptions}/>
-          </div>
-          <div className="col-sm-6">
-            <Field 
-              name="role"
-              component={SelectFormGroup}
-              label="Role"
-              validate={required}
-              options={roleOptions}/>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <Field 
-              name="lastName"
-              type="text"
-              component={InputFormGroup}
-              label="Last Name"
-              validate={required}/>
-          </div>
-          <div className="col-sm-6">
-            <Field 
-              name="firstName"
-              type="text"
-              component={InputFormGroup}
-              label="First Name"
-              validate={required}/>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <Field 
-              name="middleName"
-              type="text"
-              component={InputFormGroup}
-              label="Middle Name"/>
-          </div>
-          <div className="col-sm-6">
-            <Field 
-              name="phoneNumber"
-              type="tel"
-              component={InputFormGroup}
-              label="Mobile Number"
-              validate={required}/>
-          </div>
-        </div>
-        <Field 
-          name="addressSearch"
-          type="text"
-          component={GeosuggestFormGroup}
-          label="Address Search"
-          placeholder="Enter your address to search"
-          fillInAddress={(value) => this.fillInAddress(value)}>
-        </Field>
-        <div className="row">
-          <div className="col-sm-2">
-            <Field 
-              name="unitNumber"
-              type="text"
-              component={InputFormGroup}
-              label="Unit Number"/>
-          </div>
-          <div className="col-sm-5">
-            <Field 
-              name="streetAddress"
-              type="text"
-              component={InputFormGroup}
-              label="Street Address"/>
-          </div>
-          <div className="col-sm-5">
-            <Field 
-              name="suburb"
-              type="text"
-              component={InputFormGroup}
-              label="Suburb"/>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-2">
-            <Field 
-              name="postcode"
-              type="text"
-              component={InputFormGroup}
-              label="Postcode"/>
-          </div>
-          <div className="col-sm-5">
-            <Field 
-              name="state"
-              type="text"
-              component={InputFormGroup}
-              label="State"/>
-          </div>
-          <div className="col-sm-5">
-            <Field 
-              name="country"
-              type="text"
-              component={InputFormGroup}
-              label="Country"/>
-          </div>
-        </div>
+        <ul className="nav nav-tabs">
+          {navTabs}   
+        </ul>
+        <EditUserFormParticulars
+          user={user}
+          isDisplayed={currentTab === tabLabels[0]}/>
+        <EditUserFormAddress
+          fillInAddress={(value) => this.fillInAddress(value)}
+          isDisplayed={currentTab === tabLabels[1]}/>
+        <EditUserFormStaffDetails
+          practiceAreas={practiceAreas}
+          matters={matters}
+          isDisplayed={currentTab === tabLabels[2]}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -257,7 +183,7 @@ EditUserForm.propTypes = {
 };
 
 EditUserForm = reduxForm({
-  form:  'EditUserForm',
+  form: 'EditUserForm',
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true

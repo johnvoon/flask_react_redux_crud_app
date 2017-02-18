@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import ListItemLink from './ListItemLink';
+import NavLink from './NavLink';
 import classNames from 'classnames';
 
 export default class MainNavbar extends Component {
@@ -26,7 +26,7 @@ export default class MainNavbar extends Component {
       const endpoint = link[1];
 
       return (
-        <ListItemLink 
+        <NavLink 
           key={idx}
           linkText={linkText}
           endpoint={endpoint}

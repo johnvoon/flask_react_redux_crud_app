@@ -4,17 +4,16 @@ import { Field } from  'redux-form';
 import ErrorAlert from '../components/ErrorAlert';
 import InputFormGroup from '../components/InputFormGroup';
 import SelectFormGroup from '../components/SelectFormGroup';
-import GeosuggestFormGroup from '../components/GeosuggestFormGroup';
 import AsyncValidationFormGroup from '../components/AsyncValidationFormGroup';
 import FileUploadFormGroup from '../components/FileUploadFormGroup';
 import { required, email, username, passwordMatch, asyncValidateUserIdentity as asyncValidate } from '../utils';
 import { loadFormData as load } from './actions';
-import _ from 'lodash';
 import classNames from 'classnames';
+import _ from 'lodash';
 
-export default class UserParticularsForm extends Component {
+export default class UserAccountDetailsForm extends Component {
   render() {
-    const { isDisplayed } = this.props;
+    const { isDisplayed, passwordValue } = this.props;
 
     return (
       <div className={classNames({
@@ -23,38 +22,37 @@ export default class UserParticularsForm extends Component {
         <div className="row">
           <div className="col-sm-6">
             <Field 
-              name="lastName"
+              name="email"
+              type="email"
+              component={AsyncValidationFormGroup}
+              label="Email"
+              validate={[required, email]}/>            
+          </div>
+          <div className="col-sm-6">
+            <Field 
+              name="username"
               type="text"
+              component={AsyncValidationFormGroup}
+              label="Username"
+              validate={[required, username]}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <Field 
+              name="password"
+              type="password"
               component={InputFormGroup}
-              label="Last Name"
+              label="Password"
               validate={required}/>
           </div>
           <div className="col-sm-6">
             <Field 
-              name="firstName"
-              type="text"
+              name="passwordConfirm"
+              type="password"
               component={InputFormGroup}
-              label="First Name"
-              validate={required}/>
-          </div>
-        </div>
-        <div>
-          <div className="row">
-            <div className="col-sm-6">
-              <Field 
-                name="middleName"
-                type="text"
-                component={InputFormGroup}
-                label="Middle Name"/>
-            </div>
-            <div className="col-sm-6">
-              <Field 
-                name="phoneNumber"
-                type="tel"
-                component={InputFormGroup}
-                label="Mobile Number"
-                validate={required}/>
-            </div>
+              label="Confirm Password"
+              validate={[required, passwordMatch(passwordValue)]}/>
           </div>
         </div>
       </div>

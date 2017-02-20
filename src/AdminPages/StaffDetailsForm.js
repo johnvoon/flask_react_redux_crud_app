@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
-import DatepickerFormGroup from '../components/DatepickerFormGroup';
+import DatePickerFormGroup from '../components/DatePickerFormGroup';
 import InputFormGroup from '../components/InputFormGroup';
 import MultiselectFormGroup from '../components/MultiselectFormGroup';
 import TextAreaFormGroup from '../components/TextAreaFormGroup';
@@ -21,7 +21,7 @@ export default class EditUserFormStaffDetails extends Component {
           <div className="col-sm-6">
             <Field 
               name="dateJoined"
-              component={DatepickerFormGroup}
+              component={DatePickerFormGroup}
               label="Date Joined"/>
           </div>
           <div className="col-sm-6">

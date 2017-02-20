@@ -8,7 +8,7 @@ import RelatedPost from '../components/RelatedPost';
 import Comment from '../components/Comment';
 import Avatar from '../components/Avatar';
 import CommentForm from './CommentForm';
-import { fetchPostData, addComment } from '../Entities/actions';
+import { fetchPostData, addComment } from '../Entities/CommentsActions';
 import { fetchCurrentUser } from '../Authentication/actions';
 import _ from 'lodash';
 
@@ -72,7 +72,7 @@ class BlogPost extends Component {
   render() {
     this.showCommentTextArea = this.showCommentTextArea.bind(this);
     this.hideCommentTextArea = this.hideCommentTextArea.bind(this);
-    const { posts, relatedPosts, comments, commentAuthors, currentPost,
+    const { posts, relatedPosts, comments, currentPost,
             onChangeCurrentPost, currentPostComments, currentUser, onAddComment } = this.props;
     const { showCommentTextArea } = this.state;
     const relatedPostsList = relatedPosts.map((id) => {
@@ -179,7 +179,6 @@ BlogPost.propTypes = {
   posts: PropTypes.object.isRequired,
   relatedPosts: PropTypes.array.isRequired,
   comments: PropTypes.object.isRequired,
-  commentAuthors: PropTypes.object.isRequired,
   currentPost: PropTypes.object.isRequired,
   onChangeCurrentPost: PropTypes.func.isRequired,
   currentPostComments: PropTypes.array.isRequired

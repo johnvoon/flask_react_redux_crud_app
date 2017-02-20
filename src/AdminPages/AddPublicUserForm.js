@@ -4,21 +4,13 @@ import { reduxForm, Field, FormSection, formValueSelector } from  'redux-form';
 import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
-import ClientDetailsForm from './ClientDetailsForm';
 import ErrorAlert from '../components/ErrorAlert';
 import NavTab from '../components/NavTab';
-import AsyncValidationFormGroup from '../components/AsyncValidationFormGroup';
-import GeosuggestFormGroup from '../components/GeosuggestFormGroup';
-import InputFormGroup from '../components/InputFormGroup';
-import SelectFormGroup from '../components/SelectFormGroup';
-import TextAreaFormGroup from '../components/TextAreaFormGroup';
-import MultiselectFormGroup from '../components/MultiselectFormGroup';
-import DatePickerFormGroup from '../components/DatePickerFormGroup';
-import { required, email, username, maxLength, asyncValidateUserIdentity as asyncValidate, createOptionsList } from '../utils';
+import { createOptionsList } from '../utils';
 import { loadFormData as load } from './actions';
 import _ from 'lodash';
 
-class AddClientForm extends Component { 
+class AddPublicUserForm extends Component { 
   constructor(props) {
     super(props);
     this.state = {
@@ -28,28 +20,20 @@ class AddClientForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddUser, onAddClient, onHide, onJWTExpired, addedRecord } = this.props;
+    const { onAddUser, onHide, onJWTExpired, addedRecord } = this.props;
     const userEntityFields = [
       'email', 'username', 'password', 'lastName', 'firstName', 'middleName', 
       'phoneNumber', 'unitNumber', 'streetAddress', 'suburb', 'postcode',
       'state', 'country', 'photo'
     ];
-    const clientEntityFields = ['matters'];
     let userFormData = new FormData();
-    let clientFormData = new FormData();
     Object.keys(data).forEach((key) => {
       userEntityFields.includes(key) &&
       userFormData.append(key, data[key]);
-      clientEntityFields.includes(key) &&
-      clientFormData.append(key, data[key]);
     });
-    userFormData.append('role', 'client');
+    userFormData.append('role', 'public');
 
     onAddUser(userFormData)
-    .then(({addedRecordId}) => {
-      clientFormData.append('userId', addedRecordId);
-      onAddClient(clientFormData);
-    })
     .then(() => onHide())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -98,10 +82,9 @@ class AddClientForm extends Component {
 
   render() {
     this.handleClick = this.handleClick.bind(this);
-    const { practiceAreas, matters, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
+    const { passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage, currentTab } = this.state;
-    const matterOptions = createOptionsList(matters, "description");
-    const tabLabels = ["Account Details", "Particulars", "Address", "Client Details"];
+    const tabLabels = ["Account Details", "Particulars", "Address"];
     const navTabs = tabLabels.map((tab, idx) => {
       return (
         <NavTab
@@ -115,7 +98,7 @@ class AddClientForm extends Component {
     return (
       <div>
         <ul className="nav nav-tabs">
-          {navTabs}   
+          {navTabs}
         </ul>
         <UserAccountDetailsForm
           isDisplayed={currentTab === tabLabels[0]}
@@ -125,10 +108,6 @@ class AddClientForm extends Component {
         <UserAddressForm
           fillInAddress={(value) => this.fillInAddress(value)}
           isDisplayed={currentTab === tabLabels[2]}/>
-        <ClientDetailsForm
-          practiceAreas={practiceAreas}
-          matters={matters}
-          isDisplayed={currentTab === tabLabels[3]}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -151,7 +130,7 @@ class AddClientForm extends Component {
   }
 }
 
-AddClientForm.propTypes = {
+AddPublicUserForm.propTypes = {
   onAdd: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
@@ -160,18 +139,18 @@ AddClientForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
 };
 
-const selector = formValueSelector('AddClientForm');
+const selector = formValueSelector('AddPublicUserForm');
 
-AddClientForm = reduxForm({
-  form:  'AddClientForm',
+AddPublicUserForm = reduxForm({
+  form:  'AddPublicUserForm',
   asyncValidate,
   asyncBlurFields: ['username', 'email'],
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(AddClientForm);
+})(AddPublicUserForm);
 
-AddClientForm = connect(
+AddPublicUserForm = connect(
   state => {
     const passwordValue = selector(state, 'password');
 
@@ -181,6 +160,6 @@ AddClientForm = connect(
     };
   },
   { loadFormData: load }
-)(AddClientForm)
+)(AddPublicUserForm)
 
-export default AddClientForm;
+export default AddPublicUserForm;

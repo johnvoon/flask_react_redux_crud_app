@@ -1,20 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import Helmet from 'react-helmet';
+import AddMatter from './AddMatter';
+import EditMatter from './EditMatter';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
 import PageLengthMenu from '../components/PageLengthMenu';
 import ModalMedium from '../components/ModalMedium';
-import GetJWTForm from './GetJWTForm';
-import DeleteRecord from './DeleteRecord';
 import SuccessAlert from '../components/SuccessAlert';
 import TableDate from '../components/TableDate';
+import TablePostLink from '../components/TablePostLink';
 import TableHeading from '../components/TableHeading';
+import TableCommentsLink from '../components/TableCommentsLink';
+import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
-import { getJWT, removeJWT } from '../Authentication/actions'; 
-import { fetchComments, changeCommentVisibility, deleteComment } from '../Entities/CommentsActions';
+import { getJWT, removeJWT } from '../Authentication/actions';
+import { fetchMatters, addMatter, editMatter } from '../Entities/MattersActions';
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
+import { fetchStaff } from '../Entities/StaffActions'; 
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -34,12 +38,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchComments: (id) => {
-      dispatch(fetchComments(id));
+    onFetchMatters: () => {
+      dispatch(fetchMatters());
     },
 
-    onChangeCommentVisibility: (id, formData) => {
-      dispatch(changeCommentVisibility(id, formData));
+    onFetchPracticeAreas: () => {
+      dispatch(fetchPracticeAreas());
+    },
+
+    onFetchStaff: () => {
+      dispatch(fetchStaff());
     },
 
     onGetJWT: (data) => {
@@ -50,8 +58,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeJWT());
     },
 
-    onDelete: (JWT, id) => {
-      return dispatch(deleteComment(JWT, id));
+    onAdd: (JWT, content) => {
+      return dispatch(addMatter(JWT, content));
+    },
+
+    onEdit: (JWT, content, id) => {
+      return dispatch(editMatter(JWT, content, id));
     },
 
     onFilter: ({target: {value}}) => {
@@ -72,111 +84,45 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-class AdminComments extends Component {
+class AdminMatters extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      errorMessage: '',
+    this.state = { 
+      showAddModal: false,
+      showEditModal: false,
       showDeleteModal: false,
-      showGetJWTModal: false,
       currentRecord: {}
     };
   }
 
   componentDidMount() {
-    this.props.onFetchComments(this.props.params.id);
+    this.props.onFetchMatters();
+    this.props.onFetchPracticeAreas();
+    this.props.onFetchStaff();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { JWT } = nextProps;
-    const { visibilityChangePending, commentId, commentVisibility } = this.state;
-    const config = {
-      headers: {
-        'Authorization': `JWT ${JWT}`
-      }
-    };
-
-    if (visibilityChangePending && !this.props.JWT && JWT) {
-      this.props.onChangeCommentVisibility(commentId, commentVisibility, config);
-      this.setState({
-        visibilityChangePending: false,
-        showGetJWTModal: false
-      })
-    }
-  }
-
-  handleChange(id, {target: {value, name}}) {
-    const { JWT, onJWTExpired, JWTExpired, onChangeCommentVisibility } = this.props;
-
-    this.setState({
-      visibilityChangePending: true,
-      commentId: id,
-      commentVisibility: value,
-      [name]: value
-    });
-
-    if (!JWT || JWTExpired) {
-      this.setState({showGetJWTModal: true});
-    } else {
-      const config = {
-        headers: {
-          'Authorization': `JWT ${JWT}`
-        }
-      };
-      let formData = new FormData();
-      formData.append('visible', value);
-      onChangeCommentVisibility(id, formData, config)
-        .catch(({response, message}) => {
-          const { status, data } = response;
-          if (status === 401) {
-            onJWTExpired();
-            this.setState({showGetJWTModal: true});
-          } else if (status === 404) {
-            this.setState({
-              errorMessage: data.message
-            })
-          } else {
-            this.setState({
-              errorMessage: message
-            })
-          }
-        });
-      this.setState({
-        visibilityChangePending: false,
-        commentId: '',
-        commentVisibility: ''
-      });
-    }
-  }
-
-  renderSelectField(val, row) {
-    this.handleChange = this.handleChange.bind(this);
-    
+  renderTableCommentsLink(val, row) {
     return (
-      <select
-        name={row.id}
-        value={this.state[row.id] ? this.state[row.id] : (row.visible ? "1" : "0")}
-        className="form-control"
-        onChange={this.handleChange.bind(null, row.id)}>
-        <option value="1">Visible</option>
-        <option value="0">Hide</option>
-      </select>
+      <TableCommentsLink
+        data={row}/>
     );
   }
 
-  renderTableDeleteLink(val, row) {
+  renderTableEditLink(val, row) {
     return (
-      <TableDeleteLink 
-        handleClick={() => this.setState({
-          currentRecord: row,
-          showDeleteModal: true })}/>
+      <TableEditLink 
+        handleClick={() => {
+          this.setState({
+            currentRecord: row, 
+            showEditModal: true })}}/>
     );
   }
 
   render() {
-    const { onGetJWT, onJWTExpired, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
+    const { onGetJWT, onJWTExpired, onAdd, onEdit, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
+    const { posts, staff, practiceAreas } = this.props;
     const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord, showGetJWTModal, showDeleteModal, errorMessage } = this.state;
+    const { currentRecord, showAddModal, showEditModal } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -186,12 +132,22 @@ class AdminComments extends Component {
     return (
       <main className="container-fluid">
         <Helmet
-          title={`Admin - Commments for Post ${this.props.params.id}`}
+          title="Admin - Matters"
           meta={[
-            { name: 'description', content: `List of comments for post ${this.props.params.id}` }
+            { name: 'description', content: "List of blog posts" }
           ]}/>
-        <h1>{`Comments for Post ${this.props.params.id}`}</h1>
-        <Link to="/admin/posts">Back to Posts</Link>
+        <h1>List of All Matters</h1>
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3 text-center">
+            <div className="form-group">
+              <button
+                className="btn btn-primary btn-block text-uppercase"
+                onClick={() => this.setState({showAddModal: true})}>
+                Add a New Matter
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="row">
           <div className="col-sm-3">
             <PageLengthMenu 
@@ -212,37 +168,52 @@ class AdminComments extends Component {
               onPageNumberChange={onPageNumberChange}/>
           </div>
         </div>
-        {errorMessage && <ErrorAlert message={errorMessage}/>}
         {successMessage && <SuccessAlert message={successMessage}/>}
         <Table 
           columns={[
-            { title: 'ID', component: TableHeading, prop: 'id'},
             { title: 'Created On', component: TableDate, prop: 'created' },
-            { title: 'Content', component: TableHeading, prop: 'content'},
-            { title: 'Author Username', component: TableHeading, prop: 'authorUsername'},
-            { title: 'Author Name', component: TableHeading, prop: 'authorFullName'},
-            { title: 'Visibility', 
-              component: (val, row) => this.renderSelectField(val, row),
-              className: 'text-center' },
+            { title: 'Title', component: TablePostLink, prop: 'title'},
+            { title: 'Author', component: TableHeading, prop: 'author'},
+            { title: 'Practice Area', component: TableHeading, prop: 'practiceArea'},
             { title: '', 
-              component: (val, row) => this.renderTableDeleteLink(val, row),
+              component: (val, row) => this.renderTableEditLink(val, row),
               className: 'text-center' }
           ]}
           sortBy={sortBy}
           onSort={onSort}
           pageData={pageData}
           data={data}/>
-        <ModalMedium
-          title="Change Comment Visibility"
-          show={showGetJWTModal}
-          onHide={() => this.setState({showGetJWTModal: false})}>
-          <GetJWTForm
+        <ModalMedium 
+          title="Add New Matter"
+          show={showAddModal} 
+          onHide={() => this.setState({showAddModal: false})}>
+          <AddMatter
+            staff={staff}
+            practiceAreas={practiceAreas}
             onGetJWT={onGetJWT}
-            JWTExpired={JWTExpired}
-            onHide={() => this.setState({showGetJWTModal: false})}/>
+            onAdd={onAdd.bind(null, config)}
+            onHide={() => this.setState({showAddModal: false})}
+            onJWTExpired={onJWTExpired}
+            JWT={JWT}
+            JWTExpired={JWTExpired}/>
         </ModalMedium>
         <ModalMedium
-          title={`Delete Comment (ID: ${currentRecord.id})`}
+          title={`Edit This Matter (ID: ${currentRecord.id})`}
+          show={showEditModal} 
+          onHide={() => this.setState({showEditModal: false})}>
+          <EditMatter
+            staff={staff}
+            practiceAreas={practiceAreas}
+            matter={currentRecord}
+            onEdit={onEdit.bind(null, config)}
+            onHide={() => this.setState({showEditModal: false})}
+            onGetJWT={onGetJWT}
+            onJWTExpired={onJWTExpired}
+            JWT={JWT}
+            JWTExpired={JWTExpired}/>
+        </ModalMedium>
+        <ModalMedium
+          title={`Delete Matter (ID: ${currentRecord.id})`}
           show={showDeleteModal} 
           onHide={() => this.setState({showDeleteModal: false})}>
           <DeleteRecord
@@ -258,9 +229,11 @@ class AdminComments extends Component {
   }
 }
 
-AdminComments.propTypes = {
-  onFetchComments: PropTypes.func.isRequired,
+AdminMatters.propTypes = {
+  onFetchBlogData: PropTypes.func.isRequired,
   onGetJWT: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
@@ -282,4 +255,4 @@ AdminComments.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdminComments);
+)(AdminMatters);

@@ -4,7 +4,7 @@ import GeosuggestFormGroup from '../components/GeosuggestFormGroup';
 import InputFormGroup from '../components/InputFormGroup';
 import classNames from 'classnames';
 
-export default class EditUserFormAddress extends Component {  
+export default class UserAddressForm extends Component {  
   render() {
     const { isDisplayed, fillInAddress } = this.props;
 

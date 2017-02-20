@@ -3,6 +3,7 @@ import GetJWTForm from './GetJWTForm';
 import RoleSelectForm from './RoleSelectForm';
 import AddStaffForm from './AddStaffForm';
 import AddClientForm from './AddClientForm';
+import AddPublicUserForm from './AddPublicUserForm';
 import _ from 'lodash';
 
 export default class AddUser extends Component {
@@ -37,7 +38,6 @@ export default class AddUser extends Component {
           <AddClientForm
             onAddUser={onAddUser}
             onAddClient={onAddClient}
-            practiceAreas={practiceAreas}
             matters={matters}
             onJWTExpired={onJWTExpired}
             onHide={onHide}
@@ -52,7 +52,7 @@ export default class AddUser extends Component {
             onHide={onHide}
             addedRecord={addedRecord}/>}
         {JWT && role === 'Public' && 
-          <AddPublicForm
+          <AddPublicUserForm
             onAddUser={onAddUser}
             onJWTExpired={onJWTExpired}
             onHide={onHide}

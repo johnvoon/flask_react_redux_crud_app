@@ -2,7 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 const SelectFormGroup = (field) => {
-  const { input, label, meta, options } = field;
+  const { input, label, meta, options, handleChange } = field;
+  const { onChange, ...inputProps } = input;
   const error = meta.touched && meta.error;
 
   return (
@@ -19,7 +20,8 @@ const SelectFormGroup = (field) => {
         className={classNames(
           "form-control",
           {"bg-error": error})}
-        {...input}>
+        onChange={handleChange ? handleChange : null}
+        {...inputProps}>
         <option value="">Select {label}</option>
         {options.map((option) => {
           const [id, text] = option.split(" - ");

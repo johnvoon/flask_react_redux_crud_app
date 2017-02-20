@@ -3,12 +3,9 @@ import { POSTS_LOADED,
          USERS_LOADED,
          COMMENTS_LOADED,
          RECORD_ADDED,
-         SECONDARY_RECORD_ADDED,
          RECORD_EDITED,
          RECORD_DELETED,
          COMMENT_VISIBILITY_CHANGED,
-         JWT_LOADED,
-         REMOVE_JWT,
          CHANGE_PAGE_NUMBER, 
          CHANGE_PAGE_LENGTH,
          FILTER_ADMIN_DATA,
@@ -23,8 +20,6 @@ const initialState = {
   sortBy: { props: '', order: ''},
   currentPage: 0,
   pageLength: 5,
-  JWT: '',
-  JWTExpired: false,
   successMessage: '',
   formData: {},
   addedRecord: {}
@@ -41,17 +36,8 @@ export default function adminPagesReducer(state = initialState, action) {
     case COMMENTS_LOADED:
       return commentsLoaded(state, action);
 
-    case JWT_LOADED:
-      return JWTLoaded(state, action);
-
-    case REMOVE_JWT:
-      return removeJWT(state, action);
-
     case RECORD_ADDED:
       return recordAdded(state, action);
-
-    case SECONDARY_RECORD_ADDED:
-      return secondaryRecordAdded(state, action);
 
     case RECORD_EDITED:
       return recordEdited(state, action);
@@ -82,21 +68,6 @@ export default function adminPagesReducer(state = initialState, action) {
   }
 
   return state;
-}
-
-function JWTLoaded(state, { JWT }) {
-  return {
-    ...state,
-    JWT
-  };
-}
-
-function removeJWT(state, action) {
-  return {
-    ...state,
-    JWT: '',
-    JWTExpired: true
-  };
 }
 
 function postsLoaded(state, { entities, posts }) {
@@ -133,16 +104,6 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) {
     recordIds: [...recordIds, addedRecordId],
     successMessage: 'Record added successfully',
     addedRecord: addedRecord[addedRecordId]
-  }
-}
-
-function secondaryRecordAdded(state, action) {
-  const { addedRecord } = state;
-  console.log("hello")
-  
-  return {
-    ...state,
-    successMessage: `${addedRecord.role} added successfully`
   }
 }
 

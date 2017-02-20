@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, formValueSelector } from  'redux-form';
+import { reduxForm, Field } from  'redux-form';
 import { loadFormData as load } from './actions';
-import UserParticularsForm from './UserParticularsForm';
 import ErrorAlert from '../components/ErrorAlert';
 import InputFormGroup from '../components/InputFormGroup';
 import InputGroupFormGroup from '../components/InputGroupFormGroup';
@@ -20,13 +19,13 @@ class AddMatterForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddMatter, hideAddMatterForm, onJWTExpired } = this.props;
+    const { onAddMatter, onHide, onJWTExpired } = this.props;
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
     onAddMatter(formData)
-    .then(() => hideAddMatterForm())
+    .then(() => onHide())
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 401) {
@@ -59,9 +58,9 @@ class AddMatterForm extends Component {
           component={InputGroupFormGroup}
           label="Costs on account"/>
         <Field
-          name="practiceArea"
+          name="practiceAreas"
           component={MultiselectFormGroup}
-          label="Practice Area"
+          label="Practice Areas"
           validate={required}/>
         <Field
           name="matter"

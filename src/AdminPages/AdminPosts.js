@@ -16,7 +16,10 @@ import TableHeading from '../components/TableHeading';
 import TableCommentsLink from '../components/TableCommentsLink';
 import TableEditLink from '../components/TableEditLink';
 import TableDeleteLink from '../components/TableDeleteLink';
-import { getJWT, removeJWT, fetchBlogData, addPost, editPost, deletePost } from '../Entities/actions';
+import { getJWT, removeJWT } from '../Authentication/actions';
+import { fetchPosts, addPost, editPost, deletePost } from '../Entities/PostsActions';
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
+import { fetchStaff } from '../Entities/StaffActions'; 
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -36,8 +39,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchBlogData: () => {
-      dispatch(fetchBlogData());
+    onFetchPosts: () => {
+      dispatch(fetchPosts());
+    },
+
+    onFetchPracticeAreas: () => {
+      dispatch(fetchPracticeAreas());
+    },
+
+    onFetchStaff: () => {
+      dispatch(fetchStaff());
     },
 
     onGetJWT: (data) => {
@@ -90,7 +101,9 @@ class AdminPosts extends Component {
   }
 
   componentDidMount() {
-    this.props.onFetchBlogData();
+    this.props.onFetchPosts();
+    this.props.onFetchPracticeAreas();
+    this.props.onFetchStaff();
   }
 
   renderTableCommentsLink(val, row) {

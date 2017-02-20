@@ -18,26 +18,26 @@ export default class RelatedPost extends Component {
 
     return (
       <div className="col-sm-4">
-        <div className="thumbnail">
-          <div 
-            className="thumbnail-image"
-            style={{
-              backgroundImage: `url('${post.imgSrc}')`
-            }}/>
-          <div className="caption">
-            <p>More on {post.practiceArea}</p>
-            <h4>
-              <Link 
-                to={`/blog/${post.id}`}
-                onClick={this.handleClick}>
+        <Link 
+          to={`/blog/${post.id}`}
+          onClick={this.handleClick}>          
+          <div className="thumbnail">
+            <div 
+              className="thumbnail-image"
+              style={{
+                backgroundImage: `url('${post.imgSrc}')`
+              }}/>
+            <div className="caption">
+              <p>More on {post.practiceArea}</p>
+              <h4>
                 {post.title}
-              </Link>
-            </h4>
-            <Avatar
-              avatarPhoto={post.authorPhoto}
-              avatarText={post.author}/>
+              </h4>
+              <Avatar
+                avatarPhoto={post.authorPhoto}
+                avatarText={post.author}/>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     );
   }

@@ -5,7 +5,6 @@ import _ from 'lodash';
 import GetJWTForm from './GetJWTForm';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
-import DeleteRecord from './DeleteRecord';
 import Pagination from '../components/Pagination';
 import Table from '../components/Table';
 import SearchField from '../components/SearchField';
@@ -17,9 +16,13 @@ import TableDate from '../components/TableDate';
 import TableUserInfoLink from '../components/TableUserInfoLink';
 import TableHeading from '../components/TableHeading';
 import TableEditLink from '../components/TableEditLink';
-import TableDeleteLink from '../components/TableDeleteLink';
-import { getJWT, removeJWT, fetchUsers, fetchPracticeAreas, addUser, editUser, deleteUser,
-         addStaff, addClient, addMatter, fetchMatters, fetchStaff } from '../Entities/actions';
+import { getJWT, removeJWT } from '../Authentication/actions';
+import { fetchUsers } from '../Entities/UsersActions'
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
+import { addUser, editUser } from '../Entities/UsersActions';
+import { fetchStaff, addStaff, editStaff } from '../Entities/UsersActions';
+import { fetchClients, addClient, editClient } from '../Entities/ClientsActions';
+import { fetchMatters, addMatter } from '../Entities/MattersActions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
@@ -28,13 +31,14 @@ import { filterAdminData,
 import { selectData, selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
-  const { entities, adminPages } = state;
+  const { entities, adminPages, authentication } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
     data: selectData(state),
     ...entities,
     ...adminPages,
+    ...authentication
   };
 };
 
@@ -76,12 +80,16 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(addClient(JWT, content));
     },
 
-    onEdit: (JWT, content, id) => {
+    onEditUser: (JWT, content, id) => {
       return dispatch(editUser(JWT, content, id));
     },
 
-    onDelete: (JWT, id) => {
-      return dispatch(deleteUser(JWT, id));
+    onEditStaff: (JWT, content, id) => {
+      return dispatch(editStaff(JWT, content, id));
+    },
+
+    onEditClient: (JWT, content, id) => {
+      return dispatch(editClient(JWT, content, id));
     },
 
     onFilter: ({target: {value}}) => {
@@ -115,7 +123,6 @@ class AdminUsers extends Component {
       showUserInfoModal: false,
       showAddModal: false,
       showEditModal: false,
-      showDeleteModal: false,
       currentRecord: {}
     };
   }
@@ -133,6 +140,7 @@ class AdminUsers extends Component {
       this.props.onFetchPracticeAreas();
       this.props.onFetchMatters(config);
       this.props.onFetchStaff(config);
+      this.props.onFetchClients(config);
       this.setState({showGetJWTModal: false})
     }
 
@@ -149,15 +157,6 @@ class AdminUsers extends Component {
           this.setState({
             currentRecord: row, 
             showEditModal: true })}}/>
-    );
-  }
-
-  renderTableDeleteLink(val, row) {
-    return (
-      <TableDeleteLink 
-        handleClick={() => this.setState({
-          currentRecord: row,
-          showDeleteModal: true })}/>
     );
   }
 
@@ -179,16 +178,22 @@ class AdminUsers extends Component {
   }
 
   render() {
-    const { onGetJWT, onJWTExpired, onAddUser, onAddStaff, onAddClient, onEdit, onDelete, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { users, matters, practiceAreas, staff, clients } = this.props;
-    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage, addedRecord } = this.props;
-    const { currentRecord, showGetJWTModal, showUserInfoModal, showAddModal, showEditModal, showDeleteModal } = this.state;
+    const { onGetJWT, onJWTExpired, onAddUser, onAddStaff, onAddClient, 
+            onEditUser, onEditStaff, onEditClient, onFilter, onSort, 
+            onPageLengthChange, onPageNumberChange } = this.props;
+    const { users, matters, practiceAreas, staff, staffUsers, 
+            clients, clientUsers } = this.props;
+    const { data, filterValues, totalPages, sortBy, 
+            currentPage, pageLength, pageData, JWT, 
+            JWTExpired, successMessage, addedRecord } = this.props;
+    const { currentRecord, showGetJWTModal, showUserInfoModal, 
+            showAddModal, showEditModal } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
       }
     };
-
+    console.log(staff, staffUsers);
     return (
       <main className="container-fluid">
         <Helmet
@@ -239,9 +244,6 @@ class AdminUsers extends Component {
             { title: 'Role', component: TableHeading, prop: 'role'},
             { title: '', 
               component: (val, row) => this.renderTableEditLink(val, row),
-              className: 'text-center' },
-            { title: '', 
-              component: (val, row) => this.renderTableDeleteLink(val, row),
               className: 'text-center' }
           ]}
           sortBy={sortBy}
@@ -293,21 +295,10 @@ class AdminUsers extends Component {
             matters={matters}
             practiceAreas={practiceAreas}
             staff={staff}
+            staffUsers={staffUsers}
             clients={clients}
-            onEdit={onEdit.bind(null, config)}
+            onEditUser={onEditUser.bind(null, config)}
             onHide={() => this.setState({showEditModal: false})}
-            onGetJWT={onGetJWT}
-            onJWTExpired={onJWTExpired}
-            JWT={JWT}
-            JWTExpired={JWTExpired}/>
-        </ModalMedium>
-        <ModalMedium
-          title={`Delete User (ID: ${currentRecord.id})`}
-          show={showDeleteModal} 
-          onHide={() => this.setState({showDeleteModal: false})}>
-          <DeleteRecord
-            onDelete={onDelete.bind(null, config, currentRecord.id)}
-            onHide={() => this.setState({showDeleteModal: false})}
             onGetJWT={onGetJWT}
             onJWTExpired={onJWTExpired}
             JWT={JWT}
@@ -322,8 +313,7 @@ AdminUsers.propTypes = {
   onFetchUsers: PropTypes.func.isRequired,
   onGetJWT: PropTypes.func.isRequired,
   onAddUser: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onEditUser: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,

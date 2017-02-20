@@ -1,15 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, FormSection, formValueSelector } from  'redux-form';
+import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
+import UserAddressForm from './UserAddressForm';
+import StaffDetailsForm from './StaffDetailsForm';
 import ErrorAlert from '../components/ErrorAlert';
+import NavTab from '../components/NavTab';
 import AsyncValidationFormGroup from '../components/AsyncValidationFormGroup';
 import GeosuggestFormGroup from '../components/GeosuggestFormGroup';
 import InputFormGroup from '../components/InputFormGroup';
 import SelectFormGroup from '../components/SelectFormGroup';
 import TextAreaFormGroup from '../components/TextAreaFormGroup';
 import MultiselectFormGroup from '../components/MultiselectFormGroup';
-import DatepickerFormGroup from '../components/DatepickerFormGroup';
+import DatePickerFormGroup from '../components/DatePickerFormGroup';
 import { required, email, username, maxLength, asyncValidateUserIdentity as asyncValidate, createOptionsList } from '../utils';
 import { loadFormData as load } from './actions';
 import _ from 'lodash';
@@ -18,11 +22,13 @@ class AddStaffForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errorMessage: ''
+      errorMessage: '',
+      currentTab: 'Account Details'
     };
   }
 
   _handleSubmit(data) {
+    console.log(data);
     const { onAddUser, onAddStaff, onHide, onJWTExpired, addedRecord } = this.props;
     console.log(data);
     const userEntityFields = [
@@ -87,50 +93,47 @@ class AddStaffForm extends Component {
     loadFormData(initData);
   }
 
+  handleClick(event) {
+    event.preventDefault();
+    this.setState({
+      currentTab: event.target.textContent
+    });    
+  }
+
   render() {
+    this.handleClick = this.handleClick.bind(this);
     const { practiceAreas, matters, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
-    const { errorMessage } = this.state;
+    const { errorMessage, currentTab } = this.state;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
     const matterOptions = createOptionsList(matters, "description");
-    
+    const tabLabels = ["Account Details", "Particulars", "Address", "Staff Details"];
+    const navTabs = tabLabels.map((tab, idx) => {
+      return (
+        <NavTab
+          key={idx}
+          isActive={currentTab === tab}
+          text={tab}
+          handleClick={this.handleClick}/>
+      );
+    });    
+
     return (
       <div>
-        <UserParticularsForm
-          fillInAddress={(value) => this.fillInAddress(value)}
+        <ul className="nav nav-tabs">
+          {navTabs}   
+        </ul>
+        <UserAccountDetailsForm
+          isDisplayed={currentTab === tabLabels[0]}
           passwordValue={passwordValue}/>
-        <div className="row">
-          <div className="col-sm-6">
-            <Field 
-              name="dateJoined"
-              component={DatepickerFormGroup}
-              label="Date Joined"/>
-          </div>
-          <div className="col-sm-6">
-            <Field 
-              name="position"
-              type="text"
-              component={InputFormGroup}
-              label="Position"/>
-          </div>
-        </div>
-        <Field 
-          name="practiceAreas"
-          component={MultiselectFormGroup}
-          label="Practice Areas"
-          options={practiceAreaOptions}
-          placeholder="Select one or more practice areas"/>
-        <Field 
-          name="matters"
-          component={MultiselectFormGroup}
-          label="Matters Handled"
-          options={matterOptions}
-          placeholder="Select one or more matters"/>
-        <Field 
-          name="description"
-          component={TextAreaFormGroup}
-          label="Description"
-          validate={[ required, maxLength(1000) ]}
-          rows="4"/>
+        <UserParticularsForm
+          isDisplayed={currentTab === tabLabels[1]}/>
+        <UserAddressForm
+          fillInAddress={(value) => this.fillInAddress(value)}
+          isDisplayed={currentTab === tabLabels[2]}/>
+        <StaffDetailsForm
+          practiceAreas={practiceAreas}
+          matters={matters}
+          isDisplayed={currentTab === tabLabels[3]}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 

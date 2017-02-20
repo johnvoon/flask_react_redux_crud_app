@@ -12,10 +12,11 @@ const initialState = {
   data: {},
   // all posts from database
   allPosts: [],
-  // visible and hidden posts (can be made visible by scrolling)
+  // visible and hidden posts (visible on scroll)
   allAvailablePosts: [],
   // visible posts only
   visiblePosts: [],
+  sortBy: '',
   currentFilter: '',
   filterValues: '',
   cursorStart: 0,
@@ -58,7 +59,6 @@ function postsLoaded(state, { entities, posts }) {
 
 function sortPosts(state, { posts, sortBy }) {
   const { data } = state;
-  console.log(data, posts, sortBy);
   let sortedPosts;
   if (sortBy === "created") {
     sortedPosts = sortByDate(data, posts, "descending")
@@ -68,6 +68,7 @@ function sortPosts(state, { posts, sortBy }) {
 
   return {
     ...state,
+    sortBy,
     allAvailablePosts: sortedPosts,
     visiblePosts: sortedPosts.slice(0, 5),
   }

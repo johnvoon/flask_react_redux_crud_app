@@ -7,9 +7,9 @@ import moment from 'moment';
 import { required } from '../utils';
 import classNames from 'classnames';
 
-export default class EditUserFormParticulars extends Component {
+export default class EditUserParticularsForm extends Component {
   render() {
-    const { user, isDisplayed } = this.props;
+    const { user, isDisplayed, handleChange } = this.props;
     const userCreated = moment(user.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const userUpdated = moment(user.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const activeOptions = ["1 - Active", "2 - Disabled"];
@@ -41,9 +41,18 @@ export default class EditUserFormParticulars extends Component {
         </div>
         <div className="row">
           <div className="col-sm-2">
-            <StaticFormGroup 
-              label="Role"
-              text={user.role}/>
+            {user.role === 'staff' || user.role === 'client' ? (
+              <StaticFormGroup 
+                label="Role"
+                text={user.role}/>
+            ) : (
+              <Field 
+                name="role"
+                component={SelectFormGroup}
+                label="Role"
+                options={roleOptions}
+                handleChange={handleChange}/>
+            )}
           </div>
           <div className="col-sm-5">
             <StaticFormGroup 

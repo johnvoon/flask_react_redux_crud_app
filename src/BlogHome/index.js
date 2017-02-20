@@ -9,7 +9,7 @@ import PostCard from '../components/PostCard';
 import FilterLink from '../components/FilterLink';
 import SearchField from '../components/SearchField';
 import DropdownMenu from '../components/DropdownMenu';
-import { fetchBlogData } from '../Entities/actions';
+import { fetchPosts } from '../Entities/PostsActions';
 import { showAllPosts,
          sortPosts,
          filterPostsByKeyword, 
@@ -19,7 +19,7 @@ import { showAllPosts,
 
 const mapStateToProps = (state) => {
   const { entities, blogHome } = state;
-  
+  console.log(entities);
   return {
     ...entities,
     ...blogHome
@@ -27,9 +27,17 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onFetchBlogData: () => {
-    dispatch(fetchBlogData());
+  onFetchPosts: () => {
+    dispatch(fetchPosts());
   },
+
+  onFetchPracticeAreas: () => {
+    dispatch(fetchPracticeAreas());
+  },
+
+  onFetchStaff: () => {
+    dispatch(fetchStaff());
+  }
 
   onSearchFilter: (posts, {target: {value}}) => {
     dispatch(filterPostsByKeyword(value, posts));
@@ -44,7 +52,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   onAreaFilter: (posts, linkText) => {
-    console.log(linkText);
     dispatch(filterByArea(posts, linkText));
   },
 
@@ -71,7 +78,9 @@ class BlogHome extends Component {
   }
 
   componentDidMount() {
-    this.props.onFetchBlogData();
+    this.props.onFetchPosts();
+    this.props.onFetchPracticeAreas();
+    this.props.onFetchStaff();
   }
 
   toggleSortMenu() {
@@ -90,7 +99,6 @@ class BlogHome extends Component {
     const { posts, practiceAreas, staff, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
     const { onSort, onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
     const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
-    console.log(allAvailablePosts);
     const postsList = visiblePosts.map((id) => {
       return (
         <PostCard

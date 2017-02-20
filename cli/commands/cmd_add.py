@@ -102,7 +102,7 @@ def practice_areas():
 @click.command()
 def users():
     """
-    Generate fake clients.
+    Generate fake users.
     """
     click.echo('Working...')
 

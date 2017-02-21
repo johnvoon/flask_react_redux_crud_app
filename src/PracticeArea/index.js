@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { Scrollbars } from 'react-custom-scrollbars';
 import sr from '../components/ScrollReveal';
 import { Link, withRouter } from 'react-router';
-import { fetchPracticeAreas } from '../Entities/actions';
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
 import classNames from 'classnames';
 import { createOptionsList } from '../utils';
 import Footer from '../components/Footer';

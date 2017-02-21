@@ -6,14 +6,13 @@ import MainNavbar from '../components/MainNavbar';
 import PracticeAreaNavbar from '../components/PracticeAreaNavbar';
 import PracticeAreaPanel from '../components/PracticeAreaPanel';
 import Sidebar from '../components/Sidebar';
-import { fetchPracticeAreas } from '../Entities/actions';
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
 import { fetchCurrentUser } from '../Authentication/actions';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
-  console.log(entities, authentication);
   return {
     ...entities,
     ...authentication

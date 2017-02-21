@@ -41,6 +41,7 @@ export function filterAdminData(value) {
 }
 
 export function recordAdded(entities, addedRecord, addedRecordId) {
+  console.log(entities);
   return {
     type: RECORD_ADDED,
     entities,

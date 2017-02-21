@@ -22,13 +22,14 @@ import { filterAdminData,
 import { selectData, selectPageData, selectTotalPages } from './selectors';
 
 const mapStateToProps = (state) => {
-  const { entities, adminPages } = state;
+  const { entities, adminPages, authentication } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
     data: selectData(state),
     ...entities,
-    ...adminPages
+    ...adminPages,
+    ...authentication
   };
 };
 

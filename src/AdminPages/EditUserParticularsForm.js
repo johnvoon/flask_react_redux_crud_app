@@ -13,7 +13,7 @@ export default class EditUserParticularsForm extends Component {
     const userCreated = moment(user.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const userUpdated = moment(user.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
     const activeOptions = ["1 - Active", "2 - Disabled"];
-    const roleOptions = ["admin - Admin", "client - Client", "staff - Staff", "public - Public"];
+    const roleOptions = ["client - Client", "staff - Staff", "public - Public"];
     
     return (
       <div className={classNames({
@@ -40,7 +40,7 @@ export default class EditUserParticularsForm extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-2">
+          <div className="col-sm-4">
             {user.role === 'staff' || user.role === 'client' ? (
               <StaticFormGroup 
                 label="Role"
@@ -54,12 +54,12 @@ export default class EditUserParticularsForm extends Component {
                 handleChange={handleChange}/>
             )}
           </div>
-          <div className="col-sm-5">
+          <div className="col-sm-4">
             <StaticFormGroup 
               label="Username"
               text={user.username}/>
           </div>
-          <div className="col-sm-5">
+          <div className="col-sm-4">
             <StaticFormGroup 
               label="Email"
               text={user.email}/>

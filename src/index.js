@@ -20,7 +20,6 @@ import Login from './Authentication/Login';
 import Logout from './Authentication/Logout';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import fetchPracticeAreas from './Entities/actions';
 
 const store = configureStore();
 
@@ -39,7 +38,7 @@ ReactDOM.render(
           <Route path="admin/posts/:id/comments" component={AdminComments}/>
           <Route path="/blog/:id" component={BlogPost}/>
           <Route path="/practice-areas" component={PracticeAreas}/>
-          <Route path="/practice-areas/:practiceArea" component={PracticeArea} onEnter={fetchPracticeAreas}/>
+          <Route path="/practice-areas/:practiceArea" component={PracticeArea}/>
           <Route path="/login" component={Login}/>
           <Route path="/logout" component={Logout}/>
         </Route>

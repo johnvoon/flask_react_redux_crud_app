@@ -38,6 +38,7 @@ export default class AddUser extends Component {
           <AddClientForm
             onAddUser={onAddUser}
             onAddClient={onAddClient}
+            practiceAreas={practiceAreas}
             matters={matters}
             onJWTExpired={onJWTExpired}
             onHide={onHide}

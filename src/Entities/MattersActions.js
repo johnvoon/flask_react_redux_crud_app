@@ -3,7 +3,8 @@ import { arrayOf, normalize } from 'normalizr';
 import { matterSchema } from '../constants/Schemas';
 import { recordAdded,
          recordEdited } from '../AdminPages/actions';
-import { MATTERS_LOADED } from '../constants/actionTypes';
+import { MATTERS_LOADED,
+         MATTER_ADDED } from '../constants/actionTypes';
 
 export function fetchMatters(config) {
   return dispatch => {
@@ -38,7 +39,8 @@ export function addMatter(config, content) {
     )
     .then(({data: {matter}}) => {
         const normalized = normalize(matter, matterSchema);
-        dispatch(recordAdded(normalized.entities, normalized.entities.matters, matters.id))
+        console.log(normalized.entities);
+        return dispatch(matterAdded(normalized.entities, matter.id))
       }
     );
   }
@@ -55,5 +57,13 @@ export function editMatter(config, content, id) {
       const normalized = normalize(matter, matterSchema);
       dispatch(recordEdited(normalized.entities));
     });
+  };
+}
+
+export function matterAdded(entities, matterId) {
+  return {
+    type: MATTER_ADDED,
+    entities,
+    matterId
   };
 }

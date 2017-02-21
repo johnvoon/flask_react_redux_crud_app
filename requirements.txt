@@ -34,6 +34,9 @@ Pillow==4.0.0
 # Password hashing.
 bcrypt==3.1.2
 
+# JSON
+simplejson==3.10.0
+
 # Extensions.
 flask-debugtoolbar==0.10.0
 Flask-Mail==0.9.1

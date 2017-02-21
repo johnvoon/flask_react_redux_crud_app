@@ -6,7 +6,7 @@ import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
 import ErrorAlert from '../components/ErrorAlert';
 import NavTab from '../components/NavTab';
-import { createOptionsList } from '../utils';
+import { required, email, username, maxLength, asyncValidateUserIdentity as asyncValidate, createOptionsList } from '../utils';
 import { loadFormData as load } from './actions';
 import _ from 'lodash';
 

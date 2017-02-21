@@ -32,6 +32,7 @@ function currentUserLoaded(state, { currentUser }) {
 }
 
 function JWTLoaded(state, { JWT }) {
+  console.log(JWT);
   return {
     ...state,
     JWT

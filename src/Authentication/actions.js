@@ -9,11 +9,10 @@ export function getJWT(data) {
       'http://localhost:8000/auth', 
       data
     )
-    .then(({data: {access_token}}) => dispatch(JWTLoaded(access_token)));
+    .then(({data: {access_token}}) => 
+      dispatch(JWTLoaded(access_token)));
   };
 }
-
-
 
 export function fetchCurrentUser() {
   return dispatch => {
@@ -50,6 +49,7 @@ export function currentUserLoaded(currentUser) {
 }
 
 export function JWTLoaded(JWT) {
+  console.log(JWT);
   return {
     type: JWT_LOADED,
     JWT

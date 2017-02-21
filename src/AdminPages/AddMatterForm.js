@@ -6,9 +6,33 @@ import ErrorAlert from '../components/ErrorAlert';
 import InputFormGroup from '../components/InputFormGroup';
 import InputGroupFormGroup from '../components/InputGroupFormGroup';
 import MultiselectFormGroup from '../components/MultiselectFormGroup';
-import DatepickerFormGroup from '../components/DatepickerFormGroup';
-import { required } from '../utils';
+import DatePickerFormGroup from '../components/DatePickerFormGroup';
+import { required, createOptionsList } from '../utils';
+import { removeJWT } from '../Authentication/actions';
+import { addMatter } from '../Entities/MattersActions';
 import _ from 'lodash';
+
+const mapStateToProps = (state) => {
+  const { entities, adminPages, authentication } = state;
+  console.log(state.form);
+  return {
+    ...entities,
+    ...adminPages,
+    ...authentication
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddMatter: (JWT, content) => {
+      return dispatch(addMatter(JWT, content));
+    },
+
+    onJWTExpired: () => {
+      dispatch(removeJWT());
+    },
+  };
+};
 
 class AddMatterForm extends Component { 
   constructor(props) {
@@ -19,12 +43,22 @@ class AddMatterForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddMatter, onHide, onJWTExpired } = this.props;
+    const { onAddMatter, JWT, onHide, onJWTExpired, changeMatterFieldValue } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    onAddMatter(formData)
+    onAddMatter(config, formData)
+    .then(({matterId}) => {
+      changeMatterFieldValue && 
+      changeMatterFieldValue(matterId);
+    })
     .then(() => onHide())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -43,45 +77,55 @@ class AddMatterForm extends Component {
   }
 
   render() {
-    const { handleSubmit, hideAddMatterForm, pristine, reset, submitting } = this.props;
+    console.log(this.props);
+    const { practiceAreas, handleSubmit, hideAddMatterForm, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
+    const practiceAreaOptions = createOptionsList(practiceAreas, "area");
     
     return (
       <form>
-        <Field
-          name="fileOpen"
-          component={DatepickerFormGroup}
-          label="File Open Date"
-          validate={required}/>
-        <Field
-          name="costsOnAccount"
-          component={InputGroupFormGroup}
-          label="Costs on account"/>
-        <Field
+        <div className="row">
+          <div className="col-sm-6">
+            <Field
+              name="fileOpen"
+              component={DatePickerFormGroup}
+              label="File Open Date"
+              validate={required}/>
+          </div>
+          <div className="col-sm-6">
+            <Field
+              name="costsOnAccount"
+              component={InputFormGroup}
+              label="Costs on account ($)"/>
+          </div>
+        </div>
+        <Field 
           name="practiceAreas"
           component={MultiselectFormGroup}
           label="Practice Areas"
-          validate={required}/>
+          options={practiceAreaOptions}
+          placeholder="Select one or more practice areas"/>
         <Field
-          name="matter"
+          name="description"
           component={InputFormGroup}
-          label="Matter"
+          label="Description"
           validate={required}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
-          <button
+          <button 
+            className="btn btn-danger pull-right" 
+            type="button" 
+            disabled={pristine || submitting} 
+            onClick={reset}>
+            Reset
+          </button>
+          <button 
             className="btn btn-primary pull-right" 
             type="submit"
             disabled={submitting}
             onClick={handleSubmit(data => this._handleSubmit(data))}>
-            Add Matter
-          </button>
-          <button
-            className="btn btn-danger pull-right" 
-            type="button"
-            onClick={hideAddMatterForm}>
-            Cancel
-          </button>          
+            Save
+          </button>        
         </div>
       </form>
     );
@@ -101,5 +145,10 @@ AddMatterForm = reduxForm({
   form:  'AddMatterForm',
   destroyOnUnmount: false,
 })(AddMatterForm);
+
+AddMatterForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddMatterForm)
 
 export default AddMatterForm;

@@ -14,7 +14,7 @@ import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const { entities, blogPost, authentication } = state;
-  console.log(entities);
+  
   return {
     ...entities,
     ...blogPost,

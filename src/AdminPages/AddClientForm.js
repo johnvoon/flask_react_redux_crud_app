@@ -96,8 +96,15 @@ class AddClientForm extends Component {
     });    
   }
 
+  changeMatterFieldValue(matterId) {
+    matterId = String(matterId)
+    const { mattersValue, change } = this.props;
+    change('matters', !mattersValue ? matterId : mattersValue.concat(`,${matterId}`))
+  }
+
   render() {
     this.handleClick = this.handleClick.bind(this);
+    this.changeMatterFieldValue = this.changeMatterFieldValue.bind(this);
     const { practiceAreas, matters, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage, currentTab } = this.state;
     const matterOptions = createOptionsList(matters, "description");
@@ -128,7 +135,8 @@ class AddClientForm extends Component {
         <ClientDetailsForm
           practiceAreas={practiceAreas}
           matters={matters}
-          isDisplayed={currentTab === tabLabels[3]}/>
+          isDisplayed={currentTab === tabLabels[3]}
+          changeMatterFieldValue={this.changeMatterFieldValue}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <button 
@@ -174,9 +182,11 @@ AddClientForm = reduxForm({
 AddClientForm = connect(
   state => {
     const passwordValue = selector(state, 'password');
+    const mattersValue = selector(state, 'matters');
 
     return {
       passwordValue,
+      mattersValue,
       initialValues: state.adminPages.formData
     };
   },

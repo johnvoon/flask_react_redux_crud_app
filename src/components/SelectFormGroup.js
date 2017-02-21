@@ -3,7 +3,6 @@ import classNames from 'classnames';
 
 const SelectFormGroup = (field) => {
   const { input, label, meta, options, handleChange } = field;
-  const { onChange, ...inputProps } = input;
   const error = meta.touched && meta.error;
 
   return (
@@ -20,8 +19,7 @@ const SelectFormGroup = (field) => {
         className={classNames(
           "form-control",
           {"bg-error": error})}
-        onChange={handleChange ? handleChange : null}
-        {...inputProps}>
+        {...input}>
         <option value="">Select {label}</option>
         {options.map((option) => {
           const [id, text] = option.split(" - ");
@@ -34,7 +32,5 @@ const SelectFormGroup = (field) => {
     </div>
   );
 };
-
-
 
 export default SelectFormGroup;

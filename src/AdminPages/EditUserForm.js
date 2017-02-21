@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from  'redux-form';
+import { reduxForm, Field, formValueSelector } from  'redux-form';
 import EditUserParticularsForm from './EditUserParticularsForm';
 import UserAddressForm from './UserAddressForm';
 import StaffDetailsForm from './StaffDetailsForm';
@@ -18,7 +18,6 @@ class EditUserForm extends Component {
     this.state = {
       errorMessage: '',
       currentTab: 'Particulars',
-      roleSelected: ''
     }
   }
 
@@ -56,12 +55,14 @@ class EditUserForm extends Component {
   handleInitializeStaffData() {
     const { user, staff, staffUsers, matters, practiceAreas, loadFormData } = this.props;
     const staffUser = staffUsers[user.id];
-    const mattersList = staffUser.mattersHandled.map(id => {
-      return String(id)
-    });
-    const practiceAreasList = staffUser.practiceAreas.map(id => {
-      return String(id)
-    });
+    const mattersList = staffUser.mattersHandled.join(',');
+    const practiceAreasList = staffUser.practiceAreas.join(',');
+    // const mattersList = staffUser.mattersHandled.map(id => {
+    //   return String(id)
+    // });
+    // const practiceAreasList = staffUser.practiceAreas.map(id => {
+    //   return String(id)
+    // });
     const description = (staffUser.description || []).map((paragraph) => {
       return paragraph;
     }).join('\r\n\r\n')
@@ -115,7 +116,7 @@ class EditUserForm extends Component {
 
   _handleSubmit(data, role) {
     const { user, onAddStaff, onAddClient, onEditUser, onEditStaff, 
-      onEditClient, onHide, onJWTExpired, addedRecord } = this.props;
+      onEditClient, onHide, onJWTExpired, addedRecord, roleValue } = this.props;
     const userEntityFields = [
       'active', 'lastName', 'firstName', 'middleName', 'phoneNumber', 
       'unitNumber', 'streetAddress', 'suburb', 'postcode',
@@ -130,11 +131,11 @@ class EditUserForm extends Component {
     Object.keys(data).forEach((key) => {
       userEntityFields.includes(key) &&
       userFormData.append(key, data[key]);
-      if ((user.role === 'staff' || roleSelected === 'staff') && staffEntityFields.includes(key)) {
+      if ((user.role === 'staff' || roleValue === 'staff') && staffEntityFields.includes(key)) {
         let staffFormData = new FormData();
         staffFormData.append(key, data[key]);
       }
-      if ((user.role === 'client' || roleSelected === 'client') && clientEntityFields.includes(key)) {
+      if ((user.role === 'client' || roleValue === 'client') && clientEntityFields.includes(key)) {
         let clientFormData = new FormData();
         clientFormData.append(key, data[key]);
       }
@@ -147,9 +148,9 @@ class EditUserForm extends Component {
       } else if (user.role === 'client') {
         onEditClient(clientFormData);
       } else if (user.role === 'public') {
-        if (roleSelected === 'staff') {
+        if (roleValue === 'staff') {
           onAddStaff(staffFormData);
-        } else if (roleSelected === 'client')
+        } else if (roleValue === 'client')
           onAddClient(clientFormData);
         } else return;
       }
@@ -178,22 +179,15 @@ class EditUserForm extends Component {
     });
   }
 
-  handleChange({target: {value}}) {
-    this.setState({
-      roleSelected: value
-    })
-  }
-
   render() {
     this.handleClick = this.handleClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     const { user, practiceAreas, matters, staff } = this.props;
-    const { handleSubmit, pristine, reset, submitting } = this.props;
-    const { errorMessage, currentTab, roleSelected } = this.state;
+    const { roleValue, handleSubmit, pristine, reset, submitting } = this.props;
+    const { errorMessage, currentTab } = this.state;
     const tabLabels = ["Particulars", "Address"];
-    if (user === 'staff' || roleSelected === 'staff') {
+    if (user.role === 'staff' || roleValue === 'staff') {
       tabLabels.splice(2, 1, "Staff Details");
-    } else if (user === 'client' || roleSelected === 'client') {
+    } else if (user.role === 'client' || roleValue === 'client') {
       tabLabels.splice(2, 1, "Client Details");
     }
     const navTabs = tabLabels.map((tab, idx) => {
@@ -205,7 +199,7 @@ class EditUserForm extends Component {
           handleClick={this.handleClick}/>
       );
     });
-
+    console.log(user);
     return (
       <form>
         <ul className="nav nav-tabs">
@@ -218,12 +212,12 @@ class EditUserForm extends Component {
         <UserAddressForm
           fillInAddress={(value) => this.fillInAddress(value)}
           isDisplayed={currentTab === tabLabels[1]}/>
-        {user.role === 'staff' || roleSelected === 'staff' ? (
+        {user.role === 'staff' || roleValue === 'staff' ? (
           <StaffDetailsForm
             practiceAreas={practiceAreas}
             matters={matters}
             isDisplayed={currentTab === tabLabels[2]}/>
-        ) : user.role === 'client' || roleSelected === 'client' ? (
+        ) : user.role === 'client' || roleValue === 'client' ? (
           <ClientDetailsForm
             matters={matters}
             isDisplayed={currentTab === tabLabels[2]}/>
@@ -263,14 +257,20 @@ EditUserForm.propTypes = {
 
 EditUserForm = reduxForm({
   form: 'EditUserForm',
-  destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(EditUserForm);
 
+const selector = formValueSelector('EditUserForm');
+
 EditUserForm = connect(
   state => {
-    return {initialValues: state.adminPages.formData}
+    const roleValue = selector(state, 'role');
+    
+    return {
+      roleValue,
+      initialValues: state.adminPages.formData
+    }
   },
   { loadFormData: load }
 )(EditUserForm)

@@ -17,10 +17,9 @@ import TableUserInfoLink from '../components/TableUserInfoLink';
 import TableHeading from '../components/TableHeading';
 import TableEditLink from '../components/TableEditLink';
 import { getJWT, removeJWT } from '../Authentication/actions';
-import { fetchUsers } from '../Entities/UsersActions'
+import { fetchUsers, addUser, editUser } from '../Entities/UsersActions'
 import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import { addUser, editUser } from '../Entities/UsersActions';
-import { fetchStaff, addStaff, editStaff } from '../Entities/UsersActions';
+import { fetchStaff, addStaff, editStaff } from '../Entities/StaffActions';
 import { fetchClients, addClient, editClient } from '../Entities/ClientsActions';
 import { fetchMatters, addMatter } from '../Entities/MattersActions';
 import { filterAdminData, 
@@ -128,7 +127,7 @@ class AdminUsers extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { JWT, addedRecord } = nextProps;
+    const { JWT } = nextProps;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -140,13 +139,8 @@ class AdminUsers extends Component {
       this.props.onFetchPracticeAreas();
       this.props.onFetchMatters(config);
       this.props.onFetchStaff(config);
-      this.props.onFetchClients(config);
+      // this.props.onFetchClients(config);
       this.setState({showGetJWTModal: false})
-    }
-
-    if (_.isEmpty(this.props.addedRecord) && 
-      addedRecord.role === 'public') {
-      this.setState({showAddModal: false});
     }
   }
 
@@ -193,7 +187,7 @@ class AdminUsers extends Component {
         'Authorization': `JWT ${JWT}`
       }
     };
-    console.log(staff, staffUsers);
+    
     return (
       <main className="container-fluid">
         <Helmet

@@ -30,7 +30,6 @@ class AddStaffForm extends Component {
   _handleSubmit(data) {
     console.log(data);
     const { onAddUser, onAddStaff, onHide, onJWTExpired, addedRecord } = this.props;
-    console.log(data);
     const userEntityFields = [
       'email', 'username', 'password', 'lastName', 'firstName', 'middleName', 
       'phoneNumber', 'unitNumber', 'streetAddress', 'suburb', 'postcode',

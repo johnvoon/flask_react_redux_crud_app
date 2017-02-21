@@ -10,6 +10,8 @@ import FilterLink from '../components/FilterLink';
 import SearchField from '../components/SearchField';
 import DropdownMenu from '../components/DropdownMenu';
 import { fetchPosts } from '../Entities/PostsActions';
+import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
+import { fetchStaff } from '../Entities/StaffActions';
 import { showAllPosts,
          sortPosts,
          filterPostsByKeyword, 
@@ -37,7 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
 
   onFetchStaff: () => {
     dispatch(fetchStaff());
-  }
+  },
 
   onSearchFilter: (posts, {target: {value}}) => {
     dispatch(filterPostsByKeyword(value, posts));

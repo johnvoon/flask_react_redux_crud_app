@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { loginUser } from './actions';
-import { fetchCurrentUser } from './actions';
+import { loginUser, fetchCurrentUser } from './actions';
 import LoginForm from './LoginForm';
 
 const mapDispatchToProps = (dispatch) => ({

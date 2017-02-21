@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import AddMatterForm from './AddMatterForm';
 import MultiselectFormGroup from '../components/MultiselectFormGroup';
-import { Button } from '../components/Button';
+import Button from '../components/Button';
 import { createOptionsList } from '../utils';
 import classNames from 'classnames';
 
@@ -16,7 +16,7 @@ export default class ClientDetailsForm extends Component {
 
   handleClick() {
     this.setState({
-      showAddMatterForm: true
+      showAddMatterForm: this.state.showAddMatterForm ? false : true
     });
   }
 
@@ -29,7 +29,8 @@ export default class ClientDetailsForm extends Component {
   render() {
     this.handleClick = this.handleClick.bind(this);
     this.onHide = this.onHide.bind(this);
-    const { matters, isDisplayed } = this.props;
+    const { onAddMatter, matters, practiceAreas, isDisplayed, changeMatterFieldValue } = this.props;
+    const { showAddMatterForm } = this.state;
     const matterOptions = createOptionsList(matters, "description");
 
     return (
@@ -44,16 +45,15 @@ export default class ClientDetailsForm extends Component {
           placeholder="Select one or more matters"/>
         <Button
           handleClick={this.handleClick}>
-          Add Matter
+          {showAddMatterForm ? "Cancel" : "Add Matter"}
         </Button>
         {showAddMatterForm ? (
           <div>
             <AddMatterForm
-              onHide={this.onHide}/>
-            <Button
-              handleClick={this.onHide}>
-              Cancel
-            </Button>
+              practiceAreas={practiceAreas}
+              onAddMatter={onAddMatter}
+              onHide={this.onHide}
+              changeMatterFieldValue={changeMatterFieldValue}/>
           </div>
         ) : null}
       </div>

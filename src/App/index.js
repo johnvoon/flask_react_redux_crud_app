@@ -52,7 +52,6 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this);
     const { showSidebar } = this.state;
     const { currentUser, practiceAreas } = this.props;
-    console.log(currentUser);
     const links = [
       ["Home", "/", "index"],
       ["Practice Areas", "/practice-areas"],

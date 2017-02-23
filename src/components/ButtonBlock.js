@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class Button extends Component {
+export default class ButtonBlock extends Component {
   constructor(props) {
     super(props);
   }
@@ -12,7 +12,7 @@ export default class Button extends Component {
       <div className="form-group">
         <button
           type={type}
-          className={`btn text-uppercase ${customClassNames}`}
+          className={`btn btn-block text-uppercase ${customClassNames}`}
           onClick={handleClick}
           disabled={disabled ? disabled : false}>
           {children}

@@ -1,7 +1,7 @@
 import React from 'react';
 
-const TableHeading = (val, row) => {
+const TableText = (val, row) => {
   return <p>{val}</p>;
 };
 
-export default TableHeading;
+export default TableText;

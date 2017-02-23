@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Avatar from './Avatar';
 import { Link } from 'react-router';
+import Avatar from 'components/Avatar';
 
 export default class RelatedPost extends Component {
   constructor(props) {
@@ -8,9 +8,8 @@ export default class RelatedPost extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
-    const { dispatchEvent } = this.props;
-    dispatchEvent();
+  handleClick(event) {
+    this.props.dispatchEvent(event);
   }
   
   render() {
@@ -18,9 +17,8 @@ export default class RelatedPost extends Component {
 
     return (
       <div className="col-sm-4">
-        <Link 
-          to={`/blog/${post.id}`}
-          onClick={this.handleClick}>          
+        <Link
+          onClick={this.handleClick}>
           <div className="thumbnail">
             <div 
               className="thumbnail-image"

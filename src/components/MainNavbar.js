@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import NavLink from './NavLink';
 import classNames from 'classnames';
+import NavLink from 'components/NavLink';
 
 export default class MainNavbar extends Component {
   constructor(props) {

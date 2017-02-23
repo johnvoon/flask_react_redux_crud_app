@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import sr from './ScrollReveal';
+import sr from 'components/ScrollReveal';
 
 class ButtonLink extends Component {
   constructor(props) {

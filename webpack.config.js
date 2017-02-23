@@ -10,6 +10,12 @@ module.exports = {
     // bundle name
     filename: 'bundle.js'
   },
+  resolve: {
+    root: [
+      path.join(__dirname, 'node_modules'),
+      path.join(__dirname, 'src')
+    ]
+  }
   module: {
     preLoaders: [
       {

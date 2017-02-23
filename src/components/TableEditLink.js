@@ -1,12 +1,14 @@
 import React from 'react';
+import Button from 'components/Button'
 
 const TableEditLink = (props) => {
   return (
-    <button 
-      className="btn btn-primary btn-sm"
-      onClick={props.handleClick}>
+    <Button 
+      customClassNames="btn-primary btn-sm"
+      type="button"
+      handleClick={props.handleClick}>
       <span className="edit"/>
-    </button>
+    </Button>
   );
 };
 

@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 
 export default class ModalMedium extends Component {
   render() {
-    const {title, children, onHide} = this.props;
+    const { title, children } = this.props;
 
     return (
       <Modal {...this.props} animation={false} aria-labelledby="contained-modal-title">
@@ -15,13 +15,6 @@ export default class ModalMedium extends Component {
         <Modal.Body>
           {children}
         </Modal.Body>
-        <Modal.Footer>
-          <button 
-            className="btn btn-secondary"
-            onClick={onHide}>
-            Close
-          </button>
-        </Modal.Footer>
       </Modal>
     );  
   }

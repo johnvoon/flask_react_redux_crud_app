@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Post from '../components/Post';
@@ -8,14 +8,17 @@ import RelatedPost from '../components/RelatedPost';
 import Comment from '../components/Comment';
 import Avatar from '../components/Avatar';
 import CommentForm from './CommentForm';
-import { fetchPostData, addComment } from '../Entities/CommentsActions';
+import { fetchPost, fetchRelatedPosts } from '../Entities/PostsActions';
+import { fetchComments, addComment } from '../Entities/CommentsActions';
 import { fetchCurrentUser } from '../Authentication/actions';
+import { selectSortedComments } from './selectors';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const { entities, blogPost, authentication } = state;
   
   return {
+    sortedComments: selectSortedComments(state),
     ...entities,
     ...blogPost,
     ...authentication
@@ -23,20 +26,24 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onFetchPost: (postId) => {
-    dispatch(fetchPostData(postId));
-  },
-  
-  onChangeCurrentPost: (postId) => {
-    dispatch(fetchPostData(postId));
-  },
-  
   onFetchCurrentUser: () => {
     dispatch(fetchCurrentUser());
   },
 
+  onFetchPost: (id) => {
+    return dispatch(fetchPost(id));
+  },
+
+  onFetchRelatedPosts: (id, practiceArea) => {
+    dispatch(fetchRelatedPosts(id, practiceArea));
+  },
+
+  onFetchComments: (id) => {
+    dispatch(fetchComments(id));
+  },
+
   onAddComment: (formData) => {
-    dispatch(addComment(formData));
+    return dispatch(addComment(formData));
   }
 });
 
@@ -49,12 +56,17 @@ class BlogPost extends Component {
   }
 
   componentDidMount() {
-    this.props.onFetchCurrentUser()
-    this.props.onFetchPost(this.props.params.id);
-  }
+    const { params, onFetchCurrentUser, 
+      onFetchPost, onFetchRelatedPosts,
+      onFetchComments } = this.props;
 
-  componentDidUpdate() {
-    console.log(this.textArea);
+    onFetchCurrentUser();
+    onFetchPost(params.id)
+    .then(({post, postId}) => {
+      const practiceArea = post[postId].practiceArea;
+      onFetchRelatedPosts(postId, practiceArea);
+      onFetchComments(postId);
+    });
   }
 
   showCommentTextArea() {
@@ -69,18 +81,32 @@ class BlogPost extends Component {
     })
   }
 
+  changeCurrentPost(id, event) {
+    const { router, params, onFetchPost, 
+    onFetchRelatedPosts, onFetchComments } = this.props;
+    event.preventDefault();
+    router.push(`/blog/${id}`);
+    onFetchPost(id)
+    .then(({post, postId}) => {
+      const practiceArea = post[postId].practiceArea;
+      onFetchRelatedPosts(postId, practiceArea);
+      onFetchComments(postId);
+    });
+  }
+
   render() {
     this.showCommentTextArea = this.showCommentTextArea.bind(this);
     this.hideCommentTextArea = this.hideCommentTextArea.bind(this);
+    this.changeCurrentPost = this.changeCurrentPost.bind(this);
     const { posts, relatedPosts, comments, currentPost,
-            onChangeCurrentPost, currentPostComments, currentUser, onAddComment } = this.props;
+            sortedComments, currentUser, onAddComment } = this.props;
     const { showCommentTextArea } = this.state;
     const relatedPostsList = relatedPosts.map((id) => {
       return (
         <RelatedPost 
           key={id}
           post={posts[id]}
-          dispatchEvent={onChangeCurrentPost.bind(null, id)}
+          dispatchEvent={this.changeCurrentPost.bind(null, id)}
         /> 
       );
     });
@@ -95,7 +121,7 @@ class BlogPost extends Component {
       } else return null;
     };
 
-    const commentsList = (currentPostComments || []).map(id => {
+    const commentsList = (sortedComments || []).map(id => {
       return (
         <Comment
           key={id}
@@ -155,14 +181,14 @@ class BlogPost extends Component {
                   <CommentForm
                     name={currentUser.name}
                     onAddComment={onAddComment}
-                    postId={currentPost.id}
-                    ref={textArea => this.textArea = textArea}/>}
+                    onHide={this.hideCommentTextArea}
+                    postId={currentPost.id}/>}
               </VelocityTransitionGroup>
             </div>
-            {currentPostComments.length === 1 ? (
-              <h3>{currentPostComments.length} comment</h3>  
+            {sortedComments.length === 1 ? (
+              <h3>{sortedComments.length} comment</h3>  
             ) : (
-              <h3>{currentPostComments.length} comments</h3>
+              <h3>{sortedComments.length} comments</h3>
             )}
             {commentsList}
           </div>
@@ -181,10 +207,11 @@ BlogPost.propTypes = {
   comments: PropTypes.object.isRequired,
   currentPost: PropTypes.object.isRequired,
   onChangeCurrentPost: PropTypes.func.isRequired,
-  currentPostComments: PropTypes.array.isRequired
 };
 
-export default connect(
-  mapStateToProps, 
-  mapDispatchToProps
-)(BlogPost);
+export default withRouter(
+  connect(
+    mapStateToProps, 
+    mapDispatchToProps
+  )(BlogPost)
+);

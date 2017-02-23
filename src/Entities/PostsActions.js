@@ -45,7 +45,7 @@ export function fetchPost(id) {
     return axios.get(`http://localhost:8000/api/posts/${id}`)
     .then(({data: {post}}) => {
       const normalized = normalize(post, postSchema);
-      dispatch(postLoaded(normalized.entities, post.id));
+      return dispatch(postLoaded(normalized.entities, normalized.entities.posts, post.id));
     });
   };
 }
@@ -123,10 +123,11 @@ export function postsLoaded(entities, posts) {
   };
 }
 
-export function postLoaded(entities, postId) {
+export function postLoaded(entities, post, postId) {
   return {
     type: POST_LOADED,
     entities,
+    post,
     postId
   };
 }

@@ -15,12 +15,13 @@ class CommentForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddComment, postId } = this.props;
+    const { onAddComment, onHide, postId } = this.props;
     let formData = new FormData();
 
     formData.append('content', data.content);
     formData.append('postId', postId);
     onAddComment(formData)
+    .then(() => onHide())
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status >= 400 && status < 500) {

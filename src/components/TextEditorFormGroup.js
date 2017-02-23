@@ -1,6 +1,7 @@
 import React from 'react';
-import RichTextHTML from './RichTextHTML';
 import classNames from 'classnames';
+import RichTextHTML from 'components/RichTextHTML';
+
 
 const TextEditorFormGroup = (field) => {
   const { input, label, type, meta } = field;

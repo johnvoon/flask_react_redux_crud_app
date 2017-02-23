@@ -1,12 +1,14 @@
 import React from 'react';
+import Button from 'components/Button';
 
 const TableDeleteLink = (props) => {
   return (
-    <button 
-      className="btn btn-danger btn-sm"
-      onClick={props.handleClick}>
+    <Button 
+      customClassNames="btn-danger btn-sm"
+      type="button"
+      handleClick={props.handleClick}>
       <span className="delete"/>
-    </button>
+    </Button>
   );
 };
 

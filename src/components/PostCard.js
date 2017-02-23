@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
-import sr from './ScrollReveal';
+import sr from 'components/ScrollReveal';
 
 export default class PostCard extends Component {
   componentDidMount() {

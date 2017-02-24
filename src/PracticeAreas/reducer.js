@@ -1,4 +1,4 @@
-import { CHANGE_PRACTICE_AREA } from '../constants/actionTypes';
+import { CHANGE_PRACTICE_AREA } from 'constants/actionTypes';
 
 const initialState = { 
   currentPracticeArea: ''

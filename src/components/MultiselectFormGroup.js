@@ -1,10 +1,10 @@
 import React from 'react';
-import Select from 'react-select'
+import Select from 'react-select';
 import classNames from 'classnames';
 
 const MultiselectFormGroup = (field) => {
   const { input, label, meta, placeholder, options } = field;
-  const { onChange, onBlur, ...inputProps } = input;
+  const { onChange, onBlur, ...inputProps } = input; // eslint-disable-line no-unused-vars
   const error = meta.touched && meta.error;
   const multiselectOptions = (options || []).map((option) => {
     const [id, text] = option.split(" - ");

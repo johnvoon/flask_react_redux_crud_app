@@ -1,34 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, FormSection, formValueSelector } from  'redux-form';
+import { reduxForm } from  'redux-form';
 import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
 import ClientDetailsForm from './ClientDetailsForm';
+import { asyncValidateUserIdentity as asyncValidate } from 'utils';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
-import AsyncValidationFormGroup from 'components/AsyncValidationFormGroup';
-import GeosuggestFormGroup from 'components/GeosuggestFormGroup';
-import InputFormGroup from 'components/InputFormGroup';
-import SelectFormGroup from 'components/SelectFormGroup';
-import TextAreaFormGroup from 'components/TextAreaFormGroup';
-import MultiselectFormGroup from 'components/MultiselectFormGroup';
-import DatePickerFormGroup from 'components/DatePickerFormGroup';
-import { required, email, username, maxLength, 
-  asyncValidateUserIdentity as asyncValidate, 
-  createOptionsList } from 'utils';
 import { hideModal, loadFormData as load } from 'Admin/actions';
-import { selectAddClientForm } form 'Admin/selectors';
+import { selectAddClientForm } from 'Admin/selectors';
 import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
-import { addClient } from 'Entities/ClientActions';
+import { addClient } from 'Entities/ClientsActions';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
   return {
     passwordValue: selectAddClientForm(state, 'password'),
-    mattersValue: selectAddClientForm(state, 'matters');
+    mattersValue: selectAddClientForm(state, 'matters'),
     initialValues: state.adminPages.formData,
     ...entities,
     ...authentication
@@ -149,9 +140,8 @@ class AddClientForm extends Component {
   }
 
   render() {
-    const { passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage, currentTab } = this.state;
-    const matterOptions = createOptionsList(matters, "description");
     const tabLabels = ["Account Details", "Particulars", "Address", "Client Details"];
     const navTabs = tabLabels.map((tab, idx) => {
       return (

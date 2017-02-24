@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router';
 
-const Footer = (props) => {
+const Footer = (props) => { // eslint-disable-line no-unused-vars
   return (
     <footer className="footer text-center">
       <div className="container">
@@ -12,7 +13,7 @@ const Footer = (props) => {
         </ul>
       </div>
     </footer>  
-  )
+  );
 };
 
 export default Footer;

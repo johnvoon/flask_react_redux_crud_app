@@ -41,7 +41,8 @@ class DeletePostForm extends Component {
   }
 
   _handleSubmit() {
-    const { selectedRecord } = this.props;
+    const { onDeleteComment, onHideModal, onJWTExpired,
+      selectedRecord, JWT } = this.props;
 
     const config = {
       headers: {

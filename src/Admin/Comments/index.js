@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Helmet from 'react-helmet';
-import GetJWTForm from './GetJWTForm';
 import DeleteComment from './DeleteComment';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
          changePageNumber } from 'Admin/actions';
+import GetJWTForm from 'Admin/GetJWTForm';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';

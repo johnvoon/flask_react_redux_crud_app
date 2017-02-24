@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import GetJWTForm from 'Admin/GetJWTForm';
-import EditPracticeArea from './EditPracticeArea';
+import EditPracticeAreaForm from './EditPracticeAreaForm';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
@@ -16,7 +16,7 @@ class EditPracticeArea extends Component {
     return (
       <div>
         {!JWT && <GetJWTForm/>}
-        {JWT && <EditPracticeArea/>}
+        {JWT && <EditPracticeAreaForm/>}
       </div>
     );
   }

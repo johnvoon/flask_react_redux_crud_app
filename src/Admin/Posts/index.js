@@ -22,7 +22,7 @@ import TableCommentsLink from 'components/TableCommentsLink';
 import TableEditLink from 'components/TableEditLink';
 import TableDeleteLink from 'components/TableDeleteLink';
 import ButtonBlock from 'components/ButtonBlock';
-import { fetchPosts } from '../Entities/PostsActions';
+import { fetchPosts } from 'Entities/PostsActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions'; 
 

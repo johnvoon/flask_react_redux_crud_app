@@ -1,51 +1,56 @@
 var webpack = require('webpack');
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+const VENDOR_LIBS = [
+  'react', 'lodash', 'redux', 'react-redux', 'react-dom',
+  'redux-form', 'redux-thunk'
+];
 
 module.exports = {
   devtool: 'source-map',
-  entry: './src/index.js',
+  entry: {
+    bundle: './src/index',
+    vendor: VENDOR_LIBS
+  },
   output: {
-    // path on web server
     publicPath: 'http://localhost:8080/static/scripts',
-    // bundle name
-    filename: 'bundle.js'
+    filename: '[name].[chunkhash].js'
   },
   resolve: {
-    root: [
-      path.join(__dirname, 'node_modules'),
-      path.join(__dirname, 'src')
-    ]
-  }
+    modules: ["node_modules", "src"],
+    extensions: [".js", ".jsx"]
+  },
   module: {
-    preLoaders: [
+    rules: [
+      // {
+      //   test: /\.js$/,
+      //   enforce: "pre",
+      //   loader: 'eslint-loader',
+      //   query: {
+      //     configFile: './.eslintrc'
+      //   }
+      // },
       {
         test: /\.js$/,
-        include: path.join(__dirname, 'src'),
-        loader: 'eslint-loader'
-      }
-    ],
-    loaders: [
-      {
-        test: /\.js$/,
-        loader: 'babel', 
+        loader: 'babel-loader',
         include: path.join(__dirname, 'src')
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css']
+        loaders: ['style-loader', 'css-loader']
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.less$/,
-        loaders: ['style', 'css', 'less'],
+        loaders: ['style-loader', 'css-loader', 'less-loader'],
         include: path.join(__dirname, 'styles')
       },
       {
         test: /\.(woff(2)?|eot|ttf|svg|gif)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000',
+        loader: 'url-loader'
       },
       {
         test: /\.(jpg|jpeg|png|gif)$/,
@@ -56,10 +61,13 @@ module.exports = {
       }
     ]
   },
-  eslint: {
-    configFile: './.eslintrc'
-  },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest']
+    }),
+    new HtmlWebpackPlugin({
+      template: 'server/templates/base.html',
+      inject: 'body'
+    })
   ]
 };

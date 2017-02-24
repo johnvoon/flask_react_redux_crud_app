@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
-import { matterSchema } from '../constants/Schemas';
-import { recordAdded,
-         recordEdited } from '../AdminPages/actions';
+import { matterSchema } from 'constants/Schemas';
 import { MATTERS_LOADED,
-         MATTER_ADDED } from '../constants/actionTypes';
+         MATTER_ADDED } from 'constants/actionTypes';
+import { recordAdded,
+         recordEdited } from 'Admin/actions';
 
 export function fetchMatters(config) {
   return dispatch => {

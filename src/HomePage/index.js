@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import sr from '../components/ScrollReveal';
+import sr from 'components/ScrollReveal';
 import { Link } from 'react-router';
 import Animate from 'rc-animate';
-import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import { fetchPosts } from '../Entities/PostsActions';
-import Hero from '../components/Hero';
-import PracticeAreaNavbar from '../components/PracticeAreaNavbar';
+import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import { fetchPosts } from 'Entities/PostsActions';
+import Hero from 'components/Hero';
+import PracticeAreaNavbar from 'components/PracticeAreaNavbar';
 import Slider from 'react-slick';
 import classNames from 'classnames';
 

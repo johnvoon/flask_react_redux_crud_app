@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'redux-form';
+import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
-import AddMatterForm from './AddMatterForm';
+import AddMatterForm from 'Admin/Matters/AddMatterForm';
 import MultiselectFormGroup from 'components/MultiselectFormGroup';
 import ButtonBlock from 'components/ButtonBlock';
 import { createOptionsList } from 'utils';

@@ -2,8 +2,6 @@ import React, { Component, PropType } from 'react';
 import RichTextEditor, { createEmptyValue } from 'react-rte';
 
 export default class RichTextHTML extends Component {
-  currentValue: '';
-
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -17,6 +15,8 @@ export default class RichTextHTML extends Component {
   componentWillReceiveProps(newProps) {
     this.updateStateFromProps(newProps);
   }
+
+  currentValue: '';
 
   updateStateFromProps(props) {
     const { value } = props;
@@ -42,7 +42,7 @@ export default class RichTextHTML extends Component {
     if (oldContentState !== newContentState) {
       const stringValue = editorValue.toString('html');
       this.currentValue = stringValue;
-      if (onChange && stringValue !== this.props.value) {
+      if (onChange && stringValue !== value) {
         onChange(stringValue);
       }
     }

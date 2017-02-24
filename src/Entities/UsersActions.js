@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
-import { userSchema } from '../constants/Schemas';
+import { userSchema } from 'constants/Schemas';
 import { recordAdded,
          recordEdited, 
-         recordDeleted } from '../AdminPages/actions';
-import { USERS_LOADED } from '../constants/actionTypes';
+         recordDeleted } from 'Admin/actions';
+import { USERS_LOADED } from 'constants/actionTypes';
 
 export function fetchUsers(config) {
   return dispatch => {

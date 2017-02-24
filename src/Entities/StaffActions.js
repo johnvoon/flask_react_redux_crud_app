@@ -2,13 +2,13 @@ import axios from 'axios';
 import _ from 'lodash';
 import { arrayOf, normalize } from 'normalizr';
 import { staffSchema,
-         staffUserSchema } from '../constants/Schemas';
+         staffUserSchema } from 'constants/Schemas';
 import { STAFF_LOADED,
          STAFF_USERS_LOADED,
          STAFF_ADDED,
          STAFF_USER_ADDED,
          STAFF_EDITED,
-         STAFF_USER_EDITED } from '../constants/actionTypes';
+         STAFF_USER_EDITED } from 'constants/actionTypes';
 
 export function fetchStaff() {
   return dispatch => {

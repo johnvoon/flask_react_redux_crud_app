@@ -5,13 +5,13 @@ import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import { Scrollbars } from 'react-custom-scrollbars';
-import PostCard from '../components/PostCard';
-import FilterLink from '../components/FilterLink';
-import SearchField from '../components/SearchField';
-import DropdownMenu from '../components/DropdownMenu';
-import { fetchPosts } from '../Entities/PostsActions';
-import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import { fetchStaff } from '../Entities/StaffActions';
+import PostCard from 'components/PostCard';
+import FilterLink from 'components/FilterLink';
+import SearchField from 'components/SearchField';
+import DropdownMenu from 'components/DropdownMenu';
+import { fetchPosts } from 'Entities/PostsActions';
+import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import { fetchStaff } from 'Entities/StaffActions';
 import { showAllPosts,
          sortPosts,
          filterPostsByKeyword, 

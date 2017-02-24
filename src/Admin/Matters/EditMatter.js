@@ -29,4 +29,4 @@ EditMatter.propTypes = {
 export default connect(
   mapStateToProps,
   null
-)(EditMatter);
+)(EditMatter)

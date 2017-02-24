@@ -5,7 +5,7 @@ import {
   FILTER_BY_AREA,
   FILTER_BY_AUTHOR,
   LOAD_MORE
-} from '../constants/actionTypes';
+} from 'constants/actionTypes';
 
 export function showAllPosts() {
   return {

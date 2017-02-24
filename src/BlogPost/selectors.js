@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { sortByDate } from '../utils';
+import { sortByDate } from 'utils';
 
 const selectEntities = (state) =>
   state.entities

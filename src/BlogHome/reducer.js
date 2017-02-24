@@ -6,7 +6,7 @@ import { POSTS_LOADED,
          FILTER_POSTS_BY_KEYWORD,
          FILTER_BY_AREA,
          FILTER_BY_AUTHOR,
-         LOAD_MORE } from '../constants/actionTypes';
+         LOAD_MORE } from 'constants/actionTypes';
 
 const initialState = { 
   data: {},

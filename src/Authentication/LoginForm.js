@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
-import { required, passwordRequired } from '../utils';
-import InputFormGroup from '../components/InputFormGroup';
-import ErrorAlert from '../components/ErrorAlert';
+import { required, passwordRequired } from 'utils';
+import InputFormGroup from 'components/InputFormGroup';
+import ErrorAlert from 'components/ErrorAlert';
 
 class LoginForm extends Component {
   constructor(props) {

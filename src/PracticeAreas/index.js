@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import ButtonLink from '../components/ButtonLink';
-import { changePracticeArea } from './actions';
 import { VelocityTransitionGroup } from 'velocity-react';
+import Helmet from 'react-helmet';
+import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import ButtonLink from 'components/ButtonLink';
+import { changePracticeArea } from './actions';
+
 
 const mapStateToProps = (state) => {
   const { entities } = state;

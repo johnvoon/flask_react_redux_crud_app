@@ -6,11 +6,8 @@ import { hideModal, loadFormData as load } from 'Admin/actions';
 import { required, createOptionsList } from 'utils';
 import { removeJWT } from 'Authentication/actions';
 import { addMatter } from 'Entities/MattersActions';
+import MatterParticularsForm from './MatterParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
-import InputFormGroup from 'components/InputFormGroup';
-import InputGroupFormGroup from 'components/InputGroupFormGroup';
-import MultiselectFormGroup from 'components/MultiselectFormGroup';
-import DatePickerFormGroup from 'components/DatePickerFormGroup';
 import ButtonBlock from 'components/ButtonBlock';
 
 const mapStateToProps = (state) => {
@@ -81,46 +78,12 @@ class AddMatterForm extends Component {
   }
 
   render() {
-    const { addButtonOnly, practiceAreas, staff,
-      handleSubmit, pristine, reset, submitting } = this.props;
+    const { addButtonOnly, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
-    const practiceAreaOptions = createOptionsList(practiceAreas, "area");
-    const staffOptions = createOptionsList(staff, "name")
     
     return (
       <form>
-        <div className="row">
-          <div className="col-sm-6">
-            <Field
-              name="fileOpen"
-              component={DatePickerFormGroup}
-              label="File Open Date"
-              validate={required}/>
-          </div>
-          <div className="col-sm-6">
-            <Field
-              name="costsOnAccount"
-              component={InputFormGroup}
-              label="Costs on account ($)"/>
-          </div>
-        </div>
-        <Field 
-          name="practiceAreas"
-          component={MultiselectFormGroup}
-          label="Practice Areas"
-          options={practiceAreaOptions}
-          placeholder="Select one or more practice areas"/>
-        <Field
-          name="handlingStaff"
-          component={MultiselectFormGroup}
-          label="Handling Staff"
-          options={staffOptions}
-          placeholder="Select one or more handling staff"/>
-        <Field
-          name="description"
-          component={InputFormGroup}
-          label="Description"
-          validate={required}/>
+        <MatterParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         {addButtonOnly ? (
           <ButtonBlock 

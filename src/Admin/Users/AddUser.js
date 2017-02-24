@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class AddUser extends Component {
+class AddUser extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);

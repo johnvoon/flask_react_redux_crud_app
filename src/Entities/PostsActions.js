@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { sortByDate } from '../utils';
+import { sortByDate } from 'utils';
 import { arrayOf, normalize } from 'normalizr';
-import { postSchema } from '../constants/Schemas';
+import { postSchema } from 'constants/Schemas';
 import { recordAdded,
          recordEdited, 
-         recordDeleted } from '../AdminPages/actions';
+         recordDeleted } from 'Admin/actions';
 import { fetchComments } from './CommentsActions';
 import { POSTS_LOADED,
-         POST_LOADED } from '../constants/actionTypes';
+         POST_LOADED } from 'constants/actionTypes';
 
 export function fetchPosts() {
   return dispatch => {

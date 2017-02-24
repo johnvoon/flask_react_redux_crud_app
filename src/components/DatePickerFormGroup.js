@@ -1,17 +1,11 @@
 import React from 'react';
 import { DateField } from 'react-date-picker';
 import classNames from 'classnames';
-import moment from 'moment';
 
 const DatePickerFormGroup = (field) => {
   const { input, meta, label } = field;
   const { onChange, ...inputProps } = input;
   const error = meta.touched && meta.error;
-  const dateTimeFormat = new Intl.DateTimeFormat('en-AU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format;
   
   return (
     <div className="form-group">

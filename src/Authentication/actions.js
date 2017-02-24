@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CURRENT_USER_LOADED,
          JWT_LOADED,
-         REMOVE_JWT } from '../constants/actionTypes';
+         REMOVE_JWT } from 'constants/actionTypes';
 
 export function getJWT(data) {
   return dispatch => {

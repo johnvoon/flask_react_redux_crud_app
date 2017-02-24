@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class AddPost extends Component {
+class AddPost extends Component {
   render() {
     const { JWT } = this.props;
     

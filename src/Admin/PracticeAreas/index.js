@@ -22,8 +22,8 @@ import { fetchStaff } from 'Entities/StaffActions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
-         changePageNumber } from './actions';
-import { selectData, selectPageData, selectTotalPages } from './selectors';
+         changePageNumber } from 'Admin/actions';
+import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages } = state;
@@ -116,22 +116,25 @@ class AdminPracticeAreas extends Component {
         'Authorization': `JWT ${JWT}`
       }
     };
+    const modalTitle = (adminOperation === "view" && `Practice Area Info (ID: ${selectedRecord.id}`)
+                       (adminOperation === "add" && "Add a New Practice Area") ||
+                       (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id}`)
 
     return (
       <main className="container-fluid">
         <Helmet
-          title="Admin - Matters"
+          title="Admin - Practice Areas"
           meta={[
-            { name: 'description', content: "List of blog posts" }
+            { name: 'description', content: "List of practice areas" }
           ]}/>
-        <h1>List of All Matters</h1>
+        <h1>List of All Practice Areas</h1>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">
               <button
                 className="btn btn-primary btn-block text-uppercase"
                 onClick={() => this.setState({showAddModal: true})}>
-                Add a New Matter
+                Add a New Practice Area
               </button>
             </div>
           </div>
@@ -173,7 +176,7 @@ class AdminPracticeAreas extends Component {
           pageData={pageData}
           data={data}/>
         <ModalMedium 
-          title={}
+          title={modalTitle}
           show={modalShowing}>
           {adminOperation === "add" ? <AddPracticeArea/> : null}
           {adminOperation === "edit" ? <EditPracticeArea/> : null}

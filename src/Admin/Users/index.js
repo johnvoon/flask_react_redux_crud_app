@@ -2,31 +2,31 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import _ from 'lodash';
-import GetJWTForm from './GetJWTForm';
+import GetJWTForm from 'Admin/GetJWTForm';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
 import ViewUser from './ViewUser';
-import Pagination from '../../components/Pagination';
-import Table from '../../components/Table';
-import SearchField from '../../components/SearchField';
-import PageLengthMenu from '../../components/PageLengthMenu';
-import ModalMedium from '../../components/ModalMedium';
-import SuccessAlert from '../../components/SuccessAlert';
-import TableDate from '../components/TableDate'; 
-import TableUserInfoLink from '../components/TableUserInfoLink';
-import TableHeading from '../../components/TableHeading';
-import TableEditLink from '../../components/TableEditLink';
-import { fetchUsers } from '../../Entities/UsersActions'
-import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import { fetchStaff } from '../../Entities/StaffActions';
-import { fetchClients } from '../../Entities/ClientsActions';
-import { fetchMatters } from '../../Entities/MattersActions';
+import Pagination from 'components/Pagination';
+import Table from 'components/Table';
+import SearchField from 'components/SearchField';
+import PageLengthMenu from 'components/PageLengthMenu';
+import ModalMedium from 'components/ModalMedium';
+import SuccessAlert from 'components/SuccessAlert';
+import TableDate from 'components/TableDate'; 
+import TableUserInfoLink from 'components/TableUserInfoLink';
+import TableText from 'components/TableText';
+import TableEditLink from 'components/TableEditLink';
+import { fetchUsers } from 'Entities/UsersActions'
+import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import { fetchStaff } from 'Entities/StaffActions';
+import { fetchClients } from 'Entities/ClientsActions';
+import { fetchMatters } from 'Entities/MattersActions';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
          changePageNumber,
-         changeSelectedRecord } from './actions';
-import { selectData, selectPageData, selectTotalPages } from './selectors';
+         changeSelectedRecord } from 'Admin/actions';
+import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
 
     onFetchClients: (config) => {
       dispatch(fetchClients(config));
-    }
+    },
 
     onFilter: ({target: {value}}) => {
       dispatch(filterAdminData(value));
@@ -99,7 +99,7 @@ class AdminUsers extends Component {
   }
 
   componentDidMount() {
-    const { onShowModal, onChangeAdminOperation }
+    const { onShowModal, onChangeAdminOperation } = this.props;
     onChangeAdminOperation("authenticate");
     onShowModal();
   }
@@ -227,8 +227,8 @@ class AdminUsers extends Component {
             { title: 'Username', 
               component: (val, row) => this.renderUserInfoLink(val, row), 
               prop: 'username'},
-            { title: 'Full Name', component: TableHeading, prop: 'fullName'},
-            { title: 'Role', component: TableHeading, prop: 'role'},
+            { title: 'Full Name', component: TableText, prop: 'fullName'},
+            { title: 'Role', component: TableText, prop: 'role'},
             { title: '', 
               component: (val, row) => this.renderTableEditLink(val, row),
               className: 'text-center' }
@@ -239,7 +239,7 @@ class AdminUsers extends Component {
           data={data}
         />
         <ModalMedium
-          title={}
+          title={modalTitle}
           show={modalShowing}>
           {adminOperation === "authenticate" ? <GetJWTForm/> : null}
           {adminOperation === "read" ? <ViewUser/> : null}

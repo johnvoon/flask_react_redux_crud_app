@@ -4,7 +4,7 @@ import RichTextHTML from 'components/RichTextHTML';
 
 
 const TextEditorFormGroup = (field) => {
-  const { input, label, type, meta } = field;
+  const { input, label, meta } = field;
   const error = meta.touched && meta.error;
 
   return (

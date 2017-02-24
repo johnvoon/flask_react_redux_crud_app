@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
-import entitiesReducer from './Entities/reducer';
-import blogHomeReducer from './BlogHome/reducer';
-import blogPostReducer from './BlogPost/reducer';
-import adminPagesReducer from './AdminPages/reducer';
-import practiceAreasReducer from './PracticeAreas/reducer';
-import authenticationReducer from './Authentication/reducer';
 import { reducer as formReducer } from 'redux-form';
+import entitiesReducer from 'Entities/reducer';
+import blogHomeReducer from 'BlogHome/reducer';
+import blogPostReducer from 'BlogPost/reducer';
+import adminPagesReducer from 'Admin/reducer';
+import practiceAreasReducer from 'PracticeAreas/reducer';
+import practiceAreaReducer from 'PracticeArea/reducer';
+import authenticationReducer from 'Authentication/reducer';
+
 
 const rootReducer = combineReducers({
   entities: entitiesReducer,
@@ -13,6 +15,7 @@ const rootReducer = combineReducers({
   blogPost: blogPostReducer,
   adminPages: adminPagesReducer,
   practiceAreas: practiceAreasReducer,
+  practiceAreaReducer: practiceAreaReducer,
   authentication: authenticationReducer,
   form: formReducer
 });

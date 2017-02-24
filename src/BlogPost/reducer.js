@@ -1,7 +1,7 @@
 import { POSTS_LOADED,
          POST_LOADED,
          COMMENTS_LOADED,
-         COMMENT_ADDED } from '../constants/actionTypes';
+         COMMENT_ADDED } from 'constants/actionTypes';
 
 const initialState = { 
   currentPost: {},

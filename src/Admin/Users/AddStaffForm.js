@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { reduxForm, Field, FormSection, formValueSelector } from  'redux-form';
+import { reduxForm } from  'redux-form';
 import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
@@ -14,21 +14,13 @@ import { addStaff } from 'Entities/StaffActions';
 import Button from 'components/Button';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
-import AsyncValidationFormGroup from 'components/AsyncValidationFormGroup';
-import GeosuggestFormGroup from 'components/GeosuggestFormGroup';
-import InputFormGroup from 'components/InputFormGroup';
-import SelectFormGroup from 'components/SelectFormGroup';
-import TextAreaFormGroup from 'components/TextAreaFormGroup';
-import MultiselectFormGroup from 'components/MultiselectFormGroup';
-import DatePickerFormGroup from 'components/DatePickerFormGroup';
-import { required, email, username, maxLength, 
-  asyncValidateUserIdentity as asyncValidate } from 'utils';
+import { asyncValidateUserIdentity as asyncValidate } from 'utils';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
   return {
     passwordValue: selectAddStaffForm(state, 'password'),
-    initialValues: state.adminPages.formData
+    initialValues: state.adminPages.formData,
     ...authentication
   };
 };

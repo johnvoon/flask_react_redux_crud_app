@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from  'redux-form';
 import moment from 'moment';
 import _ from 'lodash';
@@ -104,7 +105,7 @@ class EditPostForm extends Component {
   }
 
   render() {
-    const { selectedRecord, staff, practiceAreas } = this.props;
+    const { onHideModal, selectedRecord, staff, practiceAreas } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
@@ -199,7 +200,10 @@ EditPostForm.propTypes = {
   practiceAreas: PropTypes.object.isRequired
 };
 
-export default reduxForm({
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(reduxForm({
   form: 'EditPostForm',
   destroyOnUnmount: false
-})(EditPostForm);
+})(EditPostForm));

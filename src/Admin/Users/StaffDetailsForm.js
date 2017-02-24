@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class StaffDetailsForm extends Component {
+class StaffDetailsForm extends Component {
   render() {
     const { practiceAreas, matters, isDisplayed } = this.props;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");

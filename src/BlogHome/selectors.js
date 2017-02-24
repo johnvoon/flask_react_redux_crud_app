@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import _ from 'lodash';
-import { sort, sortByDate, filter } from '../utils';
+import { sort, sortByDate, filter } from 'utils';
 
 const selectBlogHome = (state) =>
   state.blogHome

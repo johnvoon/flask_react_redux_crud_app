@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
-import { practiceAreaSchema } from '../constants/Schemas';
+import { practiceAreaSchema } from 'constants/Schemas';
 import { recordAdded,
-         recordEdited } from '../AdminPages/actions';
-import { PRACTICE_AREAS_LOADED } from '../constants/actionTypes';
+         recordEdited } from 'Admin/actions';
+import { PRACTICE_AREAS_LOADED } from 'constants/actionTypes';
 
 export function fetchPracticeAreas() {
   return dispatch => {
@@ -14,6 +14,16 @@ export function fetchPracticeAreas() {
         arrayOf(practiceAreaSchema)
       );
       dispatch(practiceAreasLoaded(normalized.entities, normalized.result));
+    });
+  };
+}
+
+export function fetchPracticeArea(slug) {
+  return (dispatch) => {
+    return axios.get(`http://localhost:8000/api/practice-areas/${slug}`)
+    .then(({data: {practiceArea}}) => {
+      const normalized = normalize(practiceArea, practiceAreaSchema);
+      return dispatch(postLoaded(normalized.entities, normalized.entities.practiceAreas, practiceArea.id));
     });
   };
 }

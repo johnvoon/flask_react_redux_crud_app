@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
-import { required, passwordRequired } from '../utils';
-import TextAreaFormGroup from '../components/TextAreaFormGroup';
-import ErrorAlert from '../components/ErrorAlert';
+import { required, passwordRequired } from 'utils';
+import TextAreaFormGroup from 'components/TextAreaFormGroup';
+import ErrorAlert from 'components/ErrorAlert';
 
 class CommentForm extends Component {
   constructor(props) {

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment';
 import StaticFormGroup from 'components/StaticFormGroup';
 import SelectFormGroup from 'components/SelectFormGroup';
+import UserParticularsForm from './UserParticularsForm';
 import { required } from 'utils';
 
 
@@ -15,7 +17,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class EditUserParticularsForm extends Component {
+class EditUserParticularsForm extends Component {
   render() {
     const { selectedRecord, isDisplayed, handleChange } = this.props;
     const userCreated = moment(selectedRecord.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
@@ -79,3 +81,8 @@ export default class EditUserParticularsForm extends Component {
     );    
   }
 }
+
+export default connect(
+  mapStateToProps,
+  null
+)(EditUserParticularsForm);

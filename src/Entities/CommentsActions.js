@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { sortByDate } from '../utils';
+import { sortByDate } from 'utils';
 import { arrayOf, normalize } from 'normalizr';
-import { commentVisibilityChanged } from '../AdminPages/actions';
-import { commentSchema } from '../constants/Schemas';
+import { commentVisibilityChanged } from 'Admin/actions';
+import { commentSchema } from 'constants/Schemas';
 import { COMMENTS_LOADED,
-         COMMENT_ADDED } from '../constants/actionTypes';
+         COMMENT_ADDED } from 'constants/actionTypes';
 
 export function fetchComments(id) {
   return dispatch => {

@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class DeleteComment extends Component {
+class DeleteComment extends Component {
   render() {
     const { JWT } = this.props;
     

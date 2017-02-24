@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, FormSection, formValueSelector } from  'redux-form';
+import { reduxForm } from  'redux-form';
 import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
-import { required, email, username, maxLength, 
-  asyncValidateUserIdentity as asyncValidate, 
-  createOptionsList } from 'utils';
+import { asyncValidateUserIdentity as asyncValidate } from 'utils';
 import { hideModal, loadFormData as load } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
@@ -120,7 +118,7 @@ class AddPublicUserForm extends Component {
 
   render() {
     this.handleClick = this.handleClick.bind(this);
-    const { passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, passwordValue, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage, currentTab } = this.state;
     const tabLabels = ["Account Details", "Particulars", "Address"];
     const navTabs = tabLabels.map((tab, idx) => {

@@ -1,6 +1,6 @@
 import { CURRENT_USER_LOADED,
          JWT_LOADED,
-         REMOVE_JWT } from '../constants/actionTypes';
+         REMOVE_JWT } from 'constants/actionTypes';
 
 const initialState = { 
   currentUser: {},
@@ -24,7 +24,7 @@ export default function authenticationReducer(state = initialState, action) {
 }
 
 function currentUserLoaded(state, { currentUser }) {
-  console.log(currentUser);
+
   return {
     ...state,
     currentUser
@@ -32,14 +32,14 @@ function currentUserLoaded(state, { currentUser }) {
 }
 
 function JWTLoaded(state, { JWT }) {
-  console.log(JWT);
+
   return {
     ...state,
     JWT
   };
 }
 
-function removeJWT(state, action) {
+function removeJWT(state, action) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     JWT: '',

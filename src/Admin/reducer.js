@@ -10,7 +10,11 @@ import { POSTS_LOADED,
          CHANGE_PAGE_LENGTH,
          FILTER_ADMIN_DATA,
          SORT_DATA,
-         LOAD_FORM_DATA } from 'constants/actionTypes';
+         LOAD_FORM_DATA,
+         SHOW_MODAL,
+         HIDE_MODAL,
+         CHANGE_SELECTED_RECORD,
+         CHANGE_ADMIN_OPERATION } from 'constants/actionTypes';
 
 const initialState = {
   data: {},
@@ -58,6 +62,9 @@ export default function adminPagesReducer(state = initialState, action) {
     case CHANGE_SELECTED_RECORD:
       return changeSelectedRecord(state, action);
 
+    case CHANGE_ADMIN_OPERATION:
+      return changeAdminOperation(state, action);
+
     case FILTER_ADMIN_DATA:
       return filterAdminData(state, action);
 
@@ -98,10 +105,10 @@ function commentsLoaded(state, { entities, comments }) {
     ...state,
     data: entities.comments || {},
     recordIds: comments
-  }
+  };
 }
 
-function recordAdded(state, { entities, addedRecord, addedRecordId }) {
+function recordAdded(state, { entities, addedRecord, addedRecordId }) { // eslint-disable-line no-unused-vars
   const { data, recordIds } = state;
 
   return {
@@ -110,34 +117,33 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) {
     recordIds: [...recordIds, addedRecordId],
     successMessage: 'Record added successfully',
     addedRecord: addedRecord[addedRecordId]
-  }
+  };
 }
 
-function recordEdited(state, action) {
+function recordEdited(state, action) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     successMessage: "Record edited successfully"
-  }
+  };
 }
 
 function commentVisibilityChanged(state, { entities, commentId }) {
-  console.log(entities.comments[commentId], typeof commentId);
   const visibility = entities.comments[commentId].visible ? "visible" : "hidden" 
 
   return {
     ...state,
     successMessage: `Comment ${commentId} now ${visibility}`
-  }
+  };
 }
 
-function recordDeleted(state, { deletedRecord, deletedRecordId }) {
+function recordDeleted(state, { deletedRecordId }) {
   const { data, recordIds } = state;
   return {
     ...state,
     data: _.omit(data, deletedRecordId),
     recordIds: _.reject(recordIds, item => item === deletedRecordId),
     successMessage: "Record deleted successfully",
-  }
+  };
 }
 
 function changePageNumber(state, {value: newPageNumber}) {
@@ -163,14 +169,14 @@ function changeSelectedRecord(state, { value }) {
   return {
     ...state,
     selectedRecord: value
-  }
+  };
 }
 
 function changeAdminOperation(state, { value }) {
   return {
     ...state,
     adminOperation: value
-  }
+  };
 }
 
 function sortData(state, { sortBy }) {
@@ -192,16 +198,16 @@ function loadFormData(state, { formData }) {
   return _.merge({}, state, { formData: formData });
 }
 
-function showModal(state, action) {
+function showModal(state, action) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     modalShowing: true
-  }
+  };
 }
 
-function hideModal(state, action) {
+function hideModal(state, action) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     modalShowing: false
-  }
+  };
 }

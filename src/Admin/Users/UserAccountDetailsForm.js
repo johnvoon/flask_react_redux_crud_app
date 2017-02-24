@@ -1,16 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { Field } from  'redux-form';
 import classNames from 'classnames';
-import _ from 'lodash';
-import { required, email, username, passwordMatch, 
-  asyncValidateUserIdentity as asyncValidate } from 'utils';
+import { required, email, username, passwordMatch } from 'utils';
 import { loadFormData as load } from 'Admin/actions';
-import ErrorAlert from 'components/ErrorAlert';
 import InputFormGroup from 'components/InputFormGroup';
-import SelectFormGroup from 'components/SelectFormGroup';
 import AsyncValidationFormGroup from 'components/AsyncValidationFormGroup';
-import FileUploadFormGroup from 'components/FileUploadFormGroup';
 
 export default class UserAccountDetailsForm extends Component {
   render() {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import GetJWTForm from 'Admin/GetJWTForm';
-import DeleteRecordForm from './DeleteRecordForm';
+import DeletePostForm from './DeletePostForm';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
@@ -9,14 +9,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class DeletePost extends Component {
+class DeletePost extends Component {
   render() {
     const { JWT } = this.props;
     
     return (
       <div>
         {!JWT && <GetJWTForm/>}
-        {JWT && <DeleteRecordForm/>}
+        {JWT && <DeletePostForm/>}
       </div>
     );
   }

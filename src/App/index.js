@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Headroom from 'react-headroom';
-import MainNavbar from '../components/MainNavbar';
-import PracticeAreaNavbar from '../components/PracticeAreaNavbar';
-import PracticeAreaPanel from '../components/PracticeAreaPanel';
-import Sidebar from '../components/Sidebar';
-import { fetchPracticeAreas } from '../Entities/PracticeAreasActions';
-import { fetchCurrentUser } from '../Authentication/actions';
+import MainNavbar from 'components/MainNavbar';
+import PracticeAreaNavbar from 'components/PracticeAreaNavbar';
+import PracticeAreaPanel from 'components/PracticeAreaPanel';
+import Sidebar from 'components/Sidebar';
+import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import { fetchCurrentUser } from 'Authentication/actions';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'lodash';
 

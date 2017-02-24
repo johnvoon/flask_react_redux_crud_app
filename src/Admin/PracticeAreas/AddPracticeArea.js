@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default class AddPracticeArea extends Component {
+class AddPracticeArea extends Component {
   render() {
     const { JWT } = this.props;
     

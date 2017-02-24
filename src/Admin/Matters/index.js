@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import ViewMatter from './ViewMatter';
 import AddMatter from './AddMatter';
 import EditMatter from './EditMatter';
-import ButtonBlock from './ButtonBlock';
+import ButtonBlock from 'components/ButtonBlock';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';
 import SearchField from 'components/SearchField';

@@ -7,6 +7,7 @@ const user = new Schema('users');
 const staff = new Schema('staff');
 const staffUser = new Schema('staffUsers', { idAttribute: 'userId'});
 const client = new Schema('clients');
+const clientUser = newSchema('clientUsers', { idAttribute: 'userId'});
 const matter = new Schema('matters');
 const currentUser = new Schema('currentUser');
 
@@ -17,5 +18,6 @@ export const userSchema = user;
 export const staffSchema = staff;
 export const staffUserSchema = staffUser;
 export const clientSchema = client;
+export const clientUserSchema = clientUser;
 export const matterSchema = matter;
 export const currentUserSchema = currentUser;

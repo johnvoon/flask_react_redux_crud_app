@@ -1,18 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import { VelocityTransitionGroup } from 'velocity-react';
-import Post from '../components/Post';
-import RelatedPost from '../components/RelatedPost';
-import Comment from '../components/Comment';
-import Avatar from '../components/Avatar';
 import CommentForm from './CommentForm';
-import { fetchPost, fetchRelatedPosts } from '../Entities/PostsActions';
-import { fetchComments, addComment } from '../Entities/CommentsActions';
-import { fetchCurrentUser } from '../Authentication/actions';
 import { selectSortedComments } from './selectors';
-import _ from 'lodash';
+import { fetchPost, fetchRelatedPosts } from 'Entities/PostsActions';
+import { fetchComments, addComment } from 'Entities/CommentsActions';
+import { fetchCurrentUser } from 'Authentication/actions';
+import Post from 'components/Post';
+import RelatedPost from 'components/RelatedPost';
+import Comment from 'components/Comment';
+import Avatar from 'components/Avatar';
+import { slugify } from 'utils';
 
 const mapStateToProps = (state) => {
   const { entities, blogPost, authentication } = state;
@@ -82,14 +83,13 @@ class BlogPost extends Component {
   }
 
   changeCurrentPost(id, event) {
-    const { router, params, onFetchPost, 
+    const { router, onFetchPost, 
     onFetchRelatedPosts, onFetchComments } = this.props;
     event.preventDefault();
-    router.push(`/blog/${id}`);
     onFetchPost(id)
     .then(({post, postId}) => {
-      const practiceArea = post[postId].practiceArea;
-      onFetchRelatedPosts(postId, practiceArea);
+      router.push(`/blog/${postId}/${post[postId].slug}`);
+      onFetchRelatedPosts(postId, post[postId].practiceArea);
       onFetchComments(postId);
     });
   }

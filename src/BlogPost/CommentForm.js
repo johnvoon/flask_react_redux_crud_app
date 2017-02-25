@@ -1,27 +1,33 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
-import { required, passwordRequired } from 'utils';
+import { addComment } from 'Entities/CommentsActions';
 import TextAreaFormGroup from 'components/TextAreaFormGroup';
 import ErrorAlert from 'components/ErrorAlert';
+import Button from 'components/Button';
+
+const mapDispatchToProps = (dispatch) => ({
+  onAddComment: (formData) => {
+    return dispatch(addComment(formData));
+  }
+});
 
 class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       errorMessage: ''
-    }
+    };
   }
 
   _handleSubmit(data) {
-    const { onAddComment, onHide, postId } = this.props;
+    const { onAddComment, onHideCommentForm, postId } = this.props;
     let formData = new FormData();
 
     formData.append('content', data.content);
     formData.append('postId', postId);
     onAddComment(formData)
-    .then(() => onHide())
+    .then(() => onHideCommentForm())
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status >= 400 && status < 500) {
@@ -37,7 +43,7 @@ class CommentForm extends Component {
   }
 
   render() {
-    const { name, submitting, handleSubmit } = this.props;
+    const { submitting, handleSubmit } = this.props;
     const { errorMessage } = this.state;
 
     return (
@@ -47,20 +53,30 @@ class CommentForm extends Component {
           component={TextAreaFormGroup}
           rows={3}
           label=""/>
-        <div className="form-group">
-          <button
-            className="btn btn-primary text-uppercase"
-            type="submit"
-            disabled={submitting}
-            onClick={handleSubmit(data => this._handleSubmit(data))}>
-            Submit Comment
-          </button>            
-        </div>
+        {errorMessage && <ErrorAlert message={errorMessage}/>}
+        <Button
+          className="btn-primary"
+          type="submit"
+          disabled={submitting}
+          handleClick={handleSubmit(data => this._handleSubmit(data))}>
+          Submit Comment
+        </Button>
       </form>
     );
   }  
 }
 
-export default reduxForm({
+export default connect(
+  null,
+  mapDispatchToProps
+)(reduxForm({
   form: 'CommentForm'
-})(CommentForm);
+})(CommentForm));
+
+CommentForm.propTypes = {
+  onAddComment: PropTypes.func.isRequired, 
+  onHideCommentForm: PropTypes.func.isRequired, 
+  postId: PropTypes.string.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};

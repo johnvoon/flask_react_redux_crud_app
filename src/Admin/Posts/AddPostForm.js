@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from  'redux-form';
 import { required, maxLength, createOptionsList, 
   asyncValidatePostTitle as asyncValidate } from 'utils';
@@ -71,18 +72,18 @@ class AddPostForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { staff, practiceAreas } = this.props; 
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, staff, practiceAreas, handleSubmit, 
+      pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     const postAuthorOptions = createOptionsList(staff, "name");
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
@@ -102,8 +103,7 @@ class AddPostForm extends Component {
               component={SelectFormGroup}
               label="Author"
               validate={required}
-              options={postAuthorOptions}>
-            </Field>
+              options={postAuthorOptions}/>
           </div>
           <div className="col-sm-6">
             <Field 
@@ -134,7 +134,7 @@ class AddPostForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -165,7 +165,9 @@ AddPostForm.propTypes = {
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   staff: PropTypes.object.isRequired,
-  practiceAreas: PropTypes.object.isRequired
+  practiceAreas: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired,
+  onJWTExpired: PropTypes.func.isRequired
 };
 
 export default connect(

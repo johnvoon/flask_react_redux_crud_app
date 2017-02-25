@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { Field } from  'redux-form';
-import _ from 'lodash';
 import classNames from 'classnames';
 import { required } from 'utils';
 import InputFormGroup from 'components/InputFormGroup';
@@ -51,6 +49,10 @@ export default class UserParticularsForm extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+UserParticularsForm.propTypes = {
+  isDisplayed: PropTypes.bool.isRequired,
+};

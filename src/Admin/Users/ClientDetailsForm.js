@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
@@ -20,7 +20,7 @@ class ClientDetailsForm extends Component {
     super(props);
     this.state = {
       showAddMatterForm: false
-    }
+    };
   }
 
   handleClick() {
@@ -32,7 +32,7 @@ class ClientDetailsForm extends Component {
   onHide() {
     this.setState({
       showAddMatterForm: false
-    })
+    });
   }
 
   render() {
@@ -64,7 +64,7 @@ class ClientDetailsForm extends Component {
           </div>
         ) : null}
       </div>
-    )
+    );
   }
 }
 
@@ -72,3 +72,9 @@ export default connect(
   mapStateToProps,
   null
 )(ClientDetailsForm);
+
+ClientDetailsForm.propTypes = {
+  matters: PropTypes.object.isRequired,
+  isDisplayed: PropTypes.bool.isRequired,
+  changeMatterFieldValue: PropTypes.func.isRequired 
+};

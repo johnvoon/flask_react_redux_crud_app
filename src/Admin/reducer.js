@@ -128,7 +128,7 @@ function recordEdited(state, action) { // eslint-disable-line no-unused-vars
 }
 
 function commentVisibilityChanged(state, { entities, commentId }) {
-  const visibility = entities.comments[commentId].visible ? "visible" : "hidden" 
+  const visibility = entities.comments[commentId].visible ? "visible" : "hidden";
 
   return {
     ...state,

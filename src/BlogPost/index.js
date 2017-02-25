@@ -13,7 +13,6 @@ import Post from 'components/Post';
 import RelatedPost from 'components/RelatedPost';
 import Comment from 'components/Comment';
 import Avatar from 'components/Avatar';
-import { slugify } from 'utils';
 
 const mapStateToProps = (state) => {
   const { entities, blogPost, authentication } = state;
@@ -52,8 +51,8 @@ class BlogPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCommentTextArea: false
-    }
+      showCommentForm: false
+    };
   }
 
   componentDidMount() {
@@ -70,16 +69,16 @@ class BlogPost extends Component {
     });
   }
 
-  showCommentTextArea() {
+  showCommentForm() {
     this.setState({
-      showCommentTextArea: true
-    })
+      showCommentForm: true
+    });
   }
 
-  hideCommentTextArea() {
+  hideCommentForm() {
     this.setState({
-      showCommentTextArea: false
-    })
+      showCommentForm: false
+    });
   }
 
   changeCurrentPost(id, event) {
@@ -95,12 +94,12 @@ class BlogPost extends Component {
   }
 
   render() {
-    this.showCommentTextArea = this.showCommentTextArea.bind(this);
-    this.hideCommentTextArea = this.hideCommentTextArea.bind(this);
+    this.showCommentForm = this.showCommentForm.bind(this);
+    this.hideCommentForm = this.hideCommentForm.bind(this);
     this.changeCurrentPost = this.changeCurrentPost.bind(this);
     const { posts, relatedPosts, comments, currentPost,
             sortedComments, currentUser, onAddComment } = this.props;
-    const { showCommentTextArea } = this.state;
+    const { showCommentForm } = this.state;
     const relatedPostsList = relatedPosts.map((id) => {
       return (
         <RelatedPost 
@@ -144,8 +143,7 @@ class BlogPost extends Component {
             backgroundPosition: 'top center',
             backgroundSize: 'cover',
             backgroundAttachment: 'fixed'
-          }}>
-        </div>
+          }}/>
         <div className="container-fluid">
           {post()}
         </div>
@@ -158,8 +156,8 @@ class BlogPost extends Component {
           <div className="comments">
             <div 
               className="comment-form"
-              onClick={this.showCommentTextArea}
-              onBlur={this.hideCommentTextArea}>
+              onClick={this.showCommentForm}
+              onBlur={this.hideCommentForm}>
               {_.isEmpty(currentUser) ? (
                 <Link to={{
                   pathname: '/login',
@@ -172,16 +170,16 @@ class BlogPost extends Component {
               ) : (
                 <Avatar
                   avatarPhoto={currentUser.photo}
-                  avatarText={showCommentTextArea ? currentUser.name : "Leave a Comment"}/>
+                  avatarText={showCommentForm ? currentUser.name : "Leave a Comment"}/>
               )}
               <VelocityTransitionGroup 
                 enter={{animation: "slideDown"}}
                 leave={{animation: "slideUp"}}>
-                {_.isEmpty(currentUser) || !showCommentTextArea ? null : 
+                {_.isEmpty(currentUser) || !showCommentForm ? null : 
                   <CommentForm
                     name={currentUser.name}
                     onAddComment={onAddComment}
-                    onHide={this.hideCommentTextArea}
+                    onHideCommentForm={this.hideCommentForm}
                     postId={currentPost.id}/>}
               </VelocityTransitionGroup>
             </div>
@@ -200,13 +198,20 @@ class BlogPost extends Component {
 
 BlogPost.propTypes = {
   onFetchPost: PropTypes.func.isRequired,
+  onFetchCurrentUser: PropTypes.func.isRequired,
+  onFetchRelatedPosts: PropTypes.func.isRequired,
+  onFetchComments: PropTypes.func.isRequired,
+  onChangeCurrentPost: PropTypes.func.isRequired,
+  onAddComment: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   posts: PropTypes.object.isRequired,
   relatedPosts: PropTypes.array.isRequired,
   comments: PropTypes.object.isRequired,
   currentPost: PropTypes.object.isRequired,
-  onChangeCurrentPost: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired,
+  sortedComments: PropTypes.array.isRequired,
+  currentUser: PropTypes.object.isRequired
 };
 
 export default withRouter(

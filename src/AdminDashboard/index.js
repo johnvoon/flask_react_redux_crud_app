@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import AdminCard from 'components/AdminCard';
 
 class AdminDashboard extends Component {
   constructor(props) {
@@ -17,5 +15,9 @@ class AdminDashboard extends Component {
     );
   }
 }
+
+AdminDashboard.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 export default AdminDashboard;

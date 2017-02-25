@@ -21,7 +21,6 @@ export default class ModalMedium extends Component {
 }
 
 ModalMedium.propTypes = {
-  onHide: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired
 };

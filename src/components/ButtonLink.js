@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import sr from 'components/ScrollReveal';
 
@@ -22,7 +22,7 @@ class ButtonLink extends Component {
     router.push({
       pathname: endpoint,
       state: { id: id }
-    })    
+    });  
   }
 
   render() {
@@ -47,3 +47,12 @@ class ButtonLink extends Component {
 }
 
 export default withRouter(ButtonLink);
+
+ButtonLink.propTypes = {
+  router: PropTypes.object.isRequired,
+  endpoint: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  imgFilename: PropTypes.string.isRequired,
+  customClassNames: PropTypes.string.isRequired,
+};

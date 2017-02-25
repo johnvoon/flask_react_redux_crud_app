@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
 const Avatar = (props) => {
@@ -32,3 +32,9 @@ const Avatar = (props) => {
 };
 
 export default Avatar;
+
+Avatar.propTypes = {
+  avatarPhoto: PropTypes.string.isRequired,
+  iconClassName: PropTypes.string.isRequired,
+  avatarText: PropTypes.string.isRequired,
+};

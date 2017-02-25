@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Button from 'components/Button';
 
 const TableDeleteLink = (props) => {
@@ -13,3 +13,7 @@ const TableDeleteLink = (props) => {
 };
 
 export default TableDeleteLink;
+
+TableDeleteLink.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+};

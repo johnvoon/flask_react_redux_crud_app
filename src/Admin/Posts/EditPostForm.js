@@ -4,7 +4,7 @@ import { reduxForm, Field } from  'redux-form';
 import moment from 'moment';
 import _ from 'lodash';
 import { required, maxLength, createOptionsList } from 'utils';
-import { removeJWT } from 'Authentication/actions'
+import { removeJWT } from 'Authentication/actions';
 import { editPost } from 'Entities/PostsActions';
 import { hideModal } from 'Admin/actions';
 import InputFormGroup from 'components/InputFormGroup';
@@ -59,7 +59,7 @@ class EditPostForm extends Component {
     const { initialize } = this.props;
     const postBody = (selectedRecord.body || []).map((paragraph) => {
       return `<p>${paragraph}</p>`;
-    }).join('\n')
+    }).join('\n');
     const initData = {
       "title": selectedRecord.title,
       "author": _.findKey(staff, (val) => val.name === selectedRecord.author),
@@ -95,11 +95,11 @@ class EditPostForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
@@ -164,7 +164,7 @@ class EditPostForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -191,13 +191,15 @@ EditPostForm.propTypes = {
   initialize: PropTypes.object.isRequired,
   onEditPost: PropTypes.object.isRequired,
   onHideModal: PropTypes.object.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
   handleSubmit: PropTypes.object.isRequired,
   pristine: PropTypes.object.isRequired,
   reset: PropTypes.object.isRequired,
   submitting: PropTypes.object.isRequired,
   selectedRecord: PropTypes.object.isRequired,
   staff: PropTypes.object.isRequired,
-  practiceAreas: PropTypes.object.isRequired
+  practiceAreas: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired
 };
 
 export default connect(

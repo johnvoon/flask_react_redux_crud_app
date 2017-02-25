@@ -1,5 +1,4 @@
 import axios from 'axios';
-import _ from 'lodash';
 import { arrayOf, normalize } from 'normalizr';
 import { staffSchema,
          staffUserSchema } from 'constants/Schemas';
@@ -37,7 +36,7 @@ export function addStaff(config, content) {
         dispatch(staffUserAdded(normalizedStaffUsers.entities));
       }
     );
-  }
+  };
 }
 
 export function editStaff(config, content) {
@@ -55,7 +54,7 @@ export function editStaff(config, content) {
         dispatch(staffUserEdited(normalizedStaffUsers.entities));
       }
     );
-  }
+  };
 }
 
 export function staffLoaded(entities) {

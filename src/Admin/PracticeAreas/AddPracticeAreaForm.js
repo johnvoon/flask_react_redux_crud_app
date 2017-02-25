@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from  'redux-form';
-import _ from 'lodash';
-import { hideModal, loadFormData as load } from 'Admin/actions';
-import { required, createOptionsList } from 'utils';
+import { reduxForm } from  'redux-form';
+import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { addMatter } from 'Entities/MattersActions';
 import ErrorAlert from 'components/ErrorAlert';
-import ButtonBlock from 'components/ButtonBlock';
+import Button from 'components/Button';
+import PracticeAreaParticularsForm from './PracticeAreaParticularsForm';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -63,28 +62,28 @@ class AddPracticeAreaForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { addButtonOnly, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     
     return (
       <form>
-        <MatterParticularsForm/>
+        <PracticeAreaParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -110,20 +109,18 @@ class AddPracticeAreaForm extends Component {
 AddPracticeAreaForm.propTypes = {
   onAddPracticeArea: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  JWT: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
 };
 
-AddPracticeAreaForm = reduxForm({
-  form:  'AddPracticeAreaForm',
-  destroyOnUnmount: false,
-})(AddPracticeAreaForm);
-
-AddPracticeAreaForm = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddPracticeAreaForm)
-
-export default AddPracticeAreaForm;
+)(reduxForm({
+  form:  'AddPracticeAreaForm',
+  destroyOnUnmount: false,
+})(AddPracticeAreaForm));

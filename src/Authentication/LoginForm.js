@@ -3,8 +3,19 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
 import { required, passwordRequired } from 'utils';
+import { loginUser, fetchCurrentUser } from './actions';
 import InputFormGroup from 'components/InputFormGroup';
 import ErrorAlert from 'components/ErrorAlert';
+import ButtonBlock from 'components/ButtonBlock';
+
+const mapDispatchToProps = (dispatch) => ({
+  onLoginUser: (formData) => {
+    return dispatch(loginUser(formData));
+  },
+  onFetchCurrentUser: () => {
+    return dispatch(fetchCurrentUser());
+  }
+});
 
 class LoginForm extends Component {
   constructor(props) {
@@ -15,7 +26,8 @@ class LoginForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { currentUser, onFetchCurrentUser, onLoginUser, router, location } = this.props;
+    const { onFetchCurrentUser, onLoginUser, 
+      router, location } = this.props;
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
@@ -24,12 +36,12 @@ class LoginForm extends Component {
     .then(() => onFetchCurrentUser())
     .then(({currentUser}) => {
       if (location.query.next) {
-        router.push(location.query.next)  
+        router.push(location.query.next);
       }
       if (currentUser.role === 'admin') {
-        router.push('/admin')
+        router.push('/admin');
       } else {
-        router.push('/portal')
+        router.push('/portal');
       }
     })
     .catch(({response, message}) => {
@@ -65,16 +77,14 @@ class LoginForm extends Component {
           label="Password"
           validate={passwordRequired}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="form-group">
-          <button
-            className="btn btn-primary btn-block text-uppercase"
-            type="submit"
-            disabled={submitting}
-            onClick={handleSubmit(data => this._handleSubmit(data))}>
-            <span className="lock"/>
-            Log In
-          </button>            
-        </div>
+        <ButtonBlock
+          customClassNames="btn-primary"
+          type="submit"
+          disabled={submitting}
+          handleClick={handleSubmit(data => this._handleSubmit(data))}>
+          <span className="lock"/>
+          Log In
+        </ButtonBlock>
         <p className="small">By clicking Log In you agree to our <Link to="/terms">Terms of Use</Link> and <Link to="/privacy">Privacy Statement</Link></p>
         <Link 
           to="/request-password-reset" 
@@ -87,7 +97,19 @@ class LoginForm extends Component {
 }
 
 export default withRouter(
-  reduxForm({
+  connect(
+    null,
+    mapDispatchToProps
+  )(reduxForm({
     form: 'LoginForm'
-  })(LoginForm)
+  })(LoginForm))
 );
+
+LoginForm.propTypes = {
+  onFetchCurrentUser: PropTypes.func.isRequired,
+  onLoginUser: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired, 
+  location: PropTypes.object.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired
+};

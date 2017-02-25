@@ -10,11 +10,11 @@ module.exports = {
   devtool: 'source-map',
   entry: {
     bundle: './src/index',
-    vendor: VENDOR_LIBS
+    // vendor: VENDOR_LIBS
   },
   output: {
     publicPath: 'http://localhost:8080/static/scripts',
-    filename: '[name].[chunkhash].js'
+    filename: 'bundle.js'
   },
   resolve: {
     modules: ["node_modules", "src"],
@@ -22,14 +22,14 @@ module.exports = {
   },
   module: {
     rules: [
-      // {
-      //   test: /\.js$/,
-      //   enforce: "pre",
-      //   loader: 'eslint-loader',
-      //   query: {
-      //     configFile: './.eslintrc'
-      //   }
-      // },
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        loader: 'eslint-loader',
+        query: {
+          configFile: './.eslintrc'
+        }
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -62,12 +62,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest']
-    }),
-    new HtmlWebpackPlugin({
-      template: 'server/templates/base.html',
-      inject: 'body'
-    })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   names: ['commons', 'vendor', 'bootstrap']
+    // })
+    // new HtmlWebpackPlugin({
+    //   title: 'Concept Law Firm',
+    //   template: 'server/templates/base.html',
+    //   hash: true
+    // })
   ]
 };

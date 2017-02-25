@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
@@ -61,7 +61,7 @@ class StaffDetailsForm extends Component {
           validate={[ required, maxLength(1000) ]}
           rows="4"/>
       </div>
-    )
+    );
   }
 }
 
@@ -69,3 +69,10 @@ export default connect(
   mapStateToProps,
   null
 )(StaffDetailsForm);
+
+StaffDetailsForm.propTypes = {
+  practiceAreas: PropTypes.object.isRequired,
+  matters: PropTypes.object.isRequired,
+  isDisplayed: PropTypes.bool.isRequired,
+  changeMatterFieldValue: PropTypes.func.isRequired 
+};

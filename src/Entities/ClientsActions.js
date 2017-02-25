@@ -36,7 +36,7 @@ export function addClient(config, content) {
         dispatch(clientUserAdded(normalizedClientUsers.entities));
       }
     );
-  }
+  };
 }
 
 export function editClient(config, content, id) {

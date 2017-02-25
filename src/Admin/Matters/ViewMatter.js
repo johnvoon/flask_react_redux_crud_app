@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
-import _ from 'lodash';
 import { hideModal } from 'Admin/actions';
 import StaticFormGroup from 'components/StaticFormGroup';
-
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { adminPages } = state;
@@ -105,7 +105,7 @@ class ViewUser extends Component {
 ViewUser.propTypes = {
   initialize: PropTypes.object.isRequired,
   onEdit: PropTypes.object.isRequired,
-  onHide: PropTypes.object.isRequired,
+  onHideModal: PropTypes.object.isRequired,
   handleSubmit: PropTypes.object.isRequired,
   pristine: PropTypes.object.isRequired,
   reset: PropTypes.object.isRequired,
@@ -115,5 +115,5 @@ ViewUser.propTypes = {
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(ViewUser);

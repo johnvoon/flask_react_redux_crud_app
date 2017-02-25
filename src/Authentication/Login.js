@@ -1,22 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { loginUser, fetchCurrentUser } from './actions';
 import LoginForm from './LoginForm';
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoginUser: (formData) => {
-    return dispatch(loginUser(formData));
-  },
-  onFetchCurrentUser: () => {
-    return dispatch(fetchCurrentUser());
-  }
-});
 
 class Login extends Component {
   render() {
-    const { onFetchCurrentUser, onLoginUser } = this.props;
-
     return (
       <main>
         <Helmet
@@ -38,9 +25,7 @@ class Login extends Component {
         </div>
         <div className="login">
           <p>Log in to post a comment or view your portal</p>
-          <LoginForm
-            onLoginUser={onLoginUser}
-            onFetchCurrentUser={onFetchCurrentUser}/>
+          <LoginForm/>
         </div>
       </main>
     );
@@ -48,17 +33,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  onAdd: PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-  staff: PropTypes.object.isRequired,
-  practiceAreas: PropTypes.object.isRequired
+  onFetchCurrentUser: PropTypes.func.isRequired
 };
 
-export default connect(
-  null, 
-  mapDispatchToProps
-)(Login);
+export default Login;

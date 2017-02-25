@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import NavLink from 'components/NavLink';
@@ -11,14 +11,7 @@ export default class MainNavbar extends Component {
     };
   }
 
-  handleClick(linkText) {
-    this.setState({
-      currentLink: linkText
-    })
-  }
-
   renderLinks() {
-    const { currentLink } = this.state;
     const { links } = this.props;
 
     return links.map((link, idx) => {
@@ -73,4 +66,8 @@ export default class MainNavbar extends Component {
   }
 }
   
-
+MainNavbar.propTypes = {
+  links: PropTypes.array.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  showSidebar: PropTypes.bool.isRequired,
+};

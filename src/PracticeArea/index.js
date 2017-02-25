@@ -1,31 +1,29 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
 import { createOptionsList } from 'utils';
 import { Scrollbars } from 'react-custom-scrollbars';
-import sr from 'components/ScrollReveal';
 import { Link, withRouter } from 'react-router';
 import { fetchPracticeAreas, fetchPracticeArea } from 'Entities/PracticeAreasActions';
-import Footer from 'components/Footer';
 
 const mapStateToProps = (state) => {
-  const { practiceAreas, entities } = state;
-
+  const { practiceArea, practiceAreas, entities } = state;
+  
   return {
     ...practiceArea,
     ...practiceAreas, 
-    ...entities};
+    ...entities
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onFetchPracticeAreas: (slug) => {
-    dispatch(fetchPracticeAreas(slug));
+  onFetchPracticeAreas: () => {
+    dispatch(fetchPracticeAreas());
   },
 
-  onFetchPracticeArea: () => {
-    dispatch(fetchPracticeArea());
+  onFetchPracticeArea: (slug) => {
+    dispatch(fetchPracticeArea(slug));
   }
 });
 
@@ -33,43 +31,29 @@ class PracticeArea extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      currentPracticeArea: ''
-    }
   }
 
   componentDidMount() {
-    const { onFetchPracticeAreas, onFetchPracticeArea, 
-      currentPracticeArea, params } = this.props;
-    const config = {
-      duration: 2000,
-      scale: 1,
-      distance: 0
-    };
+    const { onFetchPracticeAreas, 
+      onFetchPracticeArea, params } = this.props;
     
     onFetchPracticeAreas();
     onFetchPracticeArea(params.slug);
-    this.setState({ currentPracticeArea })
-    
-    sr.reveal(this.whoWeAre, config);
-    sr.reveal(this.coreValues, config);
   }
 
   handleChange({target: {value}}) {
-    const { practiceAreas, router } = this.props;
+    const { onFetchPracticeArea, 
+      practiceAreas, router } = this.props;
     const practiceArea = practiceAreas[value];
-    this.setState({
-      currentPracticeArea: practiceArea
-    });
+    
+    onFetchPracticeArea(practiceArea.slug);
     router.push(`/practice-areas/${practiceArea.slug}`);
   }
 
   render() {
-    const { practiceAreas } = this.props;
-    const { currentPracticeArea } = this.state;
-
+    const { practiceAreas, currentPracticeArea } = this.props;
     const practiceAreaName = currentPracticeArea.area;
-    const imgFilename = currentPracticeArea.slug.split('-')[0];
+    const imgFilename = (currentPracticeArea.slug || '').split('-')[0];
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
     const description = (currentPracticeArea.description || []).map((paragraph, idx) => {
       if (currentPracticeArea.description.length > 1) {
@@ -177,3 +161,12 @@ export default withRouter(
     mapDispatchToProps
   )(PracticeArea)
 );
+
+PracticeArea.propTypes = {
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchPracticeArea: PropTypes.func.isRequired,
+  currentPracticeArea: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  practiceAreas: PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
+};

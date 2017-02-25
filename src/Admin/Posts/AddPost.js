@@ -29,5 +29,5 @@ AddPost.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(AddPost);

@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 const TablePostLink = (val, row) => {
   return (
-    <Link to={`/blog/${row.id}`}>
+    <Link to={`/blog/${row.id}/${row.slug}`}>
       {val}
     </Link>
   );

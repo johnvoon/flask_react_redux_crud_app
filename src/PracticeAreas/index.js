@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { VelocityTransitionGroup } from 'velocity-react';
 import Helmet from 'react-helmet';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import ButtonLink from 'components/ButtonLink';
-import { changePracticeArea } from './actions';
-
 
 const mapStateToProps = (state) => {
   const { entities } = state;
@@ -16,10 +13,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   onFetchPracticeAreas: () => {
     dispatch(fetchPracticeAreas());
-  },
-
-  onChangePracticeArea: (id) => {
-    dispatch(changePracticeArea(id));
   }
 });
 
@@ -31,9 +24,9 @@ class PracticeAreas extends Component {
   render() {
     const { practiceAreas } = this.props;
     const buttonLinks = Object.keys(practiceAreas).map(id => {
-      const practiceArea = practiceAreas[id].area;
-      const endpoint = practiceArea.split(/[^A-Za-z]+/).join('-').toLowerCase();
-      const imgFilename = practiceArea.split(' ')[0].toLowerCase();
+      const practiceAreaName = practiceAreas[id].area;
+      const slug = practiceAreas[id].slug;
+      const imgFilename = slug.split('-')[0];
 
       return (
         <div
@@ -42,8 +35,8 @@ class PracticeAreas extends Component {
           <ButtonLink
             key={id}
             id={id}
-            text={practiceArea}
-            endpoint={`/practice-areas/${endpoint}`}
+            text={practiceAreaName}
+            endpoint={`/practice-areas/${slug}`}
             imgFilename={imgFilename}
             customClassNames="btn-practice-area"/>
         </div>
@@ -73,6 +66,11 @@ class PracticeAreas extends Component {
     );
   }
 }
+
+PracticeAreas.propTypes = {
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  practiceAreas: PropTypes.object.isRequired
+};
 
 export default connect(
   mapStateToProps, 

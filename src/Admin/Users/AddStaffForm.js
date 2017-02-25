@@ -58,7 +58,6 @@ class AddStaffForm extends Component {
   }
 
   _handleSubmit(data) {
-    console.log(data);
     const { onAddUser, onAddStaff, onHideModal, onJWTExpired, JWT } = this.props;
     const userEntityFields = [
       'email', 'username', 'password', 'lastName', 'firstName', 'middleName', 
@@ -96,11 +95,11 @@ class AddStaffForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
@@ -109,11 +108,11 @@ class AddStaffForm extends Component {
     const { loadFormData } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
-    const addressComponents = {}
+    const addressComponents = {};
     address_components.forEach((component) => {
       const addressType = component.types[0];
       const value = component.long_name;
-      addressComponents[addressType] = value
+      addressComponents[addressType] = value;
     });
     const initData = {
       unitNumber: _.get(addressComponents, 'subpremise', ''),
@@ -168,7 +167,7 @@ class AddStaffForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -192,12 +191,17 @@ class AddStaffForm extends Component {
 }
 
 AddStaffForm.propTypes = {
-  onAdd: PropTypes.func.isRequired,
+  onAddUser: PropTypes.func.isRequired,
+  onAddStaff: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  JWT: PropTypes.string.isRequired,
+  loadFormData: PropTypes.func.isRequired,
+  passwordValue: PropTypes.string.isRequired,
 };
 
 export default connect(
@@ -210,4 +214,4 @@ export default connect(
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(AddStaffForm))
+})(AddStaffForm));

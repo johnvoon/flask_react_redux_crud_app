@@ -12,6 +12,8 @@ const mapStateToProps = (state) => {
 
 class EditUser extends Component {
   render() {
+    const { JWT } = this.props;
+    
     return (
       <div>
         {!JWT && <GetJWTForm/>}

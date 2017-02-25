@@ -12,6 +12,7 @@ import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
 import { selectAddPublicUserForm } from 'Admin/selectors';
 import _ from 'lodash';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -78,11 +79,11 @@ class AddPublicUserForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
@@ -91,11 +92,11 @@ class AddPublicUserForm extends Component {
     const { loadFormData } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
-    const addressComponents = {}
+    const addressComponents = {};
     address_components.forEach((component) => {
       const addressType = component.types[0];
       const value = component.long_name;
-      addressComponents[addressType] = value
+      addressComponents[addressType] = value;
     });
     const initData = {
       unitNumber: _.get(addressComponents, 'subpremise', ''),
@@ -149,7 +150,7 @@ class AddPublicUserForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button"
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -173,12 +174,16 @@ class AddPublicUserForm extends Component {
 }
 
 AddPublicUserForm.propTypes = {
-  onAdd: PropTypes.func.isRequired,
+  onAddUser: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  JWT: PropTypes.string.isRequired,
+  loadFormData: PropTypes.func.isRequired,
+  passwordValue: PropTypes.string.isRequired
 };
 
 export default connect(
@@ -191,4 +196,4 @@ export default connect(
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(AddPublicUserForm))
+})(AddPublicUserForm));

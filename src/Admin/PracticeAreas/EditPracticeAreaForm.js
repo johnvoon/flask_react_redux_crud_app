@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from  'redux-form';
-import _ from 'lodash';
-import { hideModal, loadFormData as load } from 'Admin/actions';
-import { required, createOptionsList } from 'utils';
+import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { editPracticeArea } from 'Entities/PracticeAreasActions';
 import PracticeAreaParticularsForm from './PracticeAreaParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
-import ButtonBlock from 'components/ButtonBlock';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -66,17 +64,17 @@ class EditPracticeAreaForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { addButtonOnly, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     
     return (
@@ -87,7 +85,7 @@ class EditPracticeAreaForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -117,16 +115,15 @@ EditPracticeAreaForm.propTypes = {
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired, 
+  onJWTExpired: PropTypes.func.isRequired
 };
 
-EditPracticeAreaForm = reduxForm({
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps  
+)(reduxForm({
   form:  'EditPracticeAreaForm',
   destroyOnUnmount: false,
-})(EditPracticeAreaForm);
-
-EditPracticeAreaForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditPracticeAreaForm)
-
-export default EditPracticeAreaForm;
+})(EditPracticeAreaForm));

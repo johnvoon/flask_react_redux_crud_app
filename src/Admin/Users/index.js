@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import _ from 'lodash';
 import GetJWTForm from 'Admin/GetJWTForm';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
@@ -16,7 +15,8 @@ import TableDate from 'components/TableDate';
 import TableUserInfoLink from 'components/TableUserInfoLink';
 import TableText from 'components/TableText';
 import TableEditLink from 'components/TableEditLink';
-import { fetchUsers } from 'Entities/UsersActions'
+import ButtonBlock from 'components/ButtonBlock';
+import { fetchUsers } from 'Entities/UsersActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions';
 import { fetchClients } from 'Entities/ClientsActions';
@@ -25,7 +25,10 @@ import { filterAdminData,
          sortData, 
          changePageLength, 
          changePageNumber,
-         changeSelectedRecord } from 'Admin/actions';
+         showModal,
+         hideModal,
+         changeSelectedRecord,
+         changeAdminOperation } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
@@ -73,6 +76,10 @@ const mapDispatchToProps = (dispatch) => {
     onShowModal: () => {
       dispatch(showModal());
     },
+
+    onHideModal: () => {
+      dispatch(hideModal());
+    },
     
     onPageLengthChange: ({target: {value}}) => {
       dispatch(changePageLength(value));
@@ -82,8 +89,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(changePageNumber(value));
     },
 
-    onSelectedRecordChange: (record) => {
+    onChangeSelectedRecord: (record) => {
       dispatch(changeSelectedRecord(record));
+    },
+
+    onChangeAdminOperation: (value) => {
+      dispatch(changeAdminOperation(value));
     }
   };
 };
@@ -91,10 +102,6 @@ const mapDispatchToProps = (dispatch) => {
 class AdminUsers extends Component {
   constructor(props) {
     super(props);
-    this.hideGetJWTModal = this.hideGetJWTModal.bind(this);
-    this.hideUserInfoModal = this.hideUserInfoModal.bind(this);
-    this.hideAddModal =  this.hideAddModal.bind(this);
-    this.hideEditModal = this.hideEditModal.bind(this);
     this.handleClickAddButton = this.handleClickAddButton.bind(this);
   }
 
@@ -105,6 +112,9 @@ class AdminUsers extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { onFetchUsers, onFetchPracticeAreas,
+      onFetchMatters, onFetchStaff,
+      onFetchClients, onHideModal } = this.props;
     const { JWT } = nextProps;
     const config = {
       headers: {
@@ -113,25 +123,25 @@ class AdminUsers extends Component {
     };
 
     if (!this.props.JWT && JWT) {
-      this.props.onFetchUsers(config);
-      this.props.onFetchPracticeAreas();
-      this.props.onFetchMatters(config);
-      this.props.onFetchStaff(config);
-      this.props.onFetchClients(config);
-      this.hideGetJWTModal();
+      onFetchUsers(config);
+      onFetchPracticeAreas();
+      onFetchMatters(config);
+      onFetchStaff(config);
+      onFetchClients(config);
+      onHideModal();
     }
   }
 
   renderTableEditLink(val, row) {
     const { 
-      onSelectedRecordChange,
+      onChangeSelectedRecord,
       onChangeAdminOperation, 
       onShowModal } = this.props;
 
     return (
       <TableEditLink 
         handleClick={() => {
-          onSelectedRecordChange(row);
+          onChangeSelectedRecord(row);
           onChangeAdminOperation("edit");
           onShowModal();
         }}/>
@@ -149,7 +159,7 @@ class AdminUsers extends Component {
 
   renderUserInfoLink(val, row) {
     const { 
-      onSelectedRecordChange,
+      onChangeSelectedRecord,
       onChangeAdminOperation, 
       onShowModal } = this.props;
     
@@ -158,7 +168,7 @@ class AdminUsers extends Component {
         username={val}
         handleClick={(event) => {
           event.preventDefault();
-          onSelectedRecordChange(row);
+          onChangeSelectedRecord(row);
           onChangeAdminOperation("read");
           onShowModal();
         }}/>
@@ -166,20 +176,15 @@ class AdminUsers extends Component {
   }
 
   render() {
-    const { onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { data, filterValues, totalPages, sortBy, 
-            currentPage, pageLength, pageData, 
-            successMessage, adminOperation, 
-            selectedRecord, modalShowing } = this.props;
-    const config = {
-      headers: {
-        'Authorization': `JWT ${JWT}`
-      }
-    };
+    const { onFilter, onSort, onPageLengthChange, 
+      onPageNumberChange, data, filterValues, 
+      totalPages, sortBy, currentPage, pageLength, 
+      pageData, successMessage, adminOperation, 
+      selectedRecord, modalShowing } = this.props;
     const modalTitle = (adminOperation === "authenticate" && "Load Users") ||
                        (adminOperation === "read" && `Edit User (ID: ${selectedRecord.id}`) ||
                        (adminOperation === "add" && "Add a New User") ||
-                       (adminOperation === "edit" && `Edit User (ID: ${selectedRecord.id}`)
+                       (adminOperation === "edit" && `Edit User (ID: ${selectedRecord.id}`);
     
     return (
       <main className="container-fluid">
@@ -193,8 +198,8 @@ class AdminUsers extends Component {
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">
               <ButtonBlock
-                className="btn btn-primary btn-block text-uppercase"
-                onClick={this.handleClickAddButton}>
+                customClassNames="btn-primary"
+                handleClick={this.handleClickAddButton}>
                 Add a New User
               </ButtonBlock>
             </div> 
@@ -252,11 +257,20 @@ class AdminUsers extends Component {
 }
 
 AdminUsers.propTypes = {
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchMatters: PropTypes.func.isRequired,
+  onFetchStaff: PropTypes.func.isRequired,
+  onFetchClients: PropTypes.func.isRequired, 
   onFetchUsers: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
+  onShowModal: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
+  onChangeSelectedRecord: PropTypes.func.isRequired,
+  onChangeAdminOperation: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
   users: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
@@ -264,8 +278,12 @@ AdminUsers.propTypes = {
   currentPage: PropTypes.number.isRequired,
   pageLength: PropTypes.number.isRequired,
   pageData: PropTypes.array.isRequired,
+  adminOperation: PropTypes.string.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  modalShowing: PropTypes.bool.isRequired,
   JWT: PropTypes.string.isRequired,
-  successMessage: PropTypes.string.isRequired
+  successMessage: PropTypes.string.isRequired,
+
 };
 
 export default connect(

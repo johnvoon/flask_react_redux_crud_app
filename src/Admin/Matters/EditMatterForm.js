@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from  'redux-form';
-import _ from 'lodash';
-import { hideModal, loadFormData as load } from 'Admin/actions';
-import { required, createOptionsList } from 'utils';
+import { reduxForm } from  'redux-form';
+import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { addMatter } from 'Entities/MattersActions';
 import MatterParticularsForm from './MatterParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
-import ButtonBlock from 'components/ButtonBlock';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -70,53 +68,46 @@ class EditMatterForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { addButtonOnly, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, handleSubmit, 
+      pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     
     return (
       <form>
         <MatterParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        {addButtonOnly ? (
-          <ButtonBlock 
-            customClassNames="btn-primary"
-            type="button"
-            handleClick={props.handleClick}>
+        <div className="btn-toolbar">
+          <Button
+            customClassNames="btn-danger pull-right" 
+            type="button" 
+            handleClick={onHideModal}>
+            Close
+          </Button>
+          <Button 
+            customClassNames="btn-danger pull-right" 
+            type="button" 
+            disabled={pristine || submitting} 
+            handleClick={reset}>
+            Reset
+          </Button>
+          <Button 
+            customClassNames="btn-primary pull-right" 
+            type="submit"
+            disabled={submitting}
+            handleClick={handleSubmit(data => this._handleSubmit(data))}>
             Save
-          </ButtonBlock>
-        ) : (
-          <div className="btn-toolbar">
-            <Button
-              customClassNames="btn-danger pull-right" 
-              type="button" 
-              handleClick={onHideModal()}>
-              Close
-            </Button>
-            <Button 
-              customClassNames="btn-danger pull-right" 
-              type="button" 
-              disabled={pristine || submitting} 
-              handleClick={reset}>
-              Reset
-            </Button>
-            <Button 
-              customClassNames="btn-primary pull-right" 
-              type="submit"
-              disabled={submitting}
-              handleClick={handleSubmit(data => this._handleSubmit(data))}>
-              Save
-            </Button>      
-          </div>)}
+          </Button>      
+        </div>
       </form>
     );
   }
@@ -129,6 +120,10 @@ EditMatterForm.propTypes = {
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  changeMatterFieldValue: PropTypes.func.isRequired
 };
 
 export default connect(

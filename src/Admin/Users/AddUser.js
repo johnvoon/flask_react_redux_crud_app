@@ -5,7 +5,6 @@ import RoleSelectForm from './RoleSelectForm';
 import AddStaffForm from './AddStaffForm';
 import AddClientForm from './AddClientForm';
 import AddPublicUserForm from './AddPublicUserForm';
-import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
@@ -20,7 +19,7 @@ class AddUser extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       role: ''
-    }
+    };
   }
 
   handleClick(event) {
@@ -31,6 +30,7 @@ class AddUser extends Component {
 
   render() {
     const { role } = this.state;
+    const { JWT } = this.props;
 
     return (
       <div>

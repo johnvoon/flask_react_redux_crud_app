@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { removeJWT } from 'Authentication/actions'
+import { removeJWT } from 'Authentication/actions';
 import { deletePost } from 'Entities/PostsActions';
 import { hideModal } from 'Admin/actions';
 import Button from 'components/Button';
@@ -41,7 +41,8 @@ class DeletePostForm extends Component {
   }
 
   _handleSubmit() {
-    const { selectedRecord, JWT } = this.props;
+    const { onHideModal, onDeletePost, selectedRecord, 
+      onJWTExpired, JWT } = this.props;
 
     const config = {
       headers: {
@@ -58,17 +59,17 @@ class DeletePostForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { onDeletePost, onHideModal, onJWTExpired } = this.props;
+    const { onHideModal } = this.props;
     const { handleSubmit, submitting } = this.props;
     const { errorMessage } = this.state;
 
@@ -79,6 +80,12 @@ class DeletePostForm extends Component {
         <form>
           {errorMessage && <ErrorAlert message={errorMessage}/>}
           <div className="btn-toolbar">
+            <Button
+              customClassNames="btn-danger pull-right" 
+              type="button" 
+              handleClick={onHideModal}>
+              Close
+            </Button>
             <Button
               customClassNames="btn-primary pull-right" 
               type="submit"
@@ -98,6 +105,9 @@ DeletePostForm.propTypes = {
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.func.isRequired,
+  JWT: PropTypes.string.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
 };
 
 export default connect(

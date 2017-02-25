@@ -14,9 +14,7 @@ import SuccessAlert from 'components/SuccessAlert';
 import TableDate from 'components/TableDate';
 import TablePostLink from 'components/TablePostLink';
 import TableText from 'components/TableText';
-import TableCommentsLink from 'components/TableCommentsLink';
 import TableEditLink from 'components/TableEditLink';
-import TableDeleteLink from 'components/TableDeleteLink';
 import { fetchMatters } from 'Entities/MattersActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions'; 
@@ -80,20 +78,22 @@ class AdminMatters extends Component {
     this.props.onFetchStaff();
   }
 
-  renderTableEditLink(val, row) {
+  renderTableEditLink(val, row) { //eslint-disable-line no-unused-vars
+    const { onChangeSelectedRecord, onShowModal, 
+      onChangeAdminOperation, } = this.props;
+
     return (
       <TableEditLink 
         handleClick={() => {
-          changeSelectedRecord(row);
-          changeAdminOperation("edit");
-          showModal();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("edit");
+          onShowModal();
         }}/>
     );
   }
 
   handleClickAddButton() {
-    const { 
-      onShowModal,
+    const { onShowModal,
       onChangeAdminOperation } = this.props;
 
     onShowModal();
@@ -101,18 +101,14 @@ class AdminMatters extends Component {
   }
 
   render() {
-    const { onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { data, filterValues, totalPages, 
+    const { onFilter, onSort, onPageLengthChange, 
+      onPageNumberChange, data, filterValues, totalPages, 
       sortBy, currentPage, pageLength, selectedRecord,
-      pageData, JWT, successMessage } = this.props;
-    const config = {
-      headers: {
-        'Authorization': `JWT ${JWT}`
-      }
-    };
-    const modalTitle = (adminOperation === "view" && `Matter Info (ID: ${selectedRecord.id}`)
+      pageData, adminOperation, modalShowing,
+      successMessage } = this.props;
+    const modalTitle = (adminOperation === "view" && `Matter Info (ID: ${selectedRecord.id}`) ||
                        (adminOperation === "add" && "Add a New Matter") ||
-                       (adminOperation === "edit" && `Edit Matter (ID: ${selectedRecord.id}`)
+                       (adminOperation === "edit" && `Edit Matter (ID: ${selectedRecord.id}`);
 
     return (
       <main className="container-fluid">
@@ -182,18 +178,27 @@ class AdminMatters extends Component {
 }
 
 AdminMatters.propTypes = {
+  onFetchMatters: PropTypes.func.isRequired,
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchStaff: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
+  onShowModal: PropTypes.func.isRequired,
+  onChangeSelectedRecord: PropTypes.func.isRequired,
+  onChangeAdminOperation: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
   totalPages: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   pageLength: PropTypes.number.isRequired,
   pageData: PropTypes.array.isRequired,
-  JWT: PropTypes.string.isRequired,
-  successMessage: PropTypes.string.isRequired
+  successMessage: PropTypes.string.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  adminOperation: PropTypes.string.isRequired,
+  modalShowing: PropTypes.bool.isRequired
 };
 
 export default connect(

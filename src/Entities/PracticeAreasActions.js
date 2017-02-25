@@ -3,11 +3,12 @@ import { arrayOf, normalize } from 'normalizr';
 import { practiceAreaSchema } from 'constants/Schemas';
 import { recordAdded,
          recordEdited } from 'Admin/actions';
-import { PRACTICE_AREAS_LOADED } from 'constants/actionTypes';
+import { PRACTICE_AREAS_LOADED,
+         PRACTICE_AREA_LOADED } from 'constants/actionTypes';
 
 export function fetchPracticeAreas() {
   return dispatch => {
-    return axios.get('http://localhost:8000/api/practice_areas')
+    return axios.get('http://localhost:8000/api/practice-areas')
     .then(({data: {practiceAreas}}) => {
       const normalized = normalize(
         practiceAreas, 
@@ -23,7 +24,7 @@ export function fetchPracticeArea(slug) {
     return axios.get(`http://localhost:8000/api/practice-areas/${slug}`)
     .then(({data: {practiceArea}}) => {
       const normalized = normalize(practiceArea, practiceAreaSchema);
-      return dispatch(postLoaded(normalized.entities, normalized.entities.practiceAreas, practiceArea.id));
+      return dispatch(practiceAreaLoaded(normalized.entities, normalized.entities.practiceAreas, practiceArea.id));
     });
   };
 }
@@ -31,22 +32,22 @@ export function fetchPracticeArea(slug) {
 export function addPracticeArea(config, content) {
   return (dispatch) => {
     return axios.post(
-      'http://localhost:8000/api/practice_areas', 
+      'http://localhost:8000/api/practice-areas', 
       content, 
       config
     )
     .then(({data: {practiceArea}}) => {
         const normalized = normalize(practiceArea, practiceAreaSchema);
-        dispatch(recordAdded(normalized.entities, normalized.entities.practiceArea, practiceArea.id))
+        dispatch(recordAdded(normalized.entities, normalized.entities.practiceArea, practiceArea.id));
       }
     );
-  }
+  };
 }
 
 export function editPracticeArea(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `http://localhost:8000/api/practice_areas/${id}`, 
+      `http://localhost:8000/api/practice-areas/${id}`, 
       content,
       config
     )
@@ -62,5 +63,14 @@ export function practiceAreasLoaded(entities, practiceAreas) {
     type: PRACTICE_AREAS_LOADED,
     entities,
     practiceAreas
+  };
+}
+
+export function practiceAreaLoaded(entities, practiceArea, practiceAreaId) {
+  return {
+    type: PRACTICE_AREA_LOADED,
+    entities,
+    practiceArea,
+    practiceAreaId
   };
 }

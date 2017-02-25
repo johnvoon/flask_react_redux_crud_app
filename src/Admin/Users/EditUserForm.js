@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, formValueSelector } from  'redux-form';
+import { reduxForm } from  'redux-form';
 import _ from 'lodash';
 import moment from 'moment';
 import EditUserParticularsForm from './EditUserParticularsForm';
@@ -8,8 +8,6 @@ import UserAddressForm from './UserAddressForm';
 import StaffDetailsForm from './StaffDetailsForm';
 import ClientDetailsForm from './ClientDetailsForm';
 import { removeJWT } from 'Authentication/actions';
-import { required, email, username, 
-  asyncValidateUserIdentity as asyncValidate } from '../../utils';
 import { editUser } from 'Entities/UsersActions';
 import { addStaff, editStaff } from 'Entities/StaffActions';
 import { addClient, editClient } from 'Entities/ClientsActions';
@@ -17,6 +15,7 @@ import { hideModal, loadFormData as load } from 'Admin/actions';
 import { selectEditUserForm } from 'Admin/selectors';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -70,7 +69,7 @@ class EditUserForm extends Component {
     this.state = {
       errorMessage: '',
       currentTab: 'Particulars',
-    }
+    };
   }
 
   componentDidMount() {
@@ -117,7 +116,7 @@ class EditUserForm extends Component {
     // });
     const description = (staffUser.description || []).map((paragraph) => {
       return paragraph;
-    }).join('\r\n\r\n')
+    }).join('\r\n\r\n');
 
     const initData = {
       "dateJoined": moment(staffUser.dateJoined).format('DD/MM/YYYY'),
@@ -131,10 +130,10 @@ class EditUserForm extends Component {
   }
 
   handleInitializeClientData() {
-    const { selectedRecord, clientUsers, matters, loadFormData } = this.props;
+    const { selectedRecord, clientUsers, loadFormData } = this.props;
     const clientUser = clientUsers[selectedRecord.id];
     const mattersList = clientUser.mattersHandled.map(id => {
-      return String(id)
+      return String(id);
     });
 
     const initData = {
@@ -148,11 +147,11 @@ class EditUserForm extends Component {
     const { loadFormData } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
-    const addressComponents = {}
+    const addressComponents = {};
     address_components.forEach((component) => {
       const addressType = component.types[0];
       const value = component.long_name;
-      addressComponents[addressType] = value
+      addressComponents[addressType] = value;
     });
     const initData = {
       unitNumber: _.get(addressComponents, 'subpremise', ''),
@@ -166,10 +165,10 @@ class EditUserForm extends Component {
     loadFormData(initData);
   }
 
-  _handleSubmit(data, role) {
+  _handleSubmit(data) {
     const { selectedRecord, onAddStaff, onAddClient, 
       onEditUser, onEditStaff, onEditClient, 
-      onHideModal, onJWTExpired, roleValue } = this.props;
+      onHideModal, onJWTExpired, roleValue, JWT } = this.props;
     const userEntityFields = [
       'active', 'lastName', 'firstName', 'middleName', 'phoneNumber', 
       'unitNumber', 'streetAddress', 'suburb', 'postcode',
@@ -185,18 +184,18 @@ class EditUserForm extends Component {
       }
     };
     let userFormData = new FormData();
+    let staffFormData = new FormData();
+    let clientFormData = new FormData();
 
     Object.keys(data).forEach((key) => {
       userEntityFields.includes(key) &&
       userFormData.append(key, data[key]);
       if ((selectedRecord.role === 'staff' || roleValue === 'staff') 
         && staffEntityFields.includes(key)) {
-        let staffFormData = new FormData();
         staffFormData.append(key, data[key]);
       }
       if ((selectedRecord.role === 'client' || roleValue === 'client') 
         && clientEntityFields.includes(key)) {
-        let clientFormData = new FormData();
         clientFormData.append(key, data[key]);
       }
     });
@@ -223,11 +222,11 @@ class EditUserForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
@@ -241,8 +240,8 @@ class EditUserForm extends Component {
 
   render() {
     this.handleClick = this.handleClick.bind(this);
-    const { selectedRecord } = this.props;
-    const { roleValue, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, selectedRecord, roleValue, 
+      handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage, currentTab } = this.state;
     const tabLabels = ["Particulars", "Address"];
     if (selectedRecord.role === 'staff' || roleValue === 'staff') {
@@ -283,13 +282,13 @@ class EditUserForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
             customClassNames="btn-danger pull-right" 
             type="button" 
-            disabled={ pristine || submitting} 
+            disabled={pristine || submitting} 
             handleClick={reset}>
             Reset
           </Button>
@@ -308,13 +307,23 @@ class EditUserForm extends Component {
 
 EditUserForm.propTypes = {
   initialize: PropTypes.object.isRequired,
-  onEdit: PropTypes.object.isRequired,
+  onEditUser: PropTypes.func.isRequired,
+  onEditStaff: PropTypes.func.isRequired,
+  onEditClient: PropTypes.func.isRequired,
   onHideModal: PropTypes.object.isRequired,
   handleSubmit: PropTypes.object.isRequired,
   pristine: PropTypes.object.isRequired,
   reset: PropTypes.object.isRequired,
   submitting: PropTypes.object.isRequired,
-  selectedRecord: PropTypes.object.isRequired
+  selectedRecord: PropTypes.object.isRequired,
+  onAddStaff: PropTypes.func.isRequired,
+  onAddClient: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  roleValue: PropTypes.string.isRequired,
+  loadFormData: PropTypes.func.isRequired,
+  staffUsers: PropTypes.object.isRequired,
+  clientUsers: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired
 };
 
 export default connect(
@@ -324,4 +333,4 @@ export default connect(
   form: 'EditUserForm',
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(EditUserForm))
+})(EditUserForm));

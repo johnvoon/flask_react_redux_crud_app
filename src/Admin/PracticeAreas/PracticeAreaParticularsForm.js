@@ -1,21 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import { Field } from  'redux-form';
-import _ from 'lodash';
 import { required } from 'utils';
 import InputFormGroup from 'components/InputFormGroup';
 import FileUploadFormGroup from 'components/FileUploadFormGroup';
 import TextAreaFormGroup from 'components/TextAreaFormGroup';
 
-const mapStateToProps = (state) => {
-  const { entities } = state;
-  
-  return {
-    ...entities
-  };
-};
-
-class PracticeAreaParticularsForm extends Component {
+export default class PracticeAreaParticularsForm extends Component {
   render() {
     return (
       <div>
@@ -34,11 +24,6 @@ class PracticeAreaParticularsForm extends Component {
           label="Description"
           rows="4"/>
       </div>
-    )
+    );
   }
 }
-
-export default connect(
-  mapStateToProps,
-  null
-)(PracticeAreaParticularsForm);

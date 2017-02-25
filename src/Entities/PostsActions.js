@@ -60,7 +60,7 @@ export function addPost(config, content) {
     .then(({data: {post}}) => {
       const normalized = normalize(post, postSchema);
       dispatch(recordAdded(normalized.entities, normalized.entities.posts, post.id));
-    })
+    });
   };
 }
 

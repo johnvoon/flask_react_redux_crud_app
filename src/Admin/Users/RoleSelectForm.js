@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ButtonBlock from 'components/ButtonBlock';
 
 export default class RoleSelectForm extends Component {
@@ -35,6 +35,10 @@ export default class RoleSelectForm extends Component {
           </div>
         </div>
       </form>
-    )
+    );
   }
 }
+
+RoleSelectForm.propTypes = {
+  handleClick: PropTypes.func.isRequired 
+};

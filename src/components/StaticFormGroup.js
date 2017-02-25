@@ -12,12 +12,12 @@ const StaticFormGroup = (props) => {
         {text}
       </p>
     </div>
-  )
+  );
 };
 
 StaticFormGroup.propTypes = {
   label: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-}
+};
 
 export default StaticFormGroup;

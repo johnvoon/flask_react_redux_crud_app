@@ -14,6 +14,7 @@ import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
 import { addClient } from 'Entities/ClientsActions';
 import _ from 'lodash';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -95,11 +96,11 @@ class AddClientForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
@@ -108,11 +109,11 @@ class AddClientForm extends Component {
     const { loadFormData } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
-    const addressComponents = {}
+    const addressComponents = {};
     address_components.forEach((component) => {
       const addressType = component.types[0];
       const value = component.long_name;
-      addressComponents[addressType] = value
+      addressComponents[addressType] = value;
     });
     const initData = {
       unitNumber: _.get(addressComponents, 'subpremise', ''),
@@ -134,9 +135,9 @@ class AddClientForm extends Component {
   }
 
   changeMatterFieldValue(matterId) {
-    matterId = String(matterId)
+    matterId = String(matterId);
     const { mattersValue, change } = this.props;
-    change('matters', !mattersValue ? matterId : mattersValue.concat(`,${matterId}`))
+    change('matters', !mattersValue ? matterId : mattersValue.concat(`,${matterId}`));
   }
 
   render() {
@@ -174,7 +175,7 @@ class AddClientForm extends Component {
           <Button
             customClassNames="btn-danger pull-right" 
             type="button"
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
           <Button 
@@ -198,12 +199,19 @@ class AddClientForm extends Component {
 }
 
 AddClientForm.propTypes = {
-  onAdd: PropTypes.func.isRequired,
+  onAddUser: PropTypes.func.isRequired,
+  onAddClient: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  JWT: PropTypes.string.isRequired,
+  loadFormData: PropTypes.func.isRequired,
+  mattersValue: PropTypes.string.isRequired,
+  change: PropTypes.func.isRequired,
+  passwordValue: PropTypes.string.isRequired
 };
 
 export default connect(
@@ -216,4 +224,4 @@ export default connect(
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
-})(AddClientForm))
+})(AddClientForm));

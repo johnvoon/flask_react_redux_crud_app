@@ -14,7 +14,7 @@ export default class Post extends Component {
         );
       } else {
         return (
-          <div key={idx} dangerouslySetInnerHTML={{__html: paragraph}}/>
+          <div key={idx} dangerouslySetInnerHTML={{__html: paragraph}}/> //eslint-disable-line no-danger
         );
       }
     });

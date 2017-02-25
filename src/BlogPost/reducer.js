@@ -51,5 +51,5 @@ function commentAdded(state, { commentId }) {
   return {
     ...state,
     currentPostComments: [...state.currentPostComments, commentId]
-  }
+  };
 }

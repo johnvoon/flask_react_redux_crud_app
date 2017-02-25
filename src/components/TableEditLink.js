@@ -1,5 +1,5 @@
-import React from 'react';
-import Button from 'components/Button'
+import React, { PropTypes } from 'react';
+import Button from 'components/Button';
 
 const TableEditLink = (props) => {
   return (
@@ -13,3 +13,7 @@ const TableEditLink = (props) => {
 };
 
 export default TableEditLink;
+
+TableEditLink.propTypes = {
+  handleClick: PropTypes.func.isRequired
+};

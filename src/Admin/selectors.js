@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { formValueSelector } from 'redux-form';
-import _ from 'lodash';
 import { sort, sortByDate, filter } from 'utils';
 
 export const selectEditUserForm = formValueSelector('EditUserForm');
@@ -12,44 +11,39 @@ export const selectAddStaffForm = formValueSelector('AddStaffForm');
 export const selectAddClientForm = formValueSelector('AddClientForm');
 
 const selectAdminPages = (state) =>
-  state.adminPages
-
-const selectRecordIds = createSelector(
-  selectAdminPages,
-  (adminPages) => adminPages.recordIds
-)
+  state.adminPages;
 
 export const selectData = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.data
-)
+);
 
 const selectPageLength = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.pageLength
-) 
+);
 
 const selectCurrentPage = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.currentPage
-)
+);
       
 const selectSortBy = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.sortBy
-)
+);
 
 const selectFilterValues = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.filterValues
-)
+);
 
 const selectFilteredData = createSelector(
   [selectData, selectFilterValues],
   (data, filterValues) => {
     return filter(filterValues, data);
   }
-)
+);
 
 const selectSortedData = createSelector(
   [selectData, selectFilteredData, selectSortBy],
@@ -60,11 +54,11 @@ const selectSortedData = createSelector(
       return sort(data, filteredData, prop, order);  
     }
   }
-)
+);
 
 export const selectPageData = createSelector(
   [selectSortedData, selectPageLength, selectCurrentPage, selectSortBy],
-  (sortedData, pageLength, currentPage, sortBy) => {
+  (sortedData, pageLength, currentPage, sortBy) => { //eslint-disable-line no-unused-vars
   // sortBy must be included to tell reselect to recompute
     if (pageLength === 0) return sortedData;
     
@@ -77,6 +71,6 @@ export const selectTotalPages = createSelector(
   [selectSortedData, selectPageLength],
   (sortedData, pageLength) => {
     return pageLength === 0 ? 0 : 
-      Math.ceil(sortedData.length / pageLength)
+      Math.ceil(sortedData.length / pageLength);
   }
-)
+);

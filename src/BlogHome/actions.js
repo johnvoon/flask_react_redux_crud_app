@@ -18,7 +18,7 @@ export function sortPosts(posts, sortBy) {
     type: SORT_POSTS,
     posts,
     sortBy
-  }
+  };
 }
 
 export function filterPostsByKeyword(value, posts) {

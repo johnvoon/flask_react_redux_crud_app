@@ -7,7 +7,7 @@ const user = new Schema('users');
 const staff = new Schema('staff');
 const staffUser = new Schema('staffUsers', { idAttribute: 'userId'});
 const client = new Schema('clients');
-const clientUser = newSchema('clientUsers', { idAttribute: 'userId'});
+const clientUser = new Schema('clientUsers', { idAttribute: 'userId'});
 const matter = new Schema('matters');
 const currentUser = new Schema('currentUser');
 

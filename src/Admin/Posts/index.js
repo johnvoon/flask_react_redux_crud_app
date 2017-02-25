@@ -7,7 +7,10 @@ import DeletePost from './DeletePost';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
-         changePageNumber } from 'Admin/actions';
+         changePageNumber,
+         showModal,
+         changeSelectedRecord,
+         changeAdminOperation } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';
@@ -25,7 +28,6 @@ import ButtonBlock from 'components/ButtonBlock';
 import { fetchPosts } from 'Entities/PostsActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions'; 
-
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -67,6 +69,18 @@ const mapDispatchToProps = (dispatch) => {
 
     onPageNumberChange: (value) => {
       dispatch(changePageNumber(value));
+    },
+
+    onShowModal: () => {
+      dispatch(showModal());
+    },
+
+    onChangeSelectedRecord: (record) => {
+      dispatch(changeSelectedRecord(record));
+    },
+
+    onChangeAdminOperation: (value) => {
+      dispatch(changeAdminOperation(value));
     }
   };
 };
@@ -82,50 +96,60 @@ class AdminPosts extends Component {
     this.props.onFetchStaff();
   }
 
-  renderTableCommentsLink(val, row) {
+  renderTableCommentsLink(val, row) { // eslint-disable-line no-unused-vars
     return (
       <TableCommentsLink
         data={row}/>
     );
   }
 
-  renderTableEditLink(val, row) {
+  renderTableEditLink(val, row) { // eslint-disable-line no-unused-vars
+    const { onChangeSelectedRecord, 
+      onChangeAdminOperation, onShowModal } = this.props;
+
     return (
       <TableEditLink 
         handleClick={() => {
-          changeSelectedRecord(row);
-          changeAdminOperation("edit");
-          showModal();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("edit");
+          onShowModal();
         }}/>
     );
   }
 
-  renderTableDeleteLink(val, row) {
+  renderTableDeleteLink(val, row) { // eslint-disable-line no-unused-vars
+    const { onChangeSelectedRecord, 
+      onChangeAdminOperation, onShowModal } = this.props;
+
     return (
       <TableDeleteLink 
         handleClick={() => {
-          changeSelectedRecord(row);
-          changeAdminOperation("delete");
-          showModal();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("delete");
+          onShowModal();
         }}/>
     );
   }
 
   handleClickAddButton() {
-    changeAdminOperation("add");
-    showModal();
+    const { onChangeAdminOperation, 
+      onShowModal } = this.props;
+
+    onChangeAdminOperation("add");
+    onShowModal();
   }
 
   render() {
-    const { onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { data, filterValues, totalPages, sortBy, 
-      currentPage, pageLength, pageData, 
-      JWT, JWTExpired, successMessage, selectedRecord,
+    this.handleClickAddButton = this.handleClickAddButton.bind(this);
+    const { onFilter, onSort, onPageLengthChange, 
+      onPageNumberChange, data, filterValues, 
+      totalPages, sortBy, currentPage, pageLength, 
+      pageData, successMessage, selectedRecord,
       adminOperation, modalShowing } = this.props;
     const modalTitle = (adminOperation === "add" && "Add a New Post") ||
                        (adminOperation === "edit" && `Edit Post (ID: ${selectedRecord.id}`) ||
-                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id}`)
-
+                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id}`) ||
+                       '';
     return (
       <main className="container-fluid">
         <Helmet
@@ -200,23 +224,27 @@ class AdminPosts extends Component {
 }
 
 AdminPosts.propTypes = {
-  onFetchBlogData: PropTypes.func.isRequired,
-  onGetJWT: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onFetchPosts: PropTypes.func.isRequired,
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchStaff: PropTypes.func.isRequired,
+  onChangeSelectedRecord: PropTypes.func.isRequired,
+  onChangeAdminOperation: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
+  onShowModal: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
   totalPages: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   pageLength: PropTypes.number.isRequired,
   pageData: PropTypes.array.isRequired,
-  JWT: PropTypes.string.isRequired,
-  successMessage: PropTypes.string.isRequired
+  successMessage: PropTypes.string.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  adminOperation: PropTypes.string.isRequired,
+  modalShowing: PropTypes.bool.isRequired,
 };
 
 export default connect(

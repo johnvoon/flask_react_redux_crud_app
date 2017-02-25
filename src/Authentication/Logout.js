@@ -15,25 +15,23 @@ const mapDispatchToProps = (dispatch) => ({
 
 class Logout extends Component {
   componentDidMount() {
-    this.props.onLogoutUser()
-    .then(() => this.props.onFetchCurrentUser())
-    .then(() => this.props.router.push('/'))
+    const { onLogoutUser, onFetchCurrentUser, 
+      router } = this.props;
+
+    onLogoutUser()
+    .then(() => onFetchCurrentUser())
+    .then(() => router.push('/'));
   }
 
   render() {
-    return null;
+    return <div/>;
   }
 }
 
 Logout.propTypes = {
-  onAdd: PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-  staff: PropTypes.object.isRequired,
-  practiceAreas: PropTypes.object.isRequired
+  onLogoutUser: PropTypes.func.isRequired,
+  onFetchCurrentUser: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired
 };
 
 export default withRouter(

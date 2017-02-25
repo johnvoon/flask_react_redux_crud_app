@@ -61,9 +61,9 @@ function sortPosts(state, { posts, sortBy }) {
   const { data } = state;
   let sortedPosts;
   if (sortBy === "created") {
-    sortedPosts = sortByDate(data, posts, "descending")
+    sortedPosts = sortByDate(data, posts, "descending");
   } else {
-    sortedPosts = sort(data, posts, sortBy, "ascending")  
+    sortedPosts = sort(data, posts, sortBy, "ascending"); 
   }
 
   return {
@@ -71,7 +71,7 @@ function sortPosts(state, { posts, sortBy }) {
     sortBy,
     allAvailablePosts: sortedPosts,
     visiblePosts: sortedPosts.slice(0, 5),
-  }
+  };
 }
 
 function filterPostsByKeyword(state, {value, posts}) {
@@ -89,7 +89,7 @@ function filterPostsByKeyword(state, {value, posts}) {
   };
 }
 
-function showAllPosts(state, action) {
+function showAllPosts(state, action) { // eslint-disable-line no-unused-vars
   const allPosts = state.allPosts;
 
   return {
@@ -155,7 +155,7 @@ function loadMore(state) {
       cursorStart: newCursorStart,
       cursorEnd: newCursorEnd,
       hasMore: true
-    }
+    };
   }
 
   return {

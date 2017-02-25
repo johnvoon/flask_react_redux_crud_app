@@ -19,3 +19,11 @@ function practiceAreaLoaded(state, { entities, practiceAreaId }) {
     currentPracticeArea: entities.practiceAreas[practiceAreaId]
   };
 }
+
+// function changePracticeArea(state, action) {
+//   const { practiceAreaId } = action;
+//   return {
+//     ...state,
+//     practiceAreaId
+//   };
+// }

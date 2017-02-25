@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { removeJWT } from 'Authentication/actions'
+import { removeJWT } from 'Authentication/actions';
 import { deleteComment } from 'Entities/CommentsActions';
 import { hideModal } from 'Admin/actions';
 import Button from 'components/Button';
@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-class DeletePostForm extends Component {
+class DeleteCommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,17 +59,17 @@ class DeletePostForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
     });
   }
 
   render() {
-    const { onDeleteComment, onHideModal, onJWTExpired } = this.props;
+    const { onHideModal } = this.props;
     const { handleSubmit, submitting } = this.props;
     const { errorMessage } = this.state;
 
@@ -100,16 +100,19 @@ class DeletePostForm extends Component {
   }
 }
 
-DeletePostForm.propTypes = {
+DeleteCommentForm.propTypes = {
   onDeleteComment: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  JWT: PropTypes.string.isRequired
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(reduxForm({
-  form: 'DeletePostForm'
-})(DeletePostForm));
+  form: 'DeleteCommentForm'
+})(DeleteCommentForm));

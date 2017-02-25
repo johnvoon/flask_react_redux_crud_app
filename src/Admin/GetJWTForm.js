@@ -4,6 +4,9 @@ import { reduxForm, Field } from  'redux-form';
 import InputFormGroup from 'components/InputFormGroup';
 import ErrorAlert from 'components/ErrorAlert';
 import { required } from 'utils';
+import { getJWT } from 'Authentication/actions';
+import { hideModal } from './actions';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
@@ -18,6 +21,10 @@ const mapDispatchToProps = (dispatch) => {
     onGetJWT: (data) => {
       return dispatch(getJWT(data));
     },
+
+    onHideModal: () => {
+      dispatch(hideModal());
+    }
   };
 };
 
@@ -29,8 +36,22 @@ class GetJWTForm extends Component {
     };
   }
 
+  handleSubmit(data) {
+    const { onGetJWT } = this.props;
+
+    onGetJWT(data)
+    .catch(({message, response}) => {
+      const { status, data } = response;
+      if (status === 401) {
+        this.setState({errorMessage: data.description});
+      } else {
+        this.setState({errorMessage: message});
+      }
+    });
+  }
+
   render() {
-    const { onHide, onGetJWT, JWTExpired, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, JWTExpired, handleSubmit, pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     JWTExpired && this.setState(
       {errorMessage: "Sorry your authentication token has expired. Please re-enter your username and password"}
@@ -57,30 +78,26 @@ class GetJWTForm extends Component {
         </div>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
-          <button 
-            className="btn btn-danger pull-right" 
+          <Button
+            customClassNames="btn-danger pull-right" 
+            type="button" 
+            handleClick={onHideModal}>
+            Close
+          </Button>
+          <Button 
+            customClassNames="btn-danger pull-right" 
             type="button" 
             disabled={pristine || submitting} 
-            onClick={reset}>
+            handleClick={reset}>
             Reset
-          </button>
-          <button
-            className="btn btn-primary pull-right" 
+          </Button>
+          <Button
+            customClassNames="btn-primary pull-right" 
             type="submit" 
             disabled={submitting}
-            onClick={handleSubmit(data => {
-              onGetJWT(data)
-              .catch(({message, response}) => {
-                const { status, data } = response;
-                if (status === 401) {
-                  this.setState({errorMessage: data.description})  
-                } else {
-                  this.setState({errorMessage: message})
-                }
-              });
-            })}>
+            handleClick={handleSubmit(data => this.handleSubmit(data))}>
             Save
-          </button>
+          </Button>
         </div>
       </form>
     );
@@ -89,10 +106,12 @@ class GetJWTForm extends Component {
 
 GetJWTForm.propTypes = {
   onGetJWT: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  JWTExpired: PropTypes.bool.isRequired
 };
 
 export default connect(

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
 
 export default class DropdownMenu extends Component {
@@ -12,7 +12,7 @@ export default class DropdownMenu extends Component {
           type="button"
           onClick={handleClick}>
           <span className="pull-left">{heading}</span>
-          <span className="angle-down pull-right"></span>
+          <span className="angle-down pull-right"/>
         </button>
         <VelocityTransitionGroup
           enter={{animation: "slideDown"}}
@@ -28,3 +28,11 @@ export default class DropdownMenu extends Component {
     );
   }
 }
+
+DropdownMenu.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+  heading: PropTypes.string.isRequired,
+  showMenu: PropTypes.bool.isRequired,
+  showAllLink: PropTypes.node.isRequired,
+  links: PropTypes.node.isRequired
+};

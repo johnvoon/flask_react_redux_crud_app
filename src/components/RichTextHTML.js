@@ -1,4 +1,4 @@
-import React, { Component, PropType } from 'react';
+import React, { Component, PropTypes } from 'react';
 import RichTextEditor, { createEmptyValue } from 'react-rte';
 
 export default class RichTextHTML extends Component {
@@ -54,6 +54,11 @@ export default class RichTextHTML extends Component {
         value={this.state.editorValue}
         onChange={this.handleChange}
         placeholder="Type new post content here"/>
-    )
+    );
   }
 }
+
+RichTextHTML.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.object.isRequired
+};

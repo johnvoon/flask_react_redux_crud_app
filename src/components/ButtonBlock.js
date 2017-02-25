@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class ButtonBlock extends Component {
   constructor(props) {
@@ -21,3 +21,11 @@ export default class ButtonBlock extends Component {
     );
   }
 }
+
+ButtonBlock.propTypes = {
+  children: PropTypes.node.isRequired,
+  customClassNames: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
+};

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 class NavLink extends Component {
   render() {
-    const { router, linkText, endpoint, index, onlyActiveOnIndex } = this.props;
+    const { router, linkText, endpoint, index } = this.props;
     const isActive = router.isActive(endpoint, true);
 
     return (
@@ -24,8 +24,8 @@ class NavLink extends Component {
 NavLink.propTypes = {
   linkText: PropTypes.string.isRequired,
   endpoint: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  isActive: PropTypes.bool.isRequired
+  router: PropTypes.object.isRequired,
+  index: PropTypes.bool.isRequired
 };
 
-export default withRouter(NavLink)
+export default withRouter(NavLink);

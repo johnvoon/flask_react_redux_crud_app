@@ -15,7 +15,9 @@ export default class Hero extends Component {
           backgroundSize: 'cover',
           backgroundAttachment: 'fixed'
         }}>
-        <button type="button" className={`btn btn-primary btn-${heroClass}`}>
+        <button 
+          type="button" 
+          className={`btn btn-primary btn-${heroClass}`}>
           {buttonText}
         </button>
       </div>

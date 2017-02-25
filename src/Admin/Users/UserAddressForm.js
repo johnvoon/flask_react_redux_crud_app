@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
 import GeosuggestFormGroup from 'components/GeosuggestFormGroup';
@@ -70,3 +70,8 @@ export default class UserAddressForm extends Component {
     );
   }
 }
+
+UserAddressForm.propTypes = {
+  isDisplayed: PropTypes.bool.isRequired,
+  fillInAddress: PropTypes.func.isRequired
+};

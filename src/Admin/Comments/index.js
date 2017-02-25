@@ -6,7 +6,10 @@ import DeleteComment from './DeleteComment';
 import { filterAdminData, 
          sortData, 
          changePageLength, 
-         changePageNumber } from 'Admin/actions';
+         changePageNumber,
+         changeAdminOperation,
+         showModal,
+         hideModal } from 'Admin/actions';
 import GetJWTForm from 'Admin/GetJWTForm';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 import Pagination from 'components/Pagination';
@@ -18,9 +21,10 @@ import SuccessAlert from 'components/SuccessAlert';
 import TableDate from 'components/TableDate';
 import TableText from 'components/TableText';
 import TableDeleteLink from 'components/TableDeleteLink';
-import { getJWT, removeJWT } from 'Authentication/actions'; 
-import { fetchComments, changeCommentVisibility, 
-  deleteComment } from 'Entities/CommentsActions';
+import ErrorAlert from 'components/ErrorAlert';
+import { removeJWT } from 'Authentication/actions'; 
+import { fetchComments, 
+  changeCommentVisibility } from 'Entities/CommentsActions';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -44,14 +48,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(changeCommentVisibility(id, formData));
     },
 
-    onGetJWT: (data) => {
-      return dispatch(getJWT(data));
-    },
-
     onJWTExpired: () => {
       dispatch(removeJWT());
     },
-
 
     onFilter: ({target: {value}}) => {
       dispatch(filterAdminData(value));
@@ -67,6 +66,18 @@ const mapDispatchToProps = (dispatch) => {
 
     onPageNumberChange: (value) => {
       dispatch(changePageNumber(value));
+    },
+
+    onShowModal: () => {
+      dispatch(showModal());
+    },
+
+    onHideModal: () => {
+      dispatch(hideModal());
+    },
+
+    onChangeAdminOperation: (value) => {
+      dispatch(changeAdminOperation(value));
     }
   };
 };
@@ -74,16 +85,22 @@ const mapDispatchToProps = (dispatch) => {
 class AdminComments extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      errorMessage: ''
+    };
   }
 
   componentDidMount() {
-    this.props.onFetchComments(this.props.params.id);
+    const { onFetchComments, params } = this.props;
+    
+    onFetchComments(params.id);
   }
 
   componentWillReceiveProps(nextProps) {
     const { JWT } = nextProps;
     const { onChangeCommentVisibility, onHideModal } = this.props;
-    const { visibilityChangePending, commentId, commentVisibility } = this.state;
+    const { visibilityChangePending, commentId, 
+      commentVisibility } = this.state;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -95,12 +112,15 @@ class AdminComments extends Component {
       onHideModal();
       this.setState({
         visibilityChangePending: false
-      })
+      });
     }
   }
 
   handleChange(id, {target: {value, name}}) {
-    const { JWT, onJWTExpired, JWTExpired, onChangeCommentVisibility } = this.props;
+    const { JWT, onJWTExpired, JWTExpired, 
+      onChangeCommentVisibility, 
+      onChangeAdminOperation,
+      onShowModal } = this.props;
 
     this.setState({
       visibilityChangePending: true,
@@ -110,8 +130,8 @@ class AdminComments extends Component {
     });
 
     if (!JWT || JWTExpired) {
-      changeAdminOperation("authenticate");
-      showModal();
+      onChangeAdminOperation("edit");
+      onShowModal();
     } else {
       const config = {
         headers: {
@@ -125,16 +145,16 @@ class AdminComments extends Component {
           const { status, data } = response;
           if (status === 401) {
             onJWTExpired();
-            adminOperation("authenticate");
-            showModal();
+            onChangeAdminOperation("edit");
+            onShowModal();
           } else if (status === 404) {
             this.setState({
               errorMessage: data.message
-            })
+            });
           } else {
             this.setState({
               errorMessage: message
-            })
+            });
           }
         });
       this.setState({
@@ -161,26 +181,27 @@ class AdminComments extends Component {
   }
 
   renderTableDeleteLink(val, row) {
+    const { onChangeSelectedRecord,
+      onChangeAdminOperation, onShowModal } = this.props;
     return (
       <TableDeleteLink 
         handleClick={() => {
-          changeSelectedRecord(row);
-          changeAdminOperation("delete");
-          showModal();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("delete");
+          onShowModal();
         }}/>
     );
   }
 
   render() {
-    const { onGetJWT, onJWTExpired, onFilter, 
-      onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { data, filterValues, totalPages, 
+    const { onFilter, onSort, onPageLengthChange, 
+      onPageNumberChange, data, filterValues, totalPages, 
       sortBy, currentPage, pageLength, 
-      pageData, JWT, JWTExpired, selectedRecord,
-      successMessage, adminOperation, modalShowing } = this.props;
-    const { currentRecord, showGetJWTModal, showDeleteModal, errorMessage } = this.state;
+      pageData, selectedRecord, successMessage, 
+      adminOperation, modalShowing } = this.props;
+    const { errorMessage } = this.state;
     const modalTitle = (adminOperation === "edit" && "Change Comment Visibility") ||
-                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id}`)
+                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id}`);
 
     return (
       <main className="container-fluid">
@@ -244,14 +265,17 @@ class AdminComments extends Component {
 
 AdminComments.propTypes = {
   onFetchComments: PropTypes.func.isRequired,
-  onGetJWT: PropTypes.func.isRequired,
+  onChangeCommentVisibility: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
-  posts: PropTypes.object.isRequired,
-  staff: PropTypes.object.isRequired,
-  practiceAreas: PropTypes.object.isRequired,
+  onShowModal: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  onChangeSelectedRecord: PropTypes.func.isRequired,
+  onChangeAdminOperation: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
   totalPages: PropTypes.number.isRequired,
@@ -259,7 +283,12 @@ AdminComments.propTypes = {
   pageLength: PropTypes.number.isRequired,
   pageData: PropTypes.array.isRequired,
   JWT: PropTypes.string.isRequired,
-  successMessage: PropTypes.string.isRequired
+  JWTExpired: PropTypes.bool.isRequired,
+  successMessage: PropTypes.string.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  adminOperation: PropTypes.string.isRequired,
+  modalShowing: PropTypes.bool.isRequired,
+  params: PropTypes.object.isRequired
 };
 
 export default connect(

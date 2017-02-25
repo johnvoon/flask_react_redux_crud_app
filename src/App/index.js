@@ -1,12 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import Headroom from 'react-headroom';
 import MainNavbar from 'components/MainNavbar';
-import PracticeAreaNavbar from 'components/PracticeAreaNavbar';
-import PracticeAreaPanel from 'components/PracticeAreaPanel';
 import Sidebar from 'components/Sidebar';
-import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchCurrentUser } from 'Authentication/actions';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'lodash';
@@ -22,10 +18,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   onFetchCurrentUser: () => {
     dispatch(fetchCurrentUser());
-  },
-
-  onFetchPracticeAreas: () => {
-    dispatch(fetchPracticeAreas());
   }
 });
 
@@ -34,24 +26,23 @@ class App extends Component {
     super(props);
     this.state = {
       showSidebar: false
-    }
+    };
   }
 
   componentDidMount() {
     this.props.onFetchCurrentUser();
-    this.props.onFetchPracticeAreas();
   }
 
   handleClick() {
     this.setState({
       showSidebar: this.state.showSidebar ? false : true
-    })
+    });
   }
 
   render() {
     this.handleClick = this.handleClick.bind(this);
     const { showSidebar } = this.state;
-    const { currentUser, practiceAreas } = this.props;
+    const { currentUser } = this.props;
     const links = [
       ["Home", "/", "index"],
       ["Practice Areas", "/practice-areas"],
@@ -87,7 +78,9 @@ class App extends Component {
 }
 
 App.propTypes = {
-  children: PropTypes.node.isRequired
+  onFetchCurrentUser: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  currentUser: PropTypes.object.isRequired
 };
 
 export default connect(

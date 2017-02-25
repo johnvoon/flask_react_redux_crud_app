@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from  'redux-form';
-import _ from 'lodash';
-import { hideModal, loadFormData as load } from 'Admin/actions';
-import { required, createOptionsList } from 'utils';
+import { reduxForm } from  'redux-form';
+import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
-import { addMatter } from 'Entities/MattersActions';
+import { addMatter, addMatterInsideForm } from 'Entities/MattersActions';
 import MatterParticularsForm from './MatterParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
 import ButtonBlock from 'components/ButtonBlock';
+import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -23,6 +22,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddMatter: (JWT, content) => {
       return dispatch(addMatter(JWT, content));
+    },
+
+    onAddMatterInsideForm: (JWT, content) => {
+      return dispatch(addMatterInsideForm(JWT, content));
     },
 
     onJWTExpired: () => {
@@ -44,7 +47,8 @@ class AddMatterForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddMatter, JWT, onHideModal, onJWTExpired, changeMatterFieldValue } = this.props;
+    const { onAddMatter, JWT, 
+      onHideModal, onJWTExpired } = this.props;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -56,6 +60,36 @@ class AddMatterForm extends Component {
       formData.append(key, data[key]);
     });
     onAddMatter(config, formData)
+    .then(() => onHideModal())
+    .catch(({response, message}) => {
+      const { status, data } = response;
+      if (status === 401) {
+        onJWTExpired();
+      } else if (status === 404) {
+        this.setState({
+          errorMessage: data.message
+        });
+      } else {
+        this.setState({
+          errorMessage: message
+        });
+      }
+    });
+  }
+
+  _handleSubmitInsideForm(data) {
+    const { onAddMatterInsideForm, JWT, onHideModal, onJWTExpired, changeMatterFieldValue } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+
+    let formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+    onAddMatterInsideForm(config, formData)
     .then(({matterId}) => {
       changeMatterFieldValue && 
       changeMatterFieldValue(matterId);
@@ -68,17 +102,18 @@ class AddMatterForm extends Component {
       } else if (status === 404) {
         this.setState({
           errorMessage: data.message
-        })
+        });
       } else {
         this.setState({
           errorMessage: message
-        })
+        });
       }
-    });
+    });    
   }
 
   render() {
-    const { addButtonOnly, handleSubmit, pristine, reset, submitting } = this.props;
+    const { onHideModal, addButtonOnly, handleSubmit, 
+      pristine, reset, submitting } = this.props;
     const { errorMessage } = this.state;
     
     return (
@@ -89,7 +124,7 @@ class AddMatterForm extends Component {
           <ButtonBlock 
             customClassNames="btn-primary"
             type="button"
-            handleClick={props.handleClick}>
+            handleClick={handleSubmit(data => this._handleSubmitInsideForm(data))}>
             Save
           </ButtonBlock>
         ) : (
@@ -97,7 +132,7 @@ class AddMatterForm extends Component {
             <Button
               customClassNames="btn-danger pull-right" 
               type="button" 
-              handleClick={onHideModal()}>
+              handleClick={onHideModal}>
               Close
             </Button>
             <Button 
@@ -127,16 +162,17 @@ AddMatterForm.propTypes = {
   pristine: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  JWT: PropTypes.string.isRequired,
+  onJWTExpired: PropTypes.func.isRequired,
+  changeMatterFieldValue: PropTypes.func.isRequired,
+  addButtonOnly: PropTypes.bool.isRequired,
+  onAddMatterInsideForm: PropTypes.func.isRequired
 };
 
-AddMatterForm = reduxForm({
-  form:  'AddMatterForm',
-  destroyOnUnmount: false,
-})(AddMatterForm);
-
-AddMatterForm = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddMatterForm)
-
-export default AddMatterForm;
+)(reduxForm({
+  form:  'AddMatterForm',
+  destroyOnUnmount: false,
+})(AddMatterForm));

@@ -32,14 +32,14 @@ export function changeSelectedRecord(value) {
   return {
     type: CHANGE_SELECTED_RECORD,
     value
-  }
+  };
 }
 
 export function changeAdminOperation(value) {
   return {
     type: CHANGE_ADMIN_OPERATION,
     value
-  }
+  };
 }
 
 export function sortData(sortBy) {
@@ -85,24 +85,24 @@ export function commentVisibilityChanged(entities, commentId) {
     type: COMMENT_VISIBILITY_CHANGED,
     entities,
     commentId
-  }
+  };
 }
 
 export function loadFormData(formData) {
   return {
     type: LOAD_FORM_DATA,
     formData
-  }
+  };
 }
 
 export function showModal() {
   return {
     type: SHOW_MODAL
-  }
+  };
 }
 
 export function hideModal() {
   return {
     type: HIDE_MODAL
-  }
+  };
 }

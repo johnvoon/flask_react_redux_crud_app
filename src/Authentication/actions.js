@@ -26,7 +26,7 @@ export function fetchCurrentUser() {
 }
 
 export function loginUser(content) {
-  return (dispatch) => {
+  return (dispatch) => { //eslint-disable-line no-unused-vars
     return axios.post(
       'http://localhost:8000/api/login', 
       content
@@ -35,21 +35,19 @@ export function loginUser(content) {
 }
 
 export function logoutUser() {
-  return (dispatch) => {
+  return (dispatch) => { //eslint-disable-line no-unused-vars
     return axios.get('http://localhost:8000/api/logout');
-  }
+  };
 }
 
 export function currentUserLoaded(currentUser) {
-  console.log(currentUser);
   return {
     type: CURRENT_USER_LOADED,
     currentUser
-  }
+  };
 }
 
 export function JWTLoaded(JWT) {
-  console.log(JWT);
   return {
     type: JWT_LOADED,
     JWT
@@ -59,5 +57,5 @@ export function JWTLoaded(JWT) {
 export function removeJWT() {
   return {
     type: REMOVE_JWT
-  }
+  };
 }

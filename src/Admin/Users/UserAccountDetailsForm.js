@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Field } from  'redux-form';
 import classNames from 'classnames';
 import { required, email, username, passwordMatch } from 'utils';
-import { loadFormData as load } from 'Admin/actions';
 import InputFormGroup from 'components/InputFormGroup';
 import AsyncValidationFormGroup from 'components/AsyncValidationFormGroup';
 
@@ -51,6 +50,11 @@ export default class UserAccountDetailsForm extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+UserAccountDetailsForm.propTypes = {
+  isDisplayed: PropTypes.bool.isRequired,
+  passwordValue: PropTypes.string.isRequired
+};

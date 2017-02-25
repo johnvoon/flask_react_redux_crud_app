@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import classNames from 'classnames';
@@ -86,3 +86,9 @@ export default connect(
   mapStateToProps,
   null
 )(EditUserParticularsForm);
+
+EditUserParticularsForm.propTypes = {
+  selectedRecord: PropTypes.object.isRequired,
+  isDisplayed: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};

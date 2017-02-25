@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Field } from  'redux-form';
-import classNames from 'classnames';
 import { required, createOptionsList } from 'utils';
 import DatePickerFormGroup from 'components/DatePickerFormGroup';
 import InputFormGroup from 'components/InputFormGroup';
@@ -17,14 +16,12 @@ const mapStateToProps = (state) => {
 
 class MatterParticularsForm extends Component {
   render() {
-    const { isDisplayed, practiceAreas, staff } = this.props;
+    const { practiceAreas, staff } = this.props;
     const practiceAreaOptions = createOptionsList(practiceAreas, "area");
-    const staffOptions = createOptionsList(staff, "name")
+    const staffOptions = createOptionsList(staff, "name");
 
     return (
-      <div className={classNames({
-        hidden: !isDisplayed
-      })}>
+      <div>
         <div className="row">
           <div className="col-sm-6">
             <Field
@@ -58,7 +55,7 @@ class MatterParticularsForm extends Component {
           label="Description"
           validate={required}/>
       </div>
-    )
+    );
   }
 }
 
@@ -66,3 +63,8 @@ export default connect(
   mapStateToProps,
   null
 )(MatterParticularsForm);
+
+MatterParticularsForm.propTypes = {
+  practiceAreas: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired
+};

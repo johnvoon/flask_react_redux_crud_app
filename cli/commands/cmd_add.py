@@ -1,11 +1,10 @@
 import click
 import random
 import itertools
-
 from datetime import datetime
 from faker import Faker
 from flask import url_for
-
+from slugify import slugify
 from server.app import create_app
 from server.extensions import db
 from server.blueprints.user.models import User
@@ -92,7 +91,8 @@ def practice_areas():
         params = {
             'area': area,
             'img_src': img_src,
-            'description': description
+            'description': description,
+            'slug': slugify(area)
         }
 
         data.append(params)

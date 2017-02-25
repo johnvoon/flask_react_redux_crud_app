@@ -4,7 +4,6 @@ import entitiesReducer from 'Entities/reducer';
 import blogHomeReducer from 'BlogHome/reducer';
 import blogPostReducer from 'BlogPost/reducer';
 import adminPagesReducer from 'Admin/reducer';
-import practiceAreasReducer from 'PracticeAreas/reducer';
 import practiceAreaReducer from 'PracticeArea/reducer';
 import authenticationReducer from 'Authentication/reducer';
 
@@ -14,8 +13,7 @@ const rootReducer = combineReducers({
   blogHome: blogHomeReducer,
   blogPost: blogPostReducer,
   adminPages: adminPagesReducer,
-  practiceAreas: practiceAreasReducer,
-  practiceAreaReducer: practiceAreaReducer,
+  practiceArea: practiceAreaReducer,
   authentication: authenticationReducer,
   form: formReducer
 });

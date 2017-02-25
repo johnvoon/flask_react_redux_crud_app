@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 const TableCommentsLink = (props) => {
@@ -14,3 +14,7 @@ const TableCommentsLink = (props) => {
 };
 
 export default TableCommentsLink;
+
+TableCommentsLink.propTypes = {
+  data: PropTypes.object.isRequired
+};

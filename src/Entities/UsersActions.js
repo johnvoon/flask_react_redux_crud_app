@@ -2,8 +2,7 @@ import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
 import { userSchema } from 'constants/Schemas';
 import { recordAdded,
-         recordEdited, 
-         recordDeleted } from 'Admin/actions';
+         recordEdited } from 'Admin/actions';
 import { USERS_LOADED } from 'constants/actionTypes';
 
 export function fetchUsers(config) {

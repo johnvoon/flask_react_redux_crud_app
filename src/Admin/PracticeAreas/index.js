@@ -12,17 +12,18 @@ import SuccessAlert from 'components/SuccessAlert';
 import TableDate from 'components/TableDate';
 import TablePostLink from 'components/TablePostLink';
 import TableText from 'components/TableText';
-import TableCommentsLink from 'components/TableCommentsLink';
 import TableEditLink from 'components/TableEditLink';
-import TableDeleteLink from 'components/TableDeleteLink';
-import { getJWT, removeJWT } from 'Authentication/actions';
-import { fetchMatters, addMatter, editMatter } from 'Entities/MattersActions';
+import ButtonBlock from 'components/ButtonBlock';
+import { fetchMatters } from 'Entities/MattersActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions'; 
 import { filterAdminData, 
          sortData, 
          changePageLength, 
-         changePageNumber } from 'Admin/actions';
+         changePageNumber,
+         showModal,
+         changeSelectedRecord,
+         changeAdminOperation } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
@@ -50,22 +51,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchStaff());
     },
 
-    onGetJWT: (data) => {
-      return dispatch(getJWT(data));
-    },
-
-    onJWTExpired: () => {
-      dispatch(removeJWT());
-    },
-
-    onAdd: (JWT, content) => {
-      return dispatch(addMatter(JWT, content));
-    },
-
-    onEdit: (JWT, content, id) => {
-      return dispatch(editMatter(JWT, content, id));
-    },
-
     onFilter: ({target: {value}}) => {
       dispatch(filterAdminData(value));
     },
@@ -80,6 +65,18 @@ const mapDispatchToProps = (dispatch) => {
 
     onPageNumberChange: (value) => {
       dispatch(changePageNumber(value));
+    },
+
+    onShowModal: () => {
+      dispatch(showModal());
+    },
+
+    onChangeSelectedRecord: (record) => {
+      dispatch(changeSelectedRecord(record));
+    },
+
+    onChangeAdminOperation: (value) => {
+      dispatch(changeAdminOperation(value));
     }
   };
 };
@@ -96,29 +93,29 @@ class AdminPracticeAreas extends Component {
   }
 
   renderTableEditLink(val, row) {
+    const { onChangeSelectedRecord, 
+      onChangeAdminOperation, onShowModal } = this.props;
+
     return (
       <TableEditLink 
         handleClick={() => {
-          changeSelectedRecord(row);
-          changeAdminOperation("edit");
-          showModal();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("edit");
+          onShowModal();
         }}/>
     );
   }
 
   render() {
-    const { onGetJWT, onJWTExpired, onAdd, onEdit, onFilter, onSort, onPageLengthChange, onPageNumberChange } = this.props;
-    const { posts, staff, practiceAreas } = this.props;
-    const { data, filterValues, totalPages, sortBy, currentPage, pageLength, pageData, JWT, JWTExpired, successMessage } = this.props;
-    const { currentRecord, showAddModal, showEditModal } = this.state;
-    const config = {
-      headers: {
-        'Authorization': `JWT ${JWT}`
-      }
-    };
-    const modalTitle = (adminOperation === "view" && `Practice Area Info (ID: ${selectedRecord.id}`)
+    const { onFilter, onSort, onPageLengthChange, 
+      onPageNumberChange, adminOperation,
+      modalShowing, selectedRecord,
+      data, filterValues, totalPages, 
+      sortBy, currentPage, pageLength, 
+      pageData, successMessage } = this.props;
+    const modalTitle = (adminOperation === "view" && `Practice Area Info (ID: ${selectedRecord.id}`) ||
                        (adminOperation === "add" && "Add a New Practice Area") ||
-                       (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id}`)
+                       (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id}`);
 
     return (
       <main className="container-fluid">
@@ -131,11 +128,11 @@ class AdminPracticeAreas extends Component {
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">
-              <button
-                className="btn btn-primary btn-block text-uppercase"
+              <ButtonBlock
+                customClassNames="btn-primary"
                 onClick={() => this.setState({showAddModal: true})}>
                 Add a New Practice Area
-              </button>
+              </ButtonBlock>
             </div>
           </div>
         </div>
@@ -189,16 +186,25 @@ class AdminPracticeAreas extends Component {
 AdminPracticeAreas.propTypes = {
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
+  onFetchMatters: PropTypes.func.isRequired,
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchStaff: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
+  onShowModal: PropTypes.func.isRequired,
+  onChangeSelectedRecord: PropTypes.func.isRequired,
+  onChangeAdminOperation: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
   totalPages: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   pageLength: PropTypes.number.isRequired,
   pageData: PropTypes.array.isRequired,
-  JWT: PropTypes.string.isRequired,
-  successMessage: PropTypes.string.isRequired
+  successMessage: PropTypes.string.isRequired,
+  modalShowing: PropTypes.bool.isRequired,
+  selectedRecord: PropTypes.object.isRequired,
+  adminOperation: PropTypes.string.isRequired
 };
 
 export default connect(

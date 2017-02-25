@@ -4,7 +4,6 @@ import Helmet from 'react-helmet';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import { Scrollbars } from 'react-custom-scrollbars';
 import PostCard from 'components/PostCard';
 import FilterLink from 'components/FilterLink';
 import SearchField from 'components/SearchField';
@@ -21,7 +20,7 @@ import { showAllPosts,
 
 const mapStateToProps = (state) => {
   const { entities, blogHome } = state;
-  console.log(entities);
+
   return {
     ...entities,
     ...blogHome
@@ -86,15 +85,21 @@ class BlogHome extends Component {
   }
 
   toggleSortMenu() {
-    this.setState({showSortMenu: this.state.showSortMenu ? false : true})
+    this.setState({
+      showSortMenu: this.state.showSortMenu ? false : true
+    });
   }
 
   toggleAreaMenu() {
-    this.setState({showAreaMenu: this.state.showAreaMenu ? false : true})
+    this.setState({
+      showAreaMenu: this.state.showAreaMenu ? false : true
+    });
   }
 
   toggleAuthorMenu() {
-    this.setState({showAuthorMenu: this.state.showAuthorMenu ? false : true})
+    this.setState({
+      showAuthorMenu: this.state.showAuthorMenu ? false : true
+    });
   }
 
   render() {
@@ -245,18 +250,23 @@ class BlogHome extends Component {
 }
 
 BlogHome.propTypes = {
-  onFetchBlogData: PropTypes.func.isRequired,
+  onFetchPosts: PropTypes.func.isRequired,
+  onFetchPracticeAreas: PropTypes.func.isRequired,
+  onFetchStaff: PropTypes.func.isRequired,
   onShowAll: PropTypes.func.isRequired,
   onSearchFilter: PropTypes.func.isRequired,
   onAreaFilter: PropTypes.func.isRequired,
   onAuthorFilter: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired,
   posts: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
   staff: PropTypes.object.isRequired,
+  allAvailablePosts: PropTypes.array.isRequired,
   visiblePosts: PropTypes.array.isRequired,
   filterValues: PropTypes.string.isRequired,
-  currentFilter: PropTypes.string.isRequired
+  currentFilter: PropTypes.string.isRequired,
+  hasMore: PropTypes.bool.isRequired,
 };
 
 export default connect(

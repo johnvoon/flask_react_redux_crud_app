@@ -10,7 +10,7 @@ const SearchField = ({ filterValues, onFilter }) => {
           value={filterValues}
           onChange={onFilter}
           placeholder="Search blog posts by keyword"/>
-        <span className="input-group-addon search"></span>        
+        <span className="input-group-addon search"/>
       </div>
     </div>    
   );

@@ -54,7 +54,7 @@ export const required = value =>
   value ? undefined : 'Required';
 
 export const passwordRequired = value =>
-  value ? undefined : 'Please enter your password.'
+  value ? undefined : 'Please enter your password.';
 
 export const maxLength = max => value => 
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -76,14 +76,14 @@ export const passwordMatch = password => value =>
 export const asyncValidateUserIdentity = (value) => {
   return axios.post(
     'http://localhost:8000/api/users/validate', value)
-    .then(() => undefined) // important, otherwise will return uncaught in promise error on form submit
-    .catch(({response, message}) => {
+    .then(() => undefined) // important, otherwise returns uncaught in promise error on form submit
+    .catch(({response, message}) => { // eslint-disable-line no-unused-vars
       const { status, data } = response;
       if (status === 404 &&
         ['username', 'email'].every(key => 
           Object.keys(value).indexOf(key) > -1)) {
         throw { username: data.username,
-                email: data.email }
+                email: data.email };
       }
       if (status === 404 && 
         Object.keys(value).includes('username')) {
@@ -94,17 +94,17 @@ export const asyncValidateUserIdentity = (value) => {
         throw { email: data.email };
       } 
     });
-}
+};
 
 export const asyncValidatePostTitle = (value) => {
   return axios.post(
     'http://localhost:8000/api/posts/validate', value)
     .then(() => undefined) // important, otherwise will return uncaught in promise error on form submit
-    .catch(({response, message}) => {
+    .catch(({response, message}) => { // eslint-disable-line no-unused-vars
       const { status, data } = response;
       if (status === 404 && 
         Object.keys(value).includes('title')) {
         throw { title: data.title };
       }
     });
-}
+};

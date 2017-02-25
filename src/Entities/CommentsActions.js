@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { sortByDate } from 'utils';
 import { arrayOf, normalize } from 'normalizr';
-import { commentVisibilityChanged } from 'Admin/actions';
+import { commentVisibilityChanged, recordDeleted } from 'Admin/actions';
 import { commentSchema } from 'constants/Schemas';
 import { COMMENTS_LOADED,
          COMMENT_ADDED } from 'constants/actionTypes';
@@ -62,13 +62,13 @@ export function deleteComment(config, id) {
       config
     )
     .then(({data: {comment}}) => {
-      const normalized = normalize(comment, commentSchema)
+      const normalized = normalize(comment, commentSchema);
       dispatch(recordDeleted(
         normalized,
         comment.id
       ));
     });    
-  }
+  };
 }
 
 export function commentsLoaded(entities, comments) {

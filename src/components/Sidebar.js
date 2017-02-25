@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 export default class Sidebar extends Component {
@@ -35,3 +35,7 @@ export default class Sidebar extends Component {
     );
   }
 }
+
+Sidebar.propTypes = {
+  links: PropTypes.array.isRequired,
+};

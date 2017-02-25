@@ -19,7 +19,7 @@ export function fetchMatters(config) {
         normalized.result
       ));
     });      
-  }
+  };
 }
 
 export function mattersLoaded(entities, matters) {
@@ -27,7 +27,7 @@ export function mattersLoaded(entities, matters) {
     type: MATTERS_LOADED,
     entities,
     matters
-  }
+  };
 }
 
 export function addMatter(config, content) {
@@ -38,12 +38,25 @@ export function addMatter(config, content) {
       config
     )
     .then(({data: {matter}}) => {
+      const normalized = normalize(matter, matterSchema);
+      dispatch(recordAdded(normalized.entities, normalized.entities.matters, matter.id));
+    });
+  };
+}
+
+export function addMatterInsideForm(config, content) {
+  return (dispatch) => {
+    return axios.post(
+      'http://localhost:8000/api/matters', 
+      content, 
+      config
+    )
+    .then(({data: {matter}}) => {
         const normalized = normalize(matter, matterSchema);
-        console.log(normalized.entities);
-        return dispatch(matterAdded(normalized.entities, matter.id))
+        return dispatch(matterAdded(normalized.entities, matter.id));
       }
     );
-  }
+  };
 }
 
 export function editMatter(config, content, id) {

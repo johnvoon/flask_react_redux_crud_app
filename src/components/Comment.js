@@ -8,13 +8,13 @@ export default class Comment extends Component {
     super(props);
     this.state = {
       showCollapsedComment: false
-    }
+    };
   }
 
   handleClick() {
     this.setState({
       showCollapsedComment: true
-    })
+    });
   }
 
   render() {
@@ -56,7 +56,7 @@ export default class Comment extends Component {
       </ul>
     );    
   }
-};
+}
 
 Comment.propTypes = {
   comment: PropTypes.object.isRequired

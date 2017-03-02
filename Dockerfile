@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install --editable .
 
-CMD gunicorn -c "python:config.gunicorn" "concept.app:create_app()"
+CMD gunicorn -c "python:config.gunicorn" "server.app:create_app()"

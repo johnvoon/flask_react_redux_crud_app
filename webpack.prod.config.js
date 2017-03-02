@@ -23,7 +23,6 @@ var VENDOR_LIBS = [
 ];
 
 module.exports = {
-  devtool: 'source-map',
   entry: {
     bundle: './src/index',
     vendor: VENDOR_LIBS
@@ -46,15 +45,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          extractCSS.extract(['css-loader', 'postcss-loader']),
-        ]
+        use: extractCSS.extract(['css-loader', 'postcss-loader'])
       },
       {
         test: /\.scss$/,
-        use: [
-          extractSCSS.extract(['css-loader', 'postcss-loader', 'sass-loader'])
-        ]
+        use: extractSCSS.extract(['css-loader', 'postcss-loader', 'sass-loader'])
       },
       {
         test: /\.less$/,

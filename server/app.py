@@ -59,7 +59,7 @@ def create_celery_app(app=None):
     return celery
 
 
-def create_app(settings_override=None):
+def create_app():
     """
     Create Flask app using app factory pattern.
 
@@ -70,9 +70,7 @@ def create_app(settings_override=None):
 
     app.config.from_object('config.default')
     app.config.from_pyfile('config.py', silent=True)
-
-    if settings_override:
-        app.config.update(settings_override)
+    app.config.from_envvar('APP_SETTINGS')
 
     middleware(app)
     error_templates(app)

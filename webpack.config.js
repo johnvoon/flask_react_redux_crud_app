@@ -1,18 +1,17 @@
 var webpack = require('webpack');
 var path = require('path');
+var CleanWebpackPlugin = require("clean-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-const VENDOR_LIBS = [
-  'react', 'lodash', 'redux', 'react-redux', 'react-dom',
-  'redux-form', 'redux-thunk'
-];
+const autoprefixer = require('autoprefixer');
+const fontMagician = require('postcss-font-magician');
 
 module.exports = {
   devtool: 'source-map',
   entry: {
     bundle: './src/index',
-    // vendor: VENDOR_LIBS
   },
   output: {
+    path: path.join(__dirname, 'server/static/scripts'),
     publicPath: 'http://localhost:8080/static/scripts',
     filename: 'bundle.js'
   },
@@ -37,15 +36,29 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']
+        use: [
+          'style-loader', 
+          'css-loader', 
+          'postcss-loader'
+        ]
       },
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        use: [
+          'style-loader', 
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ]
       },
       {
         test: /\.less$/,
-        loaders: ['style-loader', 'css-loader', 'less-loader'],
+        use: [
+          'style-loader', 
+          'css-loader',
+          'postcss-loader', 
+          'less-loader'
+        ],
         include: path.join(__dirname, 'styles')
       },
       {
@@ -62,13 +75,23 @@ module.exports = {
     ]
   },
   plugins: [
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   names: ['commons', 'vendor', 'bootstrap']
-    // })
-    // new HtmlWebpackPlugin({
-    //   title: 'Concept Law Firm',
-    //   template: 'server/templates/base.html',
-    //   hash: true
-    // })
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [
+          autoprefixer(),
+          fontMagician()
+        ]
+      }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Concept Law Firm',
+      template: 'server/templates/template.html',
+      filename: '../../templates/base.html',
+      publicPath: 'http://localhost:8080/static/scripts'
+    }),
+    new CleanWebpackPlugin([,
+      "server/static/scripts",
+      "server/static/styles"
+    ])
   ]
 };

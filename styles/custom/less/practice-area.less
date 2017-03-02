@@ -1,31 +1,16 @@
 .practice-area {
-  > .practice-area-container {
-    height: 100%;
+  .select-absolute {
+    margin-left: 30px;
+    position: absolute;
+    top: 33%;
 
-    > .practice-area-image {
-      height: 100%;
-      background-size: auto 100%;
-      background-position: center center;
-
-      > .select-absolute {
-        margin-left: 30px;
-        position: absolute;
-        top: 33%;
-
-        > h1 {
-          font-size: @jumbotron-heading-font-size;
-          color: #fff;
-        }
-
-        > .select {
-          margin: 0
-        }
-      } 
+    > h1 {
+      font-size: @jumbotron-heading-font-size;
+      color: #fff;
     }
 
-    > .practice-area-content {
-      height: 100%;
-      margin-top: 60px;
+    > .select {
+      margin: 0
     }
   }
 
@@ -40,22 +25,45 @@
     border: 2px solid #fff;
     color: #fff;
   }
+}
 
-  .bg-dispute {
-    background-color: #717477;
-  }
+.practice-area-container {
+  height: 100%;
+}
 
-  .bg-criminal {
-    background-color: #89570b;
-  }
+.practice-area-image {
+  height: 100%;
+  background-size: auto 100%;
+  background-position: center center;
+}
 
-  .bg-family {
-    background-color: #d1bd83;
-  }
+.practice-area-content {
+  height: 100%;
+  margin-top: 60px;
+}
 
-  .bg-mergers {
-    background-color: #0011aa;
-  }
+.btn-practice-area {
+  color: #fff;
+  .button-size(100px; 0; 20px; normal; 0);
+  background-position: center center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.bg-dispute {
+  background-color: #717477;
+}
+
+.bg-criminal {
+  background-color: #89570b;
+}
+
+.bg-family {
+  background-color: #d1bd83;
+}
+
+.bg-mergers {
+  background-color: #0011aa;
 }
 
 @media (min-width: @screen-md-min) {

@@ -93,7 +93,7 @@ module.exports = {
       template: 'server/templates/template.html',
       hash: true
     }),
-    new CleanWebpackPlugin([,
+    new CleanWebpackPlugin([
       'server/static/scripts',
       'server/static/styles'
     ])

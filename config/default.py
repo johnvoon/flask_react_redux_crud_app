@@ -4,7 +4,6 @@ from celery.schedules import crontab
 DEBUG = False
 LOG_LEVEL = 'DEBUG'  # CRITICAL / ERROR / WARNING / INFO / DEBUG
 WTF_CSRF_ENABLED = False
-
 SERVER_NAME = 'localhost:8000'
 
 # Flask-Mail.

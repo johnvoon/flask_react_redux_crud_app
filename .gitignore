@@ -1,4 +1,3 @@
 node_modules/
-instance/server/
-node_modules
-config/
+instance/
+*.egg-info/

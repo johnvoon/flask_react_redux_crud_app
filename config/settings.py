@@ -1,3 +1,5 @@
+SERVER_NAME = '10.0.0.5'
+
 SECRET_KEY = 'insecurekeyfordev'
 
 MAIL_USERNAME = 'johnksvoon2@gmail.com'

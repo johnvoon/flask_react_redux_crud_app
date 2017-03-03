@@ -88,10 +88,6 @@ module.exports = {
       template: 'server/templates/template.html',
       filename: '../../templates/base.html',
       publicPath: 'http://localhost:8080/static/scripts'
-    }),
-    new CleanWebpackPlugin([,
-      "server/static/scripts",
-      "server/static/styles"
-    ])
+    })
   ]
 };

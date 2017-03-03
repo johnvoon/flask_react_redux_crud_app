@@ -70,7 +70,7 @@ def create_app():
 
     app.config.from_object('config.default')
     app.config.from_pyfile('config.py', silent=True)
-    app.config.from_envvar('APP_SETTINGS')
+    app.config.from_envvar('APP_SETTINGS', silent=True)
 
     middleware(app)
     error_templates(app)

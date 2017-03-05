@@ -36,7 +36,7 @@ class ButtonLink extends Component {
           className={`btn btn-block text-uppercase ${customClassNames}`}
           onClick={this.handleClick}
           style={{
-            backgroundImage: `url('http://localhost:8000/static/images/2000/${imgFilename}.jpg')`
+            backgroundImage: `url(${API_URL}/static/images/2000/${imgFilename}.jpg)`
           }}
           ref={button => this.button = button}>
           {text}

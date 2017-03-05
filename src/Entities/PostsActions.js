@@ -11,7 +11,7 @@ import { POSTS_LOADED,
 
 export function fetchPosts() {
   return dispatch => {
-    return axios.get('http://localhost:8000/api/posts')
+    return axios.get(`${API_URL}/api/posts`)
     .then(({data: {posts}}) => {
       const normalized = normalize(posts, arrayOf(postSchema));
       const allPosts = sortByDate(
@@ -42,7 +42,7 @@ export function fetchPostData(id) {
 
 export function fetchPost(id) {
   return (dispatch) => {
-    return axios.get(`http://localhost:8000/api/posts/${id}`)
+    return axios.get(`${API_URL}/api/posts/${id}`)
     .then(({data: {post}}) => {
       const normalized = normalize(post, postSchema);
       return dispatch(postLoaded(normalized.entities, normalized.entities.posts, post.id));
@@ -53,7 +53,7 @@ export function fetchPost(id) {
 export function addPost(config, content) {
   return (dispatch) => {
     return axios.post(
-      'http://localhost:8000/api/posts', 
+      '${API_URL}/api/posts', 
       content, 
       config
     )
@@ -67,7 +67,7 @@ export function addPost(config, content) {
 export function editPost(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `http://localhost:8000/api/posts/${id}`, 
+      `${API_URL}/api/posts/${id}`, 
       content, 
       config
     )
@@ -81,7 +81,7 @@ export function editPost(config, content, id) {
 export function deletePost(config, id) {
   return (dispatch) => {
     return axios.delete(
-      `http://localhost:8000/api/posts/${id}`, 
+      `${API_URL}/api/posts/${id}`, 
       config
     )
     .then(({data: {post}}) => {
@@ -96,7 +96,7 @@ export function deletePost(config, id) {
 export function fetchRelatedPosts(id, practiceArea) {
   return dispatch => {
     id = Number(id);
-    return axios.get('http://localhost:8000/api/posts')
+    return axios.get('${API_URL}/api/posts')
     .then(({data: {posts}}) => {
       const relatedPosts = posts.filter(post => {
         return (post.practiceArea === practiceArea) && (post.id !== id);

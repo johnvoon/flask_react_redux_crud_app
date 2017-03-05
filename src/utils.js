@@ -75,7 +75,7 @@ export const passwordMatch = password => value =>
 
 export const asyncValidateUserIdentity = (value) => {
   return axios.post(
-    'http://localhost:8000/api/users/validate', value)
+    `${API_URL}/api/users/validate`, value)
     .then(() => undefined) // important, otherwise returns uncaught in promise error on form submit
     .catch(({response, message}) => { // eslint-disable-line no-unused-vars
       const { status, data } = response;
@@ -98,7 +98,7 @@ export const asyncValidateUserIdentity = (value) => {
 
 export const asyncValidatePostTitle = (value) => {
   return axios.post(
-    'http://localhost:8000/api/posts/validate', value)
+    '${API_URL}/api/posts/validate', value)
     .then(() => undefined) // important, otherwise will return uncaught in promise error on form submit
     .catch(({response, message}) => { // eslint-disable-line no-unused-vars
       const { status, data } = response;

@@ -9,7 +9,7 @@ import { recordAdded,
 export function fetchMatters(config) {
   return dispatch => {
     axios.get(
-      'http://localhost:8000/api/matters', 
+      `${API_URL}/api/matters`, 
       config
     )
     .then(({data: {matters}}) => {
@@ -33,7 +33,7 @@ export function mattersLoaded(entities, matters) {
 export function addMatter(config, content) {
   return (dispatch) => {
     return axios.post(
-      'http://localhost:8000/api/matters', 
+      '${API_URL}/api/matters', 
       content, 
       config
     )
@@ -47,7 +47,7 @@ export function addMatter(config, content) {
 export function addMatterInsideForm(config, content) {
   return (dispatch) => {
     return axios.post(
-      'http://localhost:8000/api/matters', 
+      '${API_URL}/api/matters', 
       content, 
       config
     )
@@ -62,7 +62,7 @@ export function addMatterInsideForm(config, content) {
 export function editMatter(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `http://localhost:8000/api/matters/${id}`, 
+      `${API_URL}/api/matters/${id}`, 
       content,
       config
     )

@@ -1,7 +1,7 @@
 from datetime import timedelta
 from celery.schedules import crontab
 
-DEBUG = False
+DEBUG = True
 LOG_LEVEL = 'DEBUG'  # CRITICAL / ERROR / WARNING / INFO / DEBUG
 WTF_CSRF_ENABLED = False
 SERVER_NAME = 'localhost:8000'

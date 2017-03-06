@@ -6,7 +6,7 @@ import { CURRENT_USER_LOADED,
 export function getJWT(data) {
   return dispatch => {
     return axios.post(
-      `auth`, 
+      `${API_URL}/auth`, 
       data
     )
     .then(({data: {access_token}}) => 
@@ -16,7 +16,7 @@ export function getJWT(data) {
 
 export function fetchCurrentUser() {
   return dispatch => {
-    return axios.get('api/current-user')
+    return axios.get(`${API_URL}/api/current-user`)
     .then(({data: {currentUser}}) => {
       return dispatch(currentUserLoaded(
         currentUser
@@ -28,7 +28,7 @@ export function fetchCurrentUser() {
 export function loginUser(content) {
   return (dispatch) => { //eslint-disable-line no-unused-vars
     return axios.post(
-      'api/login', 
+      `${API_URL}/api/login`, 
       content
     );
   };
@@ -36,7 +36,7 @@ export function loginUser(content) {
 
 export function logoutUser() {
   return (dispatch) => { //eslint-disable-line no-unused-vars
-    return axios.get('api/logout');
+    return axios.get(`${API_URL}/api/logout`);
   };
 }
 

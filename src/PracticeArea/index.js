@@ -76,7 +76,7 @@ class PracticeArea extends Component {
           ]}/>
         <div 
           className="jumbotron hidden-md hidden-lg"
-          style={{backgroundImage: 'url(static/images/2000/${imgFilename}.jpg)'}}>
+          style={{backgroundImage: `url(${API_URL}/static/images/2000/${imgFilename}.jpg)`}}>
           <div className="container text-center">
             <h1 className="text-uppercase">{practiceAreaName}</h1>
             <select 

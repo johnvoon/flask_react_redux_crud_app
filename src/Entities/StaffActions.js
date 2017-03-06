@@ -11,7 +11,7 @@ import { STAFF_LOADED,
 
 export function fetchStaff() {
   return dispatch => {
-    return axios.get('api/staff')
+    return axios.get(`${API_URL}/api/staff`)
     .then(({data: {staff}}) => {
       const normalizedStaff = normalize(staff, arrayOf(staffSchema));
       const normalizedStaffUsers = normalize(staff, arrayOf(staffUserSchema));
@@ -24,12 +24,13 @@ export function fetchStaff() {
 export function addStaff(config, content) {
   return (dispatch) => {
     return axios.post(
-      'api/staff', 
+      `${API_URL}/api/staff`, 
       content, 
       config
     )
     .then(
       ({data: {staff}}) => {
+        console.log(staff);
         const normalizedStaff = normalize(staff, staffSchema);
         const normalizedStaffUsers = normalize(staff, staffUserSchema);
         dispatch(staffAdded(normalizedStaff.entities));
@@ -42,7 +43,7 @@ export function addStaff(config, content) {
 export function editStaff(config, content) {
   return (dispatch) => {
     return axios.post(
-      'api/staff', 
+      `${API_URL}/api/staff`, 
       content, 
       config
     )

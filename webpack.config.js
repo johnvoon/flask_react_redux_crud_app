@@ -75,6 +75,9 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'API_URL': JSON.stringify(process.env.API_URL)
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [
@@ -86,8 +89,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Concept Law Firm',
       template: 'server/templates/template.html',
-      filename: '../../templates/base.html',
-      publicPath: 'http://localhost:8080/static/scripts'
+      filename: '../../templates/base.html'
     })
   ]
 };

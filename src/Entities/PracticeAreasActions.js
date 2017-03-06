@@ -8,7 +8,7 @@ import { PRACTICE_AREAS_LOADED,
 
 export function fetchPracticeAreas() {
   return dispatch => {
-    return axios.get('api/practice-areas')
+    return axios.get(`${API_URL}/api/practice-areas`)
     .then(({data: {practiceAreas}}) => {
       const normalized = normalize(
         practiceAreas, 
@@ -21,7 +21,7 @@ export function fetchPracticeAreas() {
 
 export function fetchPracticeArea(slug) {
   return (dispatch) => {
-    return axios.get(`api/practice-areas/${slug}`)
+    return axios.get(`${API_URL}/api/practice-areas/${slug}`)
     .then(({data: {practiceArea}}) => {
       const normalized = normalize(practiceArea, practiceAreaSchema);
       return dispatch(practiceAreaLoaded(normalized.entities, normalized.entities.practiceAreas, practiceArea.id));
@@ -32,7 +32,7 @@ export function fetchPracticeArea(slug) {
 export function addPracticeArea(config, content) {
   return (dispatch) => {
     return axios.post(
-      'api/practice-areas', 
+      `${API_URL}/api/practice-areas`, 
       content, 
       config
     )
@@ -47,7 +47,7 @@ export function addPracticeArea(config, content) {
 export function editPracticeArea(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `api/practice-areas/${id}`, 
+      `${API_URL}/practice-areas/${id}`, 
       content,
       config
     )

@@ -59,7 +59,7 @@ class HomePage extends Component {
           ]}/>
         <div 
           className="jumbotron"
-          style={{backgroundImage: 'url(static/images/2000/home.jpg)'}}>
+          style={{backgroundImage: `url(${API_URL}/static/images/2000/home.jpg)`}}>
           <div className="container text-center">
             <Button 
               type="button" 

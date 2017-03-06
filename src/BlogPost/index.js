@@ -139,7 +139,7 @@ class BlogPost extends Component {
         <div 
           className="jumbotron"
           style={{
-            backgroundImage: `url("${currentPost.imgSrc}")`,
+            backgroundImage: `url(${currentPost.imgSrc})`,
             backgroundPosition: 'top center',
             backgroundSize: 'cover',
             backgroundAttachment: 'fixed'

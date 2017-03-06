@@ -90,6 +90,7 @@ module.exports = {
       hash: true
     }),
     new CleanWebpackPlugin([
+      'server/templates/base.html',
       'server/static/scripts',
       'server/static/styles'
     ])

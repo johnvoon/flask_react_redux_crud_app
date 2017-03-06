@@ -35,11 +35,11 @@ ReactDOM.render(
           <IndexRoute component={HomePage}/>
           <Route path="/blog" component={BlogHome}/>
           <Route path="/admin" component={AdminDashboard}/>
-          <Route path="admin/posts" component={AdminPosts}/>
-          <Route path="admin/users" component={AdminUsers}/>
-          <Route path="admin/practice-areas" component={AdminPracticeAreas}/>
-          <Route path="admin/matters" component={AdminMatters}/>
-          <Route path="admin/posts/:id/comments" component={AdminComments}/>
+          <Route path="/admin/posts" component={AdminPosts}/>
+          <Route path="/admin/users" component={AdminUsers}/>
+          <Route path="/admin/practice-areas" component={AdminPracticeAreas}/>
+          <Route path="/admin/matters" component={AdminMatters}/>
+          <Route path="/admin/posts/:id/comments" component={AdminComments}/>
           <Route path="/blog/:id/:slug" component={BlogPost}/>
           <Route path="/practice-areas" component={PracticeAreas}/>
           <Route path="/practice-areas/:slug" component={PracticeArea}/>

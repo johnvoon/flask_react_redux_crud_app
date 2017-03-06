@@ -54,8 +54,8 @@ Login with username: "admin", password: "devpassword" for access to account with
 ## Implementation
 - <b>Flask</b> web framework
 - Website hosted on <b>Digital Ocean</b>
-- <b>Gunicorn</b> web server
-- <b>Nginx</b> reverse proxy
+- <b>Gunicorn</b> web application server
+- <b>Nginx</b> reverse proxy for serving static assets, handling SSL, etc.
 - <b>Bootstrap</b> (customized using LESS) CSS framework
 - User authentication with <b>Flask</b> and <b>Flask-Login</b>
 - Password hashing using <b>Bcrypt</b>

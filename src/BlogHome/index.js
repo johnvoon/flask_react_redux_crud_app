@@ -191,7 +191,7 @@ class BlogHome extends Component {
         <div 
           className="jumbotron"
           style={{
-            backgroundImage: `url(${API_URL}/static/images/2000/coffee-smartphone.jpg)`,
+            backgroundImage: 'url(static/images/2000/coffee-smartphone.jpg)',
             backgroundPosition: "top center",
             backgroundSize: "cover",
             backgroundAttachment: "fixed"

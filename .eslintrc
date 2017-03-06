@@ -72,6 +72,5 @@
     "react/jsx-wrap-multilines": 1
   },
   "globals": {
-    "API_URL": false
   }
 }

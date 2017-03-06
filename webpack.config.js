@@ -75,9 +75,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      API_URL: JSON.stringify('https://10.0.0.2')
-    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [

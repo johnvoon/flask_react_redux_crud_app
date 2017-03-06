@@ -11,7 +11,7 @@ import { CLIENTS_LOADED,
 
 export function fetchClients() {
   return dispatch => {
-    return axios.get(`${API_URL}/api/clients`)
+    return axios.get('api/clients')
     .then(({data: {clients}}) => {
       const normalizedClients = normalize(clients, arrayOf(clientSchema));
       const normalizedClientUsers = normalize(clients, arrayOf(clientUserSchema));
@@ -24,7 +24,7 @@ export function fetchClients() {
 export function addClient(config, content) {
   return (dispatch) => {
     return axios.post(
-      '${API_URL}/api/client', 
+      'api/clients', 
       content, 
       config
     )
@@ -42,7 +42,7 @@ export function addClient(config, content) {
 export function editClient(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `${API_URL}/api/clients/${id}`, 
+      `api/clients/${id}`, 
       content,
       config
     )

@@ -8,7 +8,7 @@ import { USERS_LOADED } from 'constants/actionTypes';
 export function fetchUsers(config) {
   return dispatch => {
     axios.get(
-      `${API_URL}/api/users`, 
+      'api/users', 
       config
     )
     .then(({data: {users}}) => {
@@ -24,7 +24,7 @@ export function fetchUsers(config) {
 export function addUser(config, content) {
   return (dispatch) => {
     return axios.post(
-      '${API_URL}/api/users', 
+      'api/users', 
       content, 
       config
     )
@@ -39,7 +39,7 @@ export function addUser(config, content) {
 export function editUser(config, content, id) {
   return (dispatch) => {
     return axios.put(
-      `${API_URL}/api/users/${id}`, 
+      `api/users/${id}`, 
       content, 
       config
     )

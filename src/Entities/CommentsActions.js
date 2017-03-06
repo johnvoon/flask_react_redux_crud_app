@@ -8,7 +8,7 @@ import { COMMENTS_LOADED,
 
 export function fetchComments(id) {
   return dispatch => {
-    return axios.get(`${API_URL}/api/posts/${id}/comments`)
+    return axios.get(`api/posts/${id}/comments`)
     .then(({data: {comments}}) => {
       const normalized = normalize(comments, arrayOf(commentSchema));
       const orderedComments = sortByDate(
@@ -27,7 +27,7 @@ export function fetchComments(id) {
 export function changeCommentVisibility(id, formData, config) {
   return (dispatch) => {
     return axios.put(
-      `${API_URL}/api/comments/${id}`, 
+      `api/comments/${id}`, 
       formData, 
       config
     )
@@ -44,7 +44,7 @@ export function changeCommentVisibility(id, formData, config) {
 export function addComment(content) {
   return (dispatch) => {
     return axios.post(
-      '${API_URL}/api/comments', 
+      'api/comments', 
       content
     )
     .then(
@@ -58,7 +58,7 @@ export function addComment(content) {
 export function deleteComment(config, id) {
   return (dispatch) => {
     return axios.delete(
-      `${API_URL}/api/comment/${id}`, 
+      `api/comment/${id}`, 
       config
     )
     .then(({data: {comment}}) => {

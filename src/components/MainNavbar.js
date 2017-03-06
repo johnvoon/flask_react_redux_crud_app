@@ -36,7 +36,7 @@ export default class MainNavbar extends Component {
         <div className="container-fluid">
           <div className="navbar-header">
             <Link to="/">
-              <img src={`${API_URL}/static/images/concept-logo.png`}
+              <img src="static/images/concept-logo.png"
                    className="img-fluid"
                    title="Concept Law Firm" 
                    alt="Concept Law Firm"/>

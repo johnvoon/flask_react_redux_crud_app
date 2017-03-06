@@ -10,7 +10,7 @@ export default class Hero extends Component {
       <div
         className="jumbotron"
         style={{
-          backgroundImage: `url(${API_URL}/static/images/2000/${heroClass}.jpg)`,
+          backgroundImage: 'url(static/images/2000/${heroClass}.jpg)',
           backgroundPosition: 'top center',
           backgroundSize: 'cover',
           backgroundAttachment: 'fixed'

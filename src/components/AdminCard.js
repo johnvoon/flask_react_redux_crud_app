@@ -3,20 +3,20 @@ import { Link } from 'react-router';
 
 export default class AdminCard extends Component {
   render() {
-    const { text, endpoint, count, iconClass, customClassNames } = this.props;
+    const { text, slug, count } = this.props;
 
     return (
-      <div className="col-lg-3 col-md-6">
-        <Link to={`/admin/${endpoint}`}>
-          <div className={`panel ${customClassNames}`}>
+      <div className="admin-card col-lg-3 col-md-6 col-sm-6">
+        <Link to={`/admin/${slug}`}>
+          <div className={`panel bg-${slug}`}>
             <div className="panel-heading">
               <div className="row">
                 <div className="col-xs-3">
-                  <span className={iconClass}/>
+                  <span className={slug}/>
                 </div>
                 <div className="col-xs-9 text-right">
-                  <div>{count}</div>
-                  <div>{text}</div>
+                  <h2>{count}</h2>
+                  <p>{text}</p>
                 </div>
               </div>
             </div>
@@ -28,6 +28,7 @@ export default class AdminCard extends Component {
 }
 
 AdminCard.propTypes = {
-  dispatchEvent: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  text: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
+  count: PropTypes.string.isRequired
 };

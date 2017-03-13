@@ -58,6 +58,7 @@
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
+    "deep-assign": "^2.0.0",
     "font-awesome": "^4.7.0",
     "hamburgers": "^0.7.0",
     "lodash": "^4.17.2",
@@ -80,6 +81,7 @@
     "react-select": "^1.0.0-rc.2",
     "react-tap-event-plugin": "^2.0.1",
     "react-textarea-autosize": "^4.0.5",
+    "react-truncate": "^2.1.0",
     "redux": "^3.0.4",
     "redux-form": "^6.4.3",
     "redux-promise": "^0.5.3",
@@ -87,6 +89,7 @@
     "reselect": "^2.5.4",
     "scroll-into-view-if-needed": "^1.0.6",
     "scrollreveal": "^3.3.2",
+    "slug": "^0.9.1",
     "velocity-animate": "^1.4.2",
     "velocity-react": "^1.2.1"
   }

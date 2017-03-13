@@ -18,16 +18,16 @@ class ButtonLink extends Component {
   }
 
   handleClick() {
-    const { router, endpoint, id } = this.props;
+    const { router, slug, id } = this.props;
     router.push({
-      pathname: endpoint,
+      pathname: slug,
       state: { id: id }
     });  
   }
 
   render() {
     this.handleClick = this.handleClick.bind(this);
-    const { text, imgFilename, customClassNames } = this.props;
+    const { text, imgSrc, customClassNames } = this.props;
 
     return (
       <div className="form-group">
@@ -36,7 +36,7 @@ class ButtonLink extends Component {
           className={`btn btn-block text-uppercase ${customClassNames}`}
           onClick={this.handleClick}
           style={{
-            backgroundImage: `url(${API_URL}/static/images/2000/${imgFilename}.jpg)`
+            backgroundImage: `url(${imgSrc})`
           }}
           ref={button => this.button = button}>
           {text}
@@ -50,9 +50,9 @@ export default withRouter(ButtonLink);
 
 ButtonLink.propTypes = {
   router: PropTypes.object.isRequired,
-  endpoint: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  imgFilename: PropTypes.string.isRequired,
+  imgSrc: PropTypes.string.isRequired,
   customClassNames: PropTypes.string.isRequired,
 };

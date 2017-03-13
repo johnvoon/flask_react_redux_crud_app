@@ -25,21 +25,24 @@ class StaffAPI(Resource):
         content = request.form
         practice_area_ids = content.get('practiceAreas', '')
         matter_ids = content.get('matters', '')
-        
+        date_joined = content.get('dateJoined', None)
+        date_joined_date_object = datetime.strptime(date_joined, '%d/%m/%Y')
+
         staff = Staff()
-        staff.date_joined = content.get('dateJoined', None)
+        
+        staff.date_joined = date_joined_date_object.strftime('%m/%d/%Y') if date_joined else None
         staff.position = content.get('position', '')        
         staff.description = re.split('[\r\n]+', content.get('description', ''))
         staff.user_id = content.get('userId', None)
 
         if practice_area_ids:
             practice_areas = [PracticeArea.query.get(int(id)) for id in practice_area_ids.split(",")]
-            staff.practice_areas.extend(practice_areas)
+            staff.practice_areas = practice_areas
 
         if matter_ids:
             print matter_ids
             matters = [Matter.query.get(int(id)) for id in matter_ids.split(",")]
-            staff.matters_handled.extend(matters)
+            staff.matters_handled = matters
 
         try: 
             staff.save()
@@ -47,37 +50,40 @@ class StaffAPI(Resource):
         except:
             return render_json(500, {'message': "An error occurred."})
 
-@staff_api.resource('/staff/<int:staff_id>')
+@staff_api.resource('/staff/<int:user_id>')
 class StaffMemberApi(Resource):
     @staticmethod
     def get(user_id):
-        user = User.query.get_or_404(user_id)
-        if user:
-            return render_json(200, {'user': user.to_json()})
+        staff = Staff.find_by_user_id(user_id)
 
-        return render_json(404, {'message': 'No users found'})
+        if staff:
+            return render_json(200, {'staff': staff.to_json()})
+
+        return render_json(404, {'message': 'No staff found'})
 
     @staticmethod
     @jwt_required()
-    def put(staff_id):
-        staff = Staff.query.get_or_404(staff_id)
+    def put(user_id):
+        staff = Staff.find_by_user_id(user_id)
 
         if staff:
             content = request.form
             practice_area_ids = content.get('practiceAreas', '')
             matter_ids = content.get('matters', '')
-            staff.date_joined = content.get('dateJoined', None)
+            date_joined = content.get('dateJoined', None)
+            date_joined_date_object = datetime.strptime(date_joined, '%d/%m/%Y')
+
+            staff.date_joined = date_joined_date_object.strftime('%m/%d/%Y') if date_joined else None
             staff.position = content.get('position', '')
             staff.description = re.split('[\r\n]+', content.get('description', ''))
 
             if practice_area_ids:
                 practice_areas = [PracticeArea.query.get(int(id)) for id in practice_area_ids.split(",")]
-                staff.practice_areas.extend(practice_areas)
+                staff.practice_areas = practice_areas
 
             if matter_ids:
-                print matter_ids
                 matters = [Matter.query.get(int(id)) for id in matter_ids.split(",")]
-                staff.matters_handled.extend(matters)
+                staff.matters_handled = matters
 
             try: 
                 staff.save()
@@ -85,4 +91,4 @@ class StaffMemberApi(Resource):
             except:
                 return render_json(500, {'message': "An error occurred."})
  
-        return render_json(404, {'message': 'No staff with ID {} found'.format(staff_id)})
+        return render_json(404, {'message': 'No staff with user ID {} found'.format(user_id)})

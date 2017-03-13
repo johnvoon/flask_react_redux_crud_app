@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import deepAssign from 'deep-assign';
 
 const initialState = {
   posts: {},
@@ -15,7 +15,7 @@ const initialState = {
 
 export default function entitiesReducer(state = initialState, action) {
   if (action.entities) {
-    return _.merge({}, state, action.entities);
+    return deepAssign({}, state, action.entities);
   }
 
   return state;

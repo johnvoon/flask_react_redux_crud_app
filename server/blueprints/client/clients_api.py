@@ -9,13 +9,13 @@ from lib.util_json import render_json
 
 clients_api = Api(Blueprint('clients_api', __name__))
 
-@clients_api.resource('/client')
+@clients_api.resource('/clients')
 class ClientsAPI(Resource):
     @staticmethod
     def get():
         client = Client.query.all()
         if client:
-            return render_json(200, {'client': [member.to_json() for member in client]})
+            return render_json(200, {'clients': [member.to_json() for member in client]})
 
         return render_json(404, {'message': 'No client found'})
 
@@ -29,9 +29,8 @@ class ClientsAPI(Resource):
         client.user_id = content.get('userId', None)
 
         if matter_ids:
-            print matter_ids
             matters = [Matter.query.get(int(id)) for id in matter_ids.split(",")]
-            client.matters_handled.extend(matters)
+            client.matters = matters
 
         try: 
             client.save()
@@ -39,20 +38,20 @@ class ClientsAPI(Resource):
         except:
             return render_json(500, {'message': "An error occurred."})
 
-@clients_api.resource('/client/<int:client_id>')
+@clients_api.resource('/clients/<int:user_id>')
 class ClientApi(Resource):
     @staticmethod
     def get(user_id):
-        user = User.query.get_or_404(user_id)
-        if user:
-            return render_json(200, {'user': user.to_json()})
+        client = Client.find_by_user_id(user_id)
+        if client:
+            return render_json(200, {'client': client.to_json()})
 
-        return render_json(404, {'message': 'No users found'})
+        return render_json(404, {'message': 'No clients found'})
 
     @staticmethod
     @jwt_required()
-    def put(client_id):
-        client = Client.query.get_or_404(client_id)
+    def put(user_id):
+        client = Client.find_by_user_id(user_id)
 
         if client:
             content = request.form
@@ -61,7 +60,7 @@ class ClientApi(Resource):
             if matter_ids:
                 print matter_ids
                 matters = [Matter.query.get(int(id)) for id in matter_ids.split(",")]
-                client.matters_handled.extend(matters)
+                client.matters = matters
 
             try: 
                 client.save()
@@ -69,4 +68,4 @@ class ClientApi(Resource):
             except:
                 return render_json(500, {'message': "An error occurred."})
  
-        return render_json(404, {'message': 'No client with ID {} found'.format(client_id)})
+        return render_json(404, {'message': 'No client with user ID {} found'.format(user_id)})

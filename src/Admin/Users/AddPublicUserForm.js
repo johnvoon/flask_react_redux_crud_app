@@ -7,12 +7,12 @@ import UserAddressForm from './UserAddressForm';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
 import { asyncValidateUserIdentity as asyncValidate } from 'utils';
-import { hideModal, loadFormData as load } from 'Admin/actions';
+import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
 import { selectAddPublicUserForm } from 'Admin/selectors';
 import _ from 'lodash';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -26,8 +26,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadFormData: load,
-
     onAddUser: (JWT, content) => {
       return dispatch(addUser(JWT, content));
     },
@@ -52,7 +50,8 @@ class AddPublicUserForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddUser, onHideModal, onJWTExpired, JWT } = this.props;
+    const { onAddUser, onHideModal, onJWTExpired, 
+      JWT, destroy } = this.props;
     const userEntityFields = [
       'email', 'username', 'password', 'lastName', 'firstName', 'middleName', 
       'phoneNumber', 'unitNumber', 'streetAddress', 'suburb', 'postcode',
@@ -71,7 +70,10 @@ class AddPublicUserForm extends Component {
     userFormData.append('role', 'public');
 
     onAddUser(config, userFormData)
-    .then(() => onHideModal())
+    .then(() => {
+      destroy();
+      onHideModal();
+    })
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 401) {
@@ -89,7 +91,7 @@ class AddPublicUserForm extends Component {
   }
 
   fillInAddress(value) {
-    const { loadFormData } = this.props;
+    const { change } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
     const addressComponents = {};
@@ -98,16 +100,14 @@ class AddPublicUserForm extends Component {
       const value = component.long_name;
       addressComponents[addressType] = value;
     });
-    const initData = {
-      unitNumber: _.get(addressComponents, 'subpremise', ''),
-      streetAddress: _.get(addressComponents, 'street_number', '') + ' ' + _.get(addressComponents, 'route', ''),
-      suburb: _.get(addressComponents, 'locality', ''),
-      postcode: _.get(addressComponents, 'postal_code', ''),
-      state: _.get(addressComponents, 'administrative_area_level_1', ''),
-      country: _.get(addressComponents, 'country', '')
-    };
 
-    loadFormData(initData);
+    change('unitNumber', _.get(addressComponents, 'subpremise', ''));
+    change('streetAddress', _.get(addressComponents, 'street_number', '') + ' ' + 
+      _.get(addressComponents, 'route', ''));
+    change('suburb', _.get(addressComponents, 'locality', ''));
+    change('postcode', _.get(addressComponents, 'postal_code', ''));
+    change('state', _.get(addressComponents, 'administrative_area_level_1', ''));
+    change('country', _.get(addressComponents, 'country', ''));
   }
 
   handleClick(event) {
@@ -146,28 +146,12 @@ class AddPublicUserForm extends Component {
           fillInAddress={(value) => this.fillInAddress(value)}
           isDisplayed={currentTab === tabLabels[2]}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button"
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button"
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </div>
     );
   }
@@ -178,11 +162,12 @@ AddPublicUserForm.propTypes = {
   onJWTExpired: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   JWT: PropTypes.string.isRequired,
-  loadFormData: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired,
   passwordValue: PropTypes.string.isRequired
 };
 

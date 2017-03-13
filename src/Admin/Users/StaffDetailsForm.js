@@ -74,5 +74,4 @@ StaffDetailsForm.propTypes = {
   practiceAreas: PropTypes.object.isRequired,
   matters: PropTypes.object.isRequired,
   isDisplayed: PropTypes.bool.isRequired,
-  changeMatterFieldValue: PropTypes.func.isRequired 
 };

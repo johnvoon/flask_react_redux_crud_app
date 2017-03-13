@@ -18,9 +18,14 @@ class PracticeArea(ResourceMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     area = db.Column(db.String(128), nullable=False, unique=True, index=True)
     img_src = db.Column(db.String(200))
+    thumbnail_src = db.Column(db.String(200))
     description = db.Column(db.ARRAY(db.String), nullable=False)
     slug = db.Column(db.String(128), nullable=False, unique=True, index=True)
 
+    @classmethod
+    def get_by_slug(cls, slug):
+        return PracticeArea.query.filter(PracticeArea.slug == slug).first()
+    
     def to_json_short(self):
         return {
             'id': self.id,
@@ -32,7 +37,10 @@ class PracticeArea(ResourceMixin, db.Model):
             'id': self.id,
             'area': self.area,
             'imgSrc': self.img_src,
-            'posts': self.posts.count(),
+            'thumbnailSrc': self.thumbnail_src,
+            'posts': [post.id for post in self.posts],
+            'matters': [matter.id for matter in self.matters],
+            'staff': [staff_member.id for staff_member in self.staff],
             'description': self.description,
             'slug': self.slug
         }

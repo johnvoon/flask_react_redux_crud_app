@@ -12,7 +12,7 @@ import SelectFormGroup from 'components/SelectFormGroup';
 import TextAreaFormGroup from 'components/TextAreaFormGroup';
 import FileUploadFormGroup from 'components/FileUploadFormGroup';
 import TextEditorFormGroup from 'components/TextEditorFormGroup';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 
 const mapStateToProps = (state) => {
@@ -118,8 +118,8 @@ class AddPostForm extends Component {
           name="summary"
           component={TextAreaFormGroup}
           label="Summary"
-          validate={[ required, maxLength(200) ]}
-          rows="4"/>
+          validate={[ required, maxLength(300) ]}
+          rows={4}/>
         <Field 
           name="body"
           component={TextEditorFormGroup}
@@ -130,28 +130,12 @@ class AddPostForm extends Component {
           component={FileUploadFormGroup}
           label="Image Source"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { DateField } from 'react-date-picker';
 import classNames from 'classnames';
+import 'react-date-picker/index.css';
 
 const DatePickerFormGroup = (field) => {
   const { input, meta, label } = field;
@@ -23,7 +24,6 @@ const DatePickerFormGroup = (field) => {
         updateOnDateClick={true}
         collapseOnDateClick={true}
         onChange={(date) => onChange(date)}
-        // monthsShown={2}
         {...inputProps}
         />
        {error && <span className="text-error">{meta.error}</span>}

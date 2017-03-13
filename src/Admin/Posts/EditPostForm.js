@@ -14,7 +14,7 @@ import StaticFormGroup from 'components/StaticFormGroup';
 import FileUploadFormGroup from 'components/FileUploadFormGroup';
 import TextEditorFormGroup from 'components/TextEditorFormGroup';
 import ErrorAlert from 'components/ErrorAlert';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
@@ -82,7 +82,7 @@ class EditPostForm extends Component {
     let formData = new FormData();
     
     Object.keys(data).forEach((key) => {
-      key === 'file' && formData.append('file', data[key][0]);
+      key === 'file' && formData.append('file', data.file[0]);
       formData.append(key, data[key]);
     });
 
@@ -116,11 +116,17 @@ class EditPostForm extends Component {
     return (
       <form>
         <StaticFormGroup 
-          label="Created"
-          text={postCreated}/>
+          label="Image">
+          <img src={selectedRecord.thumbnailSrc} alt="Post image"/>
+        </StaticFormGroup>
         <StaticFormGroup 
-          label="Updated"
-          text={postUpdated}/>
+          label="Created">
+          {postCreated}
+        </StaticFormGroup>
+        <StaticFormGroup 
+          label="Updated">
+          {postUpdated}
+        </StaticFormGroup>
         <Field 
           name="title"
           type="text"
@@ -160,42 +166,26 @@ class EditPostForm extends Component {
           component={FileUploadFormGroup}
           label="Image Source"/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }
 }
 
 EditPostForm.propTypes = {
-  initialize: PropTypes.object.isRequired,
-  onEditPost: PropTypes.object.isRequired,
-  onHideModal: PropTypes.object.isRequired,
+  initialize: PropTypes.func.isRequired,
+  onEditPost: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
   onJWTExpired: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.object.isRequired,
-  pristine: PropTypes.object.isRequired,
-  reset: PropTypes.object.isRequired,
-  submitting: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired,
+  submitting: PropTypes.bool.isRequired,
   selectedRecord: PropTypes.object.isRequired,
   staff: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
@@ -207,5 +197,4 @@ export default connect(
   mapDispatchToProps
 )(reduxForm({
   form: 'EditPostForm',
-  destroyOnUnmount: false
 })(EditPostForm));

@@ -5,13 +5,15 @@ import {
   CHANGE_ADMIN_OPERATION,
   SORT_DATA,
   FILTER_ADMIN_DATA,
+  RECORDS_LOADED,
   RECORD_ADDED,
   RECORD_EDITED,
   RECORD_DELETED,
   COMMENT_VISIBILITY_CHANGED,
   LOAD_FORM_DATA,
   SHOW_MODAL,
-  HIDE_MODAL
+  HIDE_MODAL,
+  RESET_STATE
 } from 'constants/actionTypes';
 
 export function changePageLength(value) {
@@ -56,6 +58,14 @@ export function filterAdminData(value) {
   };
 }
 
+export function recordsLoaded(records, recordIds) {
+  return {
+    type: RECORDS_LOADED,
+    records,
+    recordIds
+  };
+}
+
 export function recordAdded(entities, addedRecord, addedRecordId) {
   return {
     type: RECORD_ADDED,
@@ -65,18 +75,21 @@ export function recordAdded(entities, addedRecord, addedRecordId) {
   };
 }
 
-export function recordEdited(entities) {
+export function recordEdited(entities, editedRecord, editedRecordId) {
   return {
     type: RECORD_EDITED,
-    entities
+    entities,
+    editedRecord,
+    editedRecordId
   };
 }
 
-export function recordDeleted(deletedRecord, deletedRecordId) {
+export function recordDeleted(entities, records, recordIds) {
   return {
     type: RECORD_DELETED,
-    deletedRecord,
-    deletedRecordId,
+    entities,
+    records,
+    recordIds,
   };
 }
 
@@ -104,5 +117,11 @@ export function showModal() {
 export function hideModal() {
   return {
     type: HIDE_MODAL
+  };
+}
+
+export function resetState() {
+  return {
+    type: RESET_STATE
   };
 }

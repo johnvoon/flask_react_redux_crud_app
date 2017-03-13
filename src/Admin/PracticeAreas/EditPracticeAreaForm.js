@@ -1,17 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from  'redux-form';
-import { hideModal } from 'Admin/actions';
+import { slugify } from 'utils';
+import { hideModal, loadFormData } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
 import { editPracticeArea } from 'Entities/PracticeAreasActions';
 import PracticeAreaParticularsForm from './PracticeAreaParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
 
   return {
+    initialValues: adminPages.formData,
     ...entities,
     ...adminPages,
     ...authentication
@@ -20,8 +22,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onEditPracticeArea: (JWT, content, practiceAreaId) => {
-      return dispatch(editPracticeArea(JWT, content, practiceAreaId));
+    onEditPracticeArea: (config, content, id) => {
+      return dispatch(editPracticeArea(config, content, id));
+    },
+
+    onLoadFormData: (formData) => {
+      return dispatch(loadFormData(formData));
     },
 
     onJWTExpired: () => {
@@ -40,6 +46,26 @@ class EditPracticeAreaForm extends Component {
     this.state = {
       errorMessage: ''
     };
+
+    this.handleInitialize = this.handleInitialize.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleInitialize();
+  }
+
+  handleInitialize() {
+    const { selectedRecord, onLoadFormData } = this.props;
+    const description = (selectedRecord.description || []).map((paragraph) => {
+      return paragraph;
+    }).join('\r\n\r\n');
+
+    const initData = {
+      "area": selectedRecord.area,
+      "description": description
+    };
+
+    onLoadFormData(initData);
   }
 
   _handleSubmit(data) {
@@ -53,9 +79,12 @@ class EditPracticeAreaForm extends Component {
 
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
+      key === 'file' && formData.append('file', data.file[0]);
       formData.append(key, data[key]);
     });
-    onEditPracticeArea(config, formData, selectedRecord.id)
+    formData.append('slug', slugify(data.area));
+
+    onEditPracticeArea(config, formData, selectedRecord.slug)
     .then(() => onHideModal())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -81,28 +110,12 @@ class EditPracticeAreaForm extends Component {
       <form>
         <PracticeAreaParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>      
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }
@@ -110,6 +123,7 @@ class EditPracticeAreaForm extends Component {
 
 EditPracticeAreaForm.propTypes = {
   onEditPracticeArea: PropTypes.func.isRequired,
+  onLoadFormData: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.func.isRequired,
@@ -125,5 +139,4 @@ export default connect(
   mapDispatchToProps  
 )(reduxForm({
   form:  'EditPracticeAreaForm',
-  destroyOnUnmount: false,
 })(EditPracticeAreaForm));

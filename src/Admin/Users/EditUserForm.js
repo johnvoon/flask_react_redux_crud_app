@@ -11,18 +11,18 @@ import { removeJWT } from 'Authentication/actions';
 import { editUser } from 'Entities/UsersActions';
 import { addStaff, editStaff } from 'Entities/StaffActions';
 import { addClient, editClient } from 'Entities/ClientsActions';
-import { hideModal, loadFormData as load } from 'Admin/actions';
+import { hideModal, loadFormData } from 'Admin/actions';
 import { selectEditUserForm } from 'Admin/selectors';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
   
   return {
     roleValue: selectEditUserForm(state, 'role'),
-    initialValues: state.adminPages.formData,
+    initialValues: adminPages.formData,
     ...entities,
     ...adminPages,
     ...authentication
@@ -31,7 +31,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadFormData: load,
+    onLoadFormData: (formData) => {
+      return dispatch(loadFormData(formData));
+    },
 
     onEditUser: (JWT, content, id) => {
       return dispatch(editUser(JWT, content, id));
@@ -70,6 +72,8 @@ class EditUserForm extends Component {
       errorMessage: '',
       currentTab: 'Particulars',
     };
+
+    this.changeMatterFieldValue = this.changeMatterFieldValue.bind(this);
   }
 
   componentDidMount() {
@@ -84,7 +88,7 @@ class EditUserForm extends Component {
   }
 
   handleInitializeUserData() {
-    const { selectedRecord, loadFormData } = this.props;
+    const { selectedRecord, onLoadFormData } = this.props;
     const initData = {
       "active": selectedRecord.active === "Active" ? "1" : "0",
       "role": selectedRecord.role,
@@ -100,20 +104,14 @@ class EditUserForm extends Component {
       "country": selectedRecord.country
     };
 
-    loadFormData(initData);
+    onLoadFormData(initData);
   }
 
   handleInitializeStaffData() {
-    const { selectedRecord, staffUsers, loadFormData } = this.props;
+    const { selectedRecord, staffUsers, onLoadFormData } = this.props;
     const staffUser = staffUsers[selectedRecord.id];
-    const mattersList = staffUser.mattersHandled.join(',');
-    const practiceAreasList = staffUser.practiceAreas.join(',');
-    // const mattersList = staffUser.mattersHandled.map(id => {
-    //   return String(id)
-    // });
-    // const practiceAreasList = staffUser.practiceAreas.map(id => {
-    //   return String(id)
-    // });
+    const mattersList = (staffUser.mattersHandled || []).join(',');
+    const practiceAreasList = (staffUser.practiceAreas || []).join(',');
     const description = (staffUser.description || []).map((paragraph) => {
       return paragraph;
     }).join('\r\n\r\n');
@@ -126,25 +124,23 @@ class EditUserForm extends Component {
       "practiceAreas": practiceAreasList
     };
 
-    loadFormData(initData);    
+    onLoadFormData(initData);    
   }
 
   handleInitializeClientData() {
-    const { selectedRecord, clientUsers, loadFormData } = this.props;
+    const { selectedRecord, clientUsers, onLoadFormData } = this.props;
     const clientUser = clientUsers[selectedRecord.id];
-    const mattersList = clientUser.mattersHandled.map(id => {
-      return String(id);
-    });
+    const mattersList = (clientUser.matters || []).join(',');
 
     const initData = {
       "matters": mattersList,
     };
 
-    loadFormData(initData);   
+    onLoadFormData(initData);   
   }
 
   fillInAddress(value) {
-    const { loadFormData } = this.props;
+    const { change } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
     const addressComponents = {};
@@ -153,16 +149,13 @@ class EditUserForm extends Component {
       const value = component.long_name;
       addressComponents[addressType] = value;
     });
-    const initData = {
-      unitNumber: _.get(addressComponents, 'subpremise', ''),
-      streetAddress: _.get(addressComponents, 'street_number', '') + ' ' + _.get(addressComponents, 'route', ''),
-      suburb: _.get(addressComponents, 'locality', ''),
-      postcode: _.get(addressComponents, 'postal_code', ''),
-      state: _.get(addressComponents, 'administrative_area_level_1', ''),
-      country: _.get(addressComponents, 'country', '')
-    };
-
-    loadFormData(initData);
+    change('unitNumber', _.get(addressComponents, 'subpremise', ''));
+    change('streetAddress', _.get(addressComponents, 'street_number', '') + ' ' + 
+      _.get(addressComponents, 'route', ''));
+    change('suburb', _.get(addressComponents, 'locality', ''));
+    change('postcode', _.get(addressComponents, 'postal_code', ''));
+    change('state', _.get(addressComponents, 'administrative_area_level_1', ''));
+    change('country', _.get(addressComponents, 'country', ''));
   }
 
   _handleSubmit(data) {
@@ -170,7 +163,7 @@ class EditUserForm extends Component {
       onEditUser, onEditStaff, onEditClient, 
       onHideModal, onJWTExpired, roleValue, JWT } = this.props;
     const userEntityFields = [
-      'active', 'lastName', 'firstName', 'middleName', 'phoneNumber', 
+      'role', 'active', 'lastName', 'firstName', 'middleName', 'phoneNumber', 
       'unitNumber', 'streetAddress', 'suburb', 'postcode',
       'state', 'country', 'photo'
     ];
@@ -201,19 +194,21 @@ class EditUserForm extends Component {
     });
 
     onEditUser(config, userFormData, selectedRecord.id)
-    .then(({addedRecordId}) => {
+    .then(({editedRecordId}) => {
       if (selectedRecord.role === 'staff') {
-        onEditStaff(config, staffFormData, addedRecordId);  
+        onEditStaff(config, staffFormData, editedRecordId);  
       } else if (selectedRecord.role === 'client') {
-        onEditClient(config, clientFormData, addedRecordId);
+        onEditClient(config, clientFormData, editedRecordId);
       } else if (selectedRecord.role === 'public') {
         if (roleValue === 'staff') {
+          staffFormData.append('userId', editedRecordId);
           onAddStaff(config, staffFormData);
-        } else if (roleValue === 'client')
+        } else if (roleValue === 'client') {
+          clientFormData.append('userId', editedRecordId);
           onAddClient(config, clientFormData);
         } else return;
       }
-    )
+    })
     .then(() => onHideModal())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -236,6 +231,12 @@ class EditUserForm extends Component {
     this.setState({
       currentTab: event.target.textContent
     });
+  }
+
+  changeMatterFieldValue(matterId) {
+    matterId = String(matterId);
+    const { mattersValue, change } = this.props;
+    change('matters', !mattersValue ? matterId : mattersValue.concat(`,${matterId}`));
   }
 
   render() {
@@ -275,55 +276,41 @@ class EditUserForm extends Component {
             isDisplayed={currentTab === tabLabels[2]}/>
         ) : selectedRecord.role === 'client' || roleValue === 'client' ? (
           <ClientDetailsForm
-            isDisplayed={currentTab === tabLabels[2]}/>
+            isDisplayed={currentTab === tabLabels[2]}
+            changeMatterFieldValue={this.changeMatterFieldValue}/>
         ) : null}
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit" 
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }
 }
 
 EditUserForm.propTypes = {
-  initialize: PropTypes.object.isRequired,
   onEditUser: PropTypes.func.isRequired,
   onEditStaff: PropTypes.func.isRequired,
   onEditClient: PropTypes.func.isRequired,
-  onHideModal: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.object.isRequired,
-  pristine: PropTypes.object.isRequired,
-  reset: PropTypes.object.isRequired,
-  submitting: PropTypes.object.isRequired,
+  onHideModal: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired,
+  submitting: PropTypes.bool.isRequired,
   selectedRecord: PropTypes.object.isRequired,
   onAddStaff: PropTypes.func.isRequired,
   onAddClient: PropTypes.func.isRequired,
   onJWTExpired: PropTypes.func.isRequired,
   roleValue: PropTypes.string.isRequired,
-  loadFormData: PropTypes.func.isRequired,
+  onLoadFormData: PropTypes.func.isRequired,
   staffUsers: PropTypes.object.isRequired,
   clientUsers: PropTypes.object.isRequired,
-  JWT: PropTypes.string.isRequired
+  change: PropTypes.func.isRequired,
+  JWT: PropTypes.string.isRequired,
+  mattersValue: PropTypes.string
 };
 
 export default connect(

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const SearchField = ({ filterValues, onFilter }) => {
+const SearchField = ({ filterValues, onFilter, placeholder }) => {
   return (
     <div className="form-group">
       <div className="input-group">
@@ -9,7 +9,7 @@ const SearchField = ({ filterValues, onFilter }) => {
           type="search"
           value={filterValues}
           onChange={onFilter}
-          placeholder="Search blog posts by keyword"/>
+          placeholder={placeholder}/>
         <span className="input-group-addon search"/>
       </div>
     </div>    
@@ -19,6 +19,7 @@ const SearchField = ({ filterValues, onFilter }) => {
 SearchField.propTypes = {
   onFilter: PropTypes.func.isRequired,
   filterValues: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired
 };
 
 export default SearchField;

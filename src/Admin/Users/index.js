@@ -12,11 +12,12 @@ import PageLengthMenu from 'components/PageLengthMenu';
 import ModalMedium from 'components/ModalMedium';
 import SuccessAlert from 'components/SuccessAlert';
 import TableDate from 'components/TableDate'; 
-import TableUserInfoLink from 'components/TableUserInfoLink';
+import TableLink from 'components/TableLink';
 import TableText from 'components/TableText';
 import TableEditLink from 'components/TableEditLink';
 import ButtonBlock from 'components/ButtonBlock';
 import { fetchUsers } from 'Entities/UsersActions';
+import { fetchPosts } from 'Entities/PostsActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions';
 import { fetchClients } from 'Entities/ClientsActions';
@@ -28,7 +29,8 @@ import { filterAdminData,
          showModal,
          hideModal,
          changeSelectedRecord,
-         changeAdminOperation } from 'Admin/actions';
+         changeAdminOperation,
+         resetState } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
@@ -45,8 +47,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchUsers: (config) => {
-      dispatch(fetchUsers(config));
+    onFetchUsers: (config, admin) => {
+      dispatch(fetchUsers(config, admin));
     },
 
     onFetchPracticeAreas: () => {
@@ -63,6 +65,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onFetchClients: (config) => {
       dispatch(fetchClients(config));
+    },
+
+    onFetchPosts: () => {
+      dispatch(fetchPosts());
     },
 
     onFilter: ({target: {value}}) => {
@@ -95,6 +101,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onChangeAdminOperation: (value) => {
       dispatch(changeAdminOperation(value));
+    },
+
+    onResetState: () => {
+      dispatch(resetState());
     }
   };
 };
@@ -106,15 +116,32 @@ class AdminUsers extends Component {
   }
 
   componentDidMount() {
-    const { onShowModal, onChangeAdminOperation } = this.props;
-    onChangeAdminOperation("authenticate");
-    onShowModal();
+    const { JWT, onShowModal, onChangeAdminOperation,
+      onFetchUsers, onFetchPracticeAreas, onFetchMatters,
+      onFetchStaff, onFetchClients, onFetchPosts } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+    
+    if (JWT) {
+      onFetchUsers(config, true);
+      onFetchPracticeAreas();
+      onFetchMatters(config);
+      onFetchStaff(config);
+      onFetchClients(config);
+      onFetchPosts();
+    } else {
+      onChangeAdminOperation("authenticate");
+      onShowModal();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const { onFetchUsers, onFetchPracticeAreas,
-      onFetchMatters, onFetchStaff,
-      onFetchClients, onHideModal } = this.props;
+      onFetchMatters, onFetchStaff, onFetchClients, 
+      onHideModal, onFetchPosts } = this.props;
     const { JWT } = nextProps;
     const config = {
       headers: {
@@ -123,13 +150,20 @@ class AdminUsers extends Component {
     };
 
     if (!this.props.JWT && JWT) {
-      onFetchUsers(config);
+      onFetchUsers(config, true);
       onFetchPracticeAreas();
       onFetchMatters(config);
       onFetchStaff(config);
       onFetchClients(config);
+      onFetchPosts();
       onHideModal();
     }
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    
+    onResetState();
   }
 
   renderTableEditLink(val, row) {
@@ -164,8 +198,8 @@ class AdminUsers extends Component {
       onShowModal } = this.props;
     
     return (
-      <TableUserInfoLink
-        username={val}
+      <TableLink
+        text={val}
         handleClick={(event) => {
           event.preventDefault();
           onChangeSelectedRecord(row);
@@ -180,11 +214,12 @@ class AdminUsers extends Component {
       onPageNumberChange, data, filterValues, 
       totalPages, sortBy, currentPage, pageLength, 
       pageData, successMessage, adminOperation, 
-      selectedRecord, modalShowing } = this.props;
+      selectedRecord, modalShowing, onHideModal } = this.props;
     const modalTitle = (adminOperation === "authenticate" && "Load Users") ||
-                       (adminOperation === "read" && `Edit User (ID: ${selectedRecord.id}`) ||
+                       (adminOperation === "read" && `Edit User (ID: ${selectedRecord.id})`) ||
                        (adminOperation === "add" && "Add a New User") ||
-                       (adminOperation === "edit" && `Edit User (ID: ${selectedRecord.id}`);
+                       (adminOperation === "edit" && `Edit User (ID: ${selectedRecord.id})`) ||
+                       '';
     
     return (
       <main className="container-fluid">
@@ -215,7 +250,8 @@ class AdminUsers extends Component {
           <div className="col-sm-5">
             <SearchField 
               filterValues={filterValues}
-              onFilter={onFilter}/> 
+              onFilter={onFilter}
+              placeholder="Search users by keyword"/> 
           </div>
           <div className="col-sm-4">
             <Pagination
@@ -228,6 +264,7 @@ class AdminUsers extends Component {
         {successMessage && <SuccessAlert message={successMessage}/>}
         <Table 
           columns={[
+            { title: 'ID', component: TableText, prop: 'id'},
             { title: 'Created On', component: TableDate, prop: 'created' },
             { title: 'Username', 
               component: (val, row) => this.renderUserInfoLink(val, row), 
@@ -245,7 +282,8 @@ class AdminUsers extends Component {
         />
         <ModalMedium
           title={modalTitle}
-          show={modalShowing}>
+          show={modalShowing}
+          onHide={onHideModal}>
           {adminOperation === "authenticate" ? <GetJWTForm/> : null}
           {adminOperation === "read" ? <ViewUser/> : null}
           {adminOperation === "add" ? <AddUser/> : null}
@@ -262,6 +300,7 @@ AdminUsers.propTypes = {
   onFetchStaff: PropTypes.func.isRequired,
   onFetchClients: PropTypes.func.isRequired, 
   onFetchUsers: PropTypes.func.isRequired,
+  onFetchPosts: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
@@ -270,8 +309,8 @@ AdminUsers.propTypes = {
   onHideModal: PropTypes.func.isRequired,
   onChangeSelectedRecord: PropTypes.func.isRequired,
   onChangeAdminOperation: PropTypes.func.isRequired,
+  onResetState: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
-  users: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,
   totalPages: PropTypes.number.isRequired,

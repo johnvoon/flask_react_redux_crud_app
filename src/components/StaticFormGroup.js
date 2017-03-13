@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 const StaticFormGroup = (props) => {
-  const { label, text } = props;
+  const { label, children } = props;
   
   return (
     <div className="form-group">
@@ -9,7 +9,7 @@ const StaticFormGroup = (props) => {
         {label}
       </label>
       <p className="form-control-static">
-        {text}
+        {children}
       </p>
     </div>
   );
@@ -17,7 +17,7 @@ const StaticFormGroup = (props) => {
 
 StaticFormGroup.propTypes = {
   label: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default StaticFormGroup;

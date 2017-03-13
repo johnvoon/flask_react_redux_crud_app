@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
+import slug from 'slug';
 
 
 // Options list
@@ -46,6 +47,18 @@ export function filter(filterValues, data) {
       return recordTerms.indexOf(keyword) >= 0;
     });
   });
+}
+
+// Text conversion
+
+export function slugify(string) {
+  return slug(string, { lower: true, remove: /\&/g });
+}
+
+export function camelize(string) {
+  return string.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+    return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+  }).replace(/\s+/g, '');
 }
 
 // Form Validations

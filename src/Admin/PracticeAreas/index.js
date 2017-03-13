@@ -3,27 +3,31 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import AddPracticeArea from './AddPracticeArea';
 import EditPracticeArea from './EditPracticeArea';
+import ViewPracticeArea from './ViewPracticeArea';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';
 import SearchField from 'components/SearchField';
 import PageLengthMenu from 'components/PageLengthMenu';
 import ModalMedium from 'components/ModalMedium';
 import SuccessAlert from 'components/SuccessAlert';
-import TableDate from 'components/TableDate';
-import TablePostLink from 'components/TablePostLink';
 import TableText from 'components/TableText';
+import TableLink from 'components/TableLink';
+import TableDescription from 'components/TableDescription';
 import TableEditLink from 'components/TableEditLink';
 import ButtonBlock from 'components/ButtonBlock';
 import { fetchMatters } from 'Entities/MattersActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
+import { fetchPosts } from 'Entities/PostsActions';
 import { fetchStaff } from 'Entities/StaffActions'; 
 import { filterAdminData, 
          sortData, 
          changePageLength, 
          changePageNumber,
          showModal,
+         hideModal,
          changeSelectedRecord,
-         changeAdminOperation } from 'Admin/actions';
+         changeAdminOperation,
+         resetState } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
@@ -43,12 +47,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchMatters());
     },
 
-    onFetchPracticeAreas: () => {
-      dispatch(fetchPracticeAreas());
+    onFetchPracticeAreas: (admin) => {
+      dispatch(fetchPracticeAreas(admin));
     },
 
     onFetchStaff: () => {
       dispatch(fetchStaff());
+    },
+
+    onFetchPosts: () => {
+      dispatch(fetchPosts());
     },
 
     onFilter: ({target: {value}}) => {
@@ -71,12 +79,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showModal());
     },
 
+    onHideModal: () => {
+      dispatch(hideModal());
+    },
+
     onChangeSelectedRecord: (record) => {
       dispatch(changeSelectedRecord(record));
     },
 
     onChangeAdminOperation: (value) => {
       dispatch(changeAdminOperation(value));
+    },
+
+    onResetState: () => {
+      dispatch(resetState());
     }
   };
 };
@@ -84,12 +100,23 @@ const mapDispatchToProps = (dispatch) => {
 class AdminPracticeAreas extends Component {
   constructor(props) {
     super(props);
+    this.handleClickAddButton = this.handleClickAddButton.bind(this);
   }
 
   componentDidMount() {
-    this.props.onFetchMatters();
-    this.props.onFetchPracticeAreas();
-    this.props.onFetchStaff();
+    const { onFetchMatters, onFetchPracticeAreas, 
+      onFetchStaff, onFetchPosts } = this.props;
+    
+    onFetchPracticeAreas(true);
+    onFetchMatters();
+    onFetchStaff();
+    onFetchPosts();
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    
+    onResetState();
   }
 
   renderTableEditLink(val, row) {
@@ -106,16 +133,58 @@ class AdminPracticeAreas extends Component {
     );
   }
 
+  renderTableLink(val, row) {
+    const { onChangeSelectedRecord, 
+      onChangeAdminOperation, onShowModal } = this.props;
+
+    return (
+      <TableLink 
+        text={val}
+        handleClick={(event) => {
+          event.preventDefault();
+          onChangeSelectedRecord(row);
+          onChangeAdminOperation("read");
+          onShowModal();
+        }}/>
+    );
+  }
+
+  renderTableDescription(val, row) { // eslint-disable-line no-unused-vars
+    const description = (row.description || []).map((paragraph, idx) => {
+      return (
+        <p key={idx}>{paragraph}</p>
+      );
+    });
+
+    return (
+      <TableDescription 
+        more="Show more"
+        less="Show less"
+        lines={1}>
+        {description}
+      </TableDescription>
+    );    
+  }
+
+  handleClickAddButton() {
+    const { onChangeAdminOperation, 
+      onShowModal } = this.props;
+
+    onChangeAdminOperation("add");
+    onShowModal();
+  }
+
   render() {
     const { onFilter, onSort, onPageLengthChange, 
       onPageNumberChange, adminOperation,
       modalShowing, selectedRecord,
       data, filterValues, totalPages, 
       sortBy, currentPage, pageLength, 
-      pageData, successMessage } = this.props;
-    const modalTitle = (adminOperation === "view" && `Practice Area Info (ID: ${selectedRecord.id}`) ||
+      pageData, successMessage, onHideModal } = this.props;
+    const modalTitle = (adminOperation === "read" && `Practice Area Info (ID: ${selectedRecord.id})`) ||
                        (adminOperation === "add" && "Add a New Practice Area") ||
-                       (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id}`);
+                       (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id})`) ||
+                       '';
 
     return (
       <main className="container-fluid">
@@ -129,8 +198,9 @@ class AdminPracticeAreas extends Component {
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">
               <ButtonBlock
+                type="button"
                 customClassNames="btn-primary"
-                onClick={() => this.setState({showAddModal: true})}>
+                handleClick={this.handleClickAddButton}>
                 Add a New Practice Area
               </ButtonBlock>
             </div>
@@ -146,7 +216,8 @@ class AdminPracticeAreas extends Component {
           <div className="col-sm-5">
             <SearchField 
               filterValues={filterValues}
-              onFilter={onFilter}/>
+              onFilter={onFilter}
+              placeholder="Search practice areas by keyword"/>
           </div>
           <div className="col-sm-4">
             <Pagination
@@ -160,10 +231,12 @@ class AdminPracticeAreas extends Component {
         <Table 
           columns={[
             { title: 'ID', component: TableText, prop: 'id'},
-            { title: 'File Open Date', component: TableDate, prop: 'created' },
-            { title: 'Description', component: TablePostLink, prop: 'title'},
-            { title: 'Author', component: TableText, prop: 'author'},
-            { title: 'Practice Area', component: TableText, prop: 'practiceArea'},
+            { title: 'Practice Area', 
+              component: (val, row) => this.renderTableLink(val, row), 
+              prop: 'area' },
+            { title: 'Description', 
+              component: (val, row) => this.renderTableDescription(val, row), 
+              prop: 'description'},
             { title: '', 
               component: (val, row) => this.renderTableEditLink(val, row),
               className: 'text-center' }
@@ -174,7 +247,9 @@ class AdminPracticeAreas extends Component {
           data={data}/>
         <ModalMedium 
           title={modalTitle}
-          show={modalShowing}>
+          show={modalShowing}
+          onHide={onHideModal}>
+          {adminOperation === "read" ? <ViewPracticeArea/> : null}
           {adminOperation === "add" ? <AddPracticeArea/> : null}
           {adminOperation === "edit" ? <EditPracticeArea/> : null}
         </ModalMedium>
@@ -189,9 +264,11 @@ AdminPracticeAreas.propTypes = {
   onFetchMatters: PropTypes.func.isRequired,
   onFetchPracticeAreas: PropTypes.func.isRequired,
   onFetchStaff: PropTypes.func.isRequired,
+  onFetchPosts: PropTypes.func.isRequired,
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
   onShowModal: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
   onChangeSelectedRecord: PropTypes.func.isRequired,
   onChangeAdminOperation: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
@@ -204,7 +281,8 @@ AdminPracticeAreas.propTypes = {
   successMessage: PropTypes.string.isRequired,
   modalShowing: PropTypes.bool.isRequired,
   selectedRecord: PropTypes.object.isRequired,
-  adminOperation: PropTypes.string.isRequired
+  adminOperation: PropTypes.string.isRequired,
+  onResetState: PropTypes.func.isRequired
 };
 
 export default connect(

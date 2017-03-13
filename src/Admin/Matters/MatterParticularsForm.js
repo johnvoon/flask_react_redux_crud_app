@@ -44,7 +44,7 @@ class MatterParticularsForm extends Component {
           options={practiceAreaOptions}
           placeholder="Select one or more practice areas"/>
         <Field
-          name="handlingStaff"
+          name="staff"
           component={MultiselectFormGroup}
           label="Handling Staff"
           options={staffOptions}

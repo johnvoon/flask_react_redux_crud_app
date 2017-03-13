@@ -9,7 +9,8 @@ import { filterAdminData,
          changePageNumber,
          changeAdminOperation,
          showModal,
-         hideModal } from 'Admin/actions';
+         hideModal,
+         resetState } from 'Admin/actions';
 import GetJWTForm from 'Admin/GetJWTForm';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 import Pagination from 'components/Pagination';
@@ -40,8 +41,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchComments: (id) => {
-      dispatch(fetchComments(id));
+    onFetchComments: (id, admin) => {
+      dispatch(fetchComments(id, admin));
     },
 
     onChangeCommentVisibility: (id, formData) => {
@@ -78,6 +79,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onChangeAdminOperation: (value) => {
       dispatch(changeAdminOperation(value));
+    },
+
+    onResetState: () => {
+      dispatch(resetState());
     }
   };
 };
@@ -93,7 +98,7 @@ class AdminComments extends Component {
   componentDidMount() {
     const { onFetchComments, params } = this.props;
     
-    onFetchComments(params.id);
+    onFetchComments(params.id, true);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -114,6 +119,12 @@ class AdminComments extends Component {
         visibilityChangePending: false
       });
     }
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    
+    onResetState();
   }
 
   handleChange(id, {target: {value, name}}) {
@@ -222,7 +233,8 @@ class AdminComments extends Component {
           <div className="col-sm-5">
             <SearchField 
               filterValues={filterValues}
-              onFilter={onFilter}/>
+              onFilter={onFilter}
+              placeholder="Search comment by keyword"/>
           </div>
           <div className="col-sm-4">
             <Pagination
@@ -275,6 +287,7 @@ AdminComments.propTypes = {
   onJWTExpired: PropTypes.func.isRequired,
   onChangeSelectedRecord: PropTypes.func.isRequired,
   onChangeAdminOperation: PropTypes.func.isRequired,
+  onResetState: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,

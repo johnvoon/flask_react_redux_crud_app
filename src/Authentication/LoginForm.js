@@ -37,8 +37,7 @@ class LoginForm extends Component {
     .then(({currentUser}) => {
       if (location.query.next) {
         router.push(location.query.next);
-      }
-      if (currentUser.role === 'admin') {
+      } else if (currentUser.role === 'admin') {
         router.push('/admin');
       } else {
         router.push('/portal');

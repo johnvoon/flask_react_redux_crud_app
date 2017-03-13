@@ -26,7 +26,6 @@ class PracticeAreas extends Component {
     const buttonLinks = Object.keys(practiceAreas).map(id => {
       const practiceAreaName = practiceAreas[id].area;
       const slug = practiceAreas[id].slug;
-      const imgFilename = slug.split('-')[0];
 
       return (
         <div
@@ -36,8 +35,8 @@ class PracticeAreas extends Component {
             key={id}
             id={id}
             text={practiceAreaName}
-            endpoint={`/practice-areas/${slug}`}
-            imgFilename={imgFilename}
+            slug={`/practice-areas/${slug}`}
+            imgSrc={practiceAreas[id].imgSrc}
             customClassNames="btn-practice-area"/>
         </div>
       );

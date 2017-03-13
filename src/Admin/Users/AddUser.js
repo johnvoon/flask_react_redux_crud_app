@@ -50,9 +50,6 @@ class AddUser extends Component {
 }
 
 AddUser.propTypes = {
-  onAddUser: PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired,
-  getJWT: PropTypes.func.isRequired,
   JWT: PropTypes.string.isRequired
 };
 

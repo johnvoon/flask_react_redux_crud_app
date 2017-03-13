@@ -27,6 +27,7 @@ class Matter(ResourceMixin, db.Model):
         """
         clients = [client.id for client in self.clients]
         practice_areas = [practice_area.id for practice_area in self.practice_areas]
+        staff = [staff_member.id for staff_member in self.staff]
 
         return {
             'id': self.id,
@@ -36,5 +37,6 @@ class Matter(ResourceMixin, db.Model):
             'active': self.active,
             'costsOnAccount': self.costs_on_account,
             'clients': clients,
-            'practiceAreas': practice_areas
+            'practiceAreas': practice_areas,
+            'staff': staff
         }

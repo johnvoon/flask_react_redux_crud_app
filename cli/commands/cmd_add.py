@@ -78,19 +78,22 @@ def practice_areas():
     data = []
     practice_areas = ["Dispute Resolution", "Criminal Law", "Family Law", "Mergers & Acquisitions"]
     with app.app_context():
-        img_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
-                    url_for('static', filename='images/400/building.jpg'),
-                    url_for('static', filename='images/400/ipad.jpg'),
-                    url_for('static', filename='images/400/pencils.jpg'),
-                    url_for('static', filename='images/400/team_meeting.jpg'),
-                    url_for('static', filename='images/400/suit.jpg')]
+        img_srcs = [url_for('static', filename='images/2000/dispute.jpg'), 
+                    url_for('static', filename='images/2000/criminal.jpg'),
+                    url_for('static', filename='images/2000/family.jpg'),
+                    url_for('static', filename='images/2000/mergers.jpg')]
 
-    for area in practice_areas:
-        img_src = random.choice(img_srcs)
+        thumbnail_srcs = [url_for('static', filename='images/400/dispute.jpg'), 
+                    url_for('static', filename='images/400/criminal.jpg'),
+                    url_for('static', filename='images/400/family.jpg'),
+                    url_for('static', filename='images/400/mergers.jpg')]
+
+    for idx, area in enumerate(practice_areas):
         description = list(fake.paragraphs(nb=20))
         params = {
             'area': area,
-            'img_src': img_src,
+            'img_src': img_srcs[idx],
+            'thumbnail_src': thumbnail_srcs[idx],
             'description': description,
             'slug': slugify(area)
         }

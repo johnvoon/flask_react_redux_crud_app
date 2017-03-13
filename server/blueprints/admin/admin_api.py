@@ -1,17 +1,23 @@
 from flask import Blueprint, request
 from flask_restful import Api, Resource
-from server.blueprints.blog.models.comment import Comment
+from server.blueprints.blog.models.post import Post
+from server.blueprints.user.models import User
+from server.blueprints.client.models.matter import Matter
+from server.blueprints.practice_area.models import PracticeArea
 from lib.util_json import render_json
 from flask_login import current_user
 
-comments_api = Api(Blueprint('comments_api', __name__))
+admin_api = Api(Blueprint('admin_api', __name__))
 
-@comments_api.resource('/comments')
-class CommentsAPI(Resource):
+@admin_api.resource('/admin')
+class AdminAPI(Resource):
     @staticmethod
     def get():
-        
-        if comments:
-            return render_json(200, {'admin': comments})
+        return render_json(200, {'admin': {
+            'posts': Post.query.count(),
+            'users': User.query.count(),
+            'matters': Matter.query.count(),
+            'practiceAreas': PracticeArea.query.count()
+        }})
 
-        return render_json(404, {'message': 'No comments found'})
+        return render_json(404, {'message': 'No data found'})

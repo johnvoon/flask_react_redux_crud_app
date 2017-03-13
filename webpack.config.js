@@ -1,12 +1,12 @@
-var webpack = require('webpack');
-var path = require('path');
-var CleanWebpackPlugin = require("clean-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const fontMagician = require('postcss-font-magician');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: {
     bundle: './src/index',
   },

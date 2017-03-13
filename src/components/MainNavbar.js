@@ -15,16 +15,20 @@ export default class MainNavbar extends Component {
     const { links } = this.props;
 
     return links.map((link, idx) => {
-      const linkText = link[0];
-      const endpoint = link[1];
+      if (link) {
+        const linkText = link[0];
+        const slug = link[1];
 
-      return (
-        <NavLink 
-          key={idx}
-          linkText={linkText}
-          endpoint={endpoint}
-          index={endpoint === "/"}/>
-      );
+        return (
+          <NavLink 
+            key={idx}
+            linkText={linkText}
+            slug={slug}
+            index={slug === "/"}/>
+        );        
+      } else {
+        return null;
+      }
     });
   }
 

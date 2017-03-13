@@ -32,13 +32,15 @@ class EditUserParticularsForm extends Component {
         <div className="row">
           <div className="col-sm-4">
             <StaticFormGroup 
-              label="Created"
-              text={userCreated}/>
+              label="Created">
+              {userCreated}
+            </StaticFormGroup>
           </div>
           <div className="col-sm-4">
             <StaticFormGroup 
-              label="Updated"
-              text={userUpdated}/>
+              label="Updated">
+              {userUpdated}
+            </StaticFormGroup>
           </div>
           <div className="col-sm-4">
             <Field 
@@ -53,8 +55,9 @@ class EditUserParticularsForm extends Component {
           <div className="col-sm-4">
             {selectedRecord.role === 'staff' || selectedRecord.role === 'client' ? (
               <StaticFormGroup 
-                label="Role"
-                text={selectedRecord.role}/>
+                label="Role">
+                {selectedRecord.role}
+              </StaticFormGroup>
             ) : (
               <Field 
                 name="role"
@@ -66,13 +69,15 @@ class EditUserParticularsForm extends Component {
           </div>
           <div className="col-sm-4">
             <StaticFormGroup 
-              label="Username"
-              text={selectedRecord.username}/>
+              label="Username">
+              {selectedRecord.username}
+            </StaticFormGroup>
           </div>
           <div className="col-sm-4">
             <StaticFormGroup 
-              label="Email"
-              text={selectedRecord.email}/>
+              label="Email">
+              {selectedRecord.email}
+            </StaticFormGroup>
           </div>
         </div>
         <UserParticularsForm

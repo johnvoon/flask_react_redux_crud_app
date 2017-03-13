@@ -6,9 +6,10 @@ import StaticFormGroup from 'components/StaticFormGroup';
 import Button from 'components/Button';
 
 const mapStateToProps = (state) => {
-  const { adminPages } = state;
+  const { entities, adminPages } = state;
   
   return {
+    ...entities,
     ...adminPages
   };
 };
@@ -23,77 +24,80 @@ const mapDispatchToProps = (dispatch) => {
 
 class ViewUser extends Component { 
   render() {
-    const { selectedRecord, onHideModal } = this.props;
-    const userCreated = moment(selectedRecord.created, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
-    const userUpdated = moment(selectedRecord.updated, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
+    const { selectedRecord, staff, clients, 
+      practiceAreas, onHideModal } = this.props;
+    const fileOpen = moment(selectedRecord.fileOpen, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
+    const fileClose = moment(selectedRecord.fileClose, "ddd DD-MMM-YYYY HH:mm:ss").format('DD/MM/YY HH:mm:ss');
+    const clientList = selectedRecord.clients.length > 0 ? 
+      selectedRecord.clients.map(id => {
+        return (
+          <p key={id}>[{id}] {clients[id].name}</p>
+        );
+      }) : "None";
+    const practiceAreaList = selectedRecord.practiceAreas.length > 0 ? 
+      selectedRecord.practiceAreas.map(id => {
+        return (
+          <p key={id}>[{id}] {practiceAreas[id].area}</p>
+        );
+      }) : "None";
+    const staffList = selectedRecord.staff.length > 0 ? 
+      selectedRecord.staff.map(id => {
+        return (
+          <p key={id}>[{id}] {staff[id].name}</p>
+        );
+      }) : "None";
 
     return (
       <form>
-        <div>
-          <img src={selectedRecord.photo} alt="User photo"/>
-        </div>
+        <StaticFormGroup 
+          label="Description">
+          {selectedRecord.description || ""}
+        </StaticFormGroup>        
         <div className="row">
-          <div className="col-sm-4">
+          <div className="col-sm-6">
             <StaticFormGroup 
-              label="Created"
-              text={userCreated}/>
+              label="Active">
+              {selectedRecord.active ? "Yes" : "No"}
+            </StaticFormGroup>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-6">
             <StaticFormGroup 
-              label="Updated"
-              text={userUpdated}/>
-          </div>
-          <div className="col-sm-4">
-            <StaticFormGroup 
-              label="Status"
-              text={selectedRecord.active}/>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-4">
-            <StaticFormGroup 
-              label="Role"
-              text={selectedRecord.role}/>
-          </div>
-          <div className="col-sm-4">
-            <StaticFormGroup 
-              label="Username"
-              text={selectedRecord.username}/>
-          </div>
-          <div className="col-sm-4">
-            <StaticFormGroup 
-              label="Email"
-              text={selectedRecord.email}/>
+              label="Costs on Account">
+              ${selectedRecord.costsOnAccount}
+            </StaticFormGroup>
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-4">
+          <div className="col-sm-6">
             <StaticFormGroup 
-              label="Last Name"
-              text={selectedRecord.lastName}/>
+              label="File Open Date">
+              {fileOpen}
+            </StaticFormGroup>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-6">
             <StaticFormGroup 
-              label="First Name"
-              text={selectedRecord.firstName}/>
-          </div>
-          <div className="col-sm-4">
-            <StaticFormGroup 
-              label="Middle Name"
-              text={selectedRecord.middleName}/>
+              label="File Close Date">
+              {fileClose}
+            </StaticFormGroup>
           </div>
         </div>
         <StaticFormGroup 
-          label="Phone Number"
-          text={selectedRecord.phoneNumber}/>
+          label="Client(s)">
+          {clientList}
+        </StaticFormGroup>
         <StaticFormGroup 
-          label="Full Address"
-          text={selectedRecord.fullAddress}/>
+          label="Practice Area(s)">
+          {practiceAreaList}
+        </StaticFormGroup>
+        <StaticFormGroup 
+          label="Handling Staff">
+          {staffList}
+        </StaticFormGroup>
         <div className="btn-toolbar">
           <Button
-            customClassNames="btn-danger pull-right" 
+            customClassNames="btn-default pull-right" 
             type="button" 
-            handleClick={onHideModal()}>
+            handleClick={onHideModal}>
             Close
           </Button>
         </div>
@@ -103,14 +107,11 @@ class ViewUser extends Component {
 }
 
 ViewUser.propTypes = {
-  initialize: PropTypes.object.isRequired,
-  onEdit: PropTypes.object.isRequired,
   onHideModal: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.object.isRequired,
-  pristine: PropTypes.object.isRequired,
-  reset: PropTypes.object.isRequired,
-  submitting: PropTypes.object.isRequired,
-  selectedRecord: PropTypes.object.isRequired
+  selectedRecord: PropTypes.object.isRequired,
+  staff: PropTypes.object.isRequired,
+  clients: PropTypes.object.isRequired,
+  practiceAreas: PropTypes.object.isRequired
 };
 
 export default connect(

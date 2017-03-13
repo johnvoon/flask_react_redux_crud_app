@@ -8,10 +8,11 @@ import Button from 'components/Button';
 import ErrorAlert from 'components/ErrorAlert';
 
 const mapStateToProps = (state) => {
-  const { entities, authentication } = state;
+  const { entities, adminPages, authentication } = state;
   
   return {
     ...entities,
+    ...adminPages,
     ...authentication
   };
 };
@@ -49,7 +50,6 @@ class DeletePostForm extends Component {
         'Authorization': `JWT ${JWT}`
       }
     };
-
     onDeletePost(config, selectedRecord.id)
     .then(() => onHideModal())
     .catch(({response, message}) => {

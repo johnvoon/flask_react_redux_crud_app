@@ -1,7 +1,6 @@
 from sqlalchemy import func
 from server.blueprints.user.models import db, User
 
-
 class Dashboard(object):
     @classmethod
     def _group_and_count(cls, model, field):

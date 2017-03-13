@@ -7,14 +7,12 @@
     <meta name="description"
           content="{% block meta_description %}{% endblock %}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link href="/static/scripts/../stylesheets/bundle-css.css?56d7bf07eedfb40e82cc" rel="stylesheet"><link href="/static/scripts/../stylesheets/bundle-scss.css?56d7bf07eedfb40e82cc" rel="stylesheet"><link href="/static/scripts/../stylesheets/bundle-less.css?56d7bf07eedfb40e82cc" rel="stylesheet"></head>
+  </head>
   <body>
     {% block body %}{% endblock %}
     <div id="root" class="root"></div>
-    <script
-      src="https://code.jquery.com/jquery-1.12.2.min.js"
-      integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
-      crossorigin="anonymous">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr6MNUWILJ14oOkpOH6LMlEz-cMW3aJ60&libraries=places">
     </script>
-  <script type="text/javascript" src="/static/scripts/bootstrap.1f9b76c3850cee32b17f.bundle.js?56d7bf07eedfb40e82cc"></script><script type="text/javascript" src="/static/scripts/vendor.ce322877a799646c3e7c.bundle.js?56d7bf07eedfb40e82cc"></script><script type="text/javascript" src="/static/scripts/bundle.f56c2db0f7a118b16bcb.bundle.js?56d7bf07eedfb40e82cc"></script></body>
+    <script src="http://localhost:8080/static/scripts/bundle.js"></script>
+  </body>
 </html>

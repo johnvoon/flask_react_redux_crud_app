@@ -1,21 +1,15 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
 
 const Avatar = (props) => {
   const { avatarPhoto, iconClassName, avatarText } = props;
   
   return (
     <div className="avatar-frame">
-      <div className={classNames(
-        "avatar-img", {
-        comment: iconClassName
-      })}>
+      <div className="avatar-img">
         <a>
           {iconClassName ? (
             <span 
-              className={classNames({
-                comment: iconClassName
-              })}/>
+              className={iconClassName}/>
           ) : avatarPhoto ? (
             <img 
               className="img-responsive" src={avatarPhoto} alt="User avatar"/>

@@ -27,6 +27,8 @@ class App extends Component {
     this.state = {
       showSidebar: false
     };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -40,15 +42,13 @@ class App extends Component {
   }
 
   render() {
-    this.handleClick = this.handleClick.bind(this);
     const { showSidebar } = this.state;
     const { currentUser } = this.props;
     const links = [
       ["Home", "/", "index"],
       ["Practice Areas", "/practice-areas"],
-      ["People", "/people"],
       ["Blog", "/blog"],
-      ["Contact", "/contact"],
+      (_.isEmpty(currentUser) ? undefined : ["Admin Dashboard", "/admin"]),
       (_.isEmpty(currentUser) ? ["Login", "/login"] : ["Logout", "/logout"])
     ];
 

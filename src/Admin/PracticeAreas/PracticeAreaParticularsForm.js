@@ -22,7 +22,7 @@ export default class PracticeAreaParticularsForm extends Component {
           name="description"
           component={TextAreaFormGroup}
           label="Description"
-          rows="4"/>
+          rows={4}/>
       </div>
     );
   }

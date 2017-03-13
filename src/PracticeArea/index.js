@@ -8,11 +8,10 @@ import { Link, withRouter } from 'react-router';
 import { fetchPracticeAreas, fetchPracticeArea } from 'Entities/PracticeAreasActions';
 
 const mapStateToProps = (state) => {
-  const { practiceArea, practiceAreas, entities } = state;
+  const { practiceArea, entities } = state;
   
   return {
     ...practiceArea,
-    ...practiceAreas, 
     ...entities
   };
 };
@@ -76,7 +75,7 @@ class PracticeArea extends Component {
           ]}/>
         <div 
           className="jumbotron hidden-md hidden-lg"
-          style={{backgroundImage: `url(${API_URL}/static/images/2000/${imgFilename}.jpg)`}}>
+          style={{backgroundImage: `url(${currentPracticeArea.imgSrc})`}}>
           <div className="container text-center">
             <h1 className="text-uppercase">{practiceAreaName}</h1>
             <select 
@@ -99,13 +98,13 @@ class PracticeArea extends Component {
             </select>
           </div>
         </div>
-        <div className="container-fluid hidden-md hidden-lg">
+        <div className="container-fluid visible-sm visible-xs">
           {description}  
         </div>
-        <div className="row practice-area-container hidden-sm">
+        <div className="row practice-area-container visible-md visible-lg">
           <div 
             className="col-md-5 practice-area-image"
-            style={{backgroundImage: `url('static/images/2000/${imgFilename}.jpg')`}}>
+            style={{backgroundImage: `url('${API_URL}/static/images/2000/${imgFilename}.jpg')`}}>
             <div className="select-absolute">
               <h1 className="text-uppercase text-left">{practiceAreaName}</h1>
               <select

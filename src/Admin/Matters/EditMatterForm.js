@@ -1,17 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from  'redux-form';
-import { hideModal } from 'Admin/actions';
+import moment from 'moment';
+import { hideModal, loadFormData } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
-import { addMatter } from 'Entities/MattersActions';
+import { editMatter } from 'Entities/MattersActions';
 import MatterParticularsForm from './MatterParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, adminPages, authentication } = state;
 
   return {
+    initialValues: adminPages.formData,
     ...entities,
     ...adminPages,
     ...authentication
@@ -20,8 +22,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onEditMatter: (JWT, content, matterId) => {
-      return dispatch(addMatter(JWT, content, matterId));
+    onEditMatter: (JWT, content, id) => {
+      return dispatch(editMatter(JWT, content, id));
+    },
+
+    onLoadFormData: (formData) => {
+      return dispatch(loadFormData(formData));
     },
 
     onJWTExpired: () => {
@@ -40,11 +46,31 @@ class EditMatterForm extends Component {
     this.state = {
       errorMessage: ''
     };
+
+    this.handleInitialize = this.handleInitialize.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleInitialize();
+  }
+
+  handleInitialize() {
+    const { selectedRecord, onLoadFormData } = this.props;
+
+    const initData = {
+      "fileOpen": moment(selectedRecord.fileOpen).format('DD/MM/YYYY'),
+      "costsOnAccount": selectedRecord.costsOnAccount,
+      "practiceAreas": (selectedRecord.practiceAreas || []).join(','),
+      "staff": (selectedRecord.staff || []).join(','),
+      "description": selectedRecord.description.replace(/^[\[\d+\]\s+]+/g, '')
+    };
+
+    onLoadFormData(initData);
   }
 
   _handleSubmit(data) {
     const { selectedRecord, onEditMatter, JWT, onHideModal, 
-      onJWTExpired, changeMatterFieldValue } = this.props;
+      onJWTExpired } = this.props;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -56,10 +82,6 @@ class EditMatterForm extends Component {
       formData.append(key, data[key]);
     });
     onEditMatter(config, formData, selectedRecord.id)
-    .then(({matterId}) => {
-      changeMatterFieldValue && 
-      changeMatterFieldValue(matterId);
-    })
     .then(() => onHideModal())
     .catch(({response, message}) => {
       const { status, data } = response;
@@ -87,26 +109,12 @@ class EditMatterForm extends Component {
         <MatterParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
         <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>      
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>    
         </div>
       </form>
     );
@@ -114,16 +122,16 @@ class EditMatterForm extends Component {
 }
 
 EditMatterForm.propTypes = {
+  onLoadFormData: PropTypes.func.isRequired,
   onEditMatter: PropTypes.func.isRequired,
   onHideModal: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   selectedRecord: PropTypes.object.isRequired,
   JWT: PropTypes.string.isRequired,
   onJWTExpired: PropTypes.func.isRequired,
-  changeMatterFieldValue: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -131,5 +139,4 @@ export default connect(
   mapDispatchToProps
 )(reduxForm({
   form:  'EditMatterForm',
-  destroyOnUnmount: false,
 })(EditMatterForm));

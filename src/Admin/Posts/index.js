@@ -9,8 +9,10 @@ import { filterAdminData,
          changePageLength, 
          changePageNumber,
          showModal,
+         hideModal,
          changeSelectedRecord,
-         changeAdminOperation } from 'Admin/actions';
+         changeAdminOperation,
+         resetState } from 'Admin/actions';
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';
@@ -43,8 +45,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchPosts: () => {
-      dispatch(fetchPosts());
+    onFetchPosts: (admin) => {
+      dispatch(fetchPosts(admin));
     },
 
     onFetchPracticeAreas: () => {
@@ -75,12 +77,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showModal());
     },
 
+    onHideModal: () => {
+      dispatch(hideModal());
+    },
+
     onChangeSelectedRecord: (record) => {
       dispatch(changeSelectedRecord(record));
     },
 
     onChangeAdminOperation: (value) => {
       dispatch(changeAdminOperation(value));
+    },
+
+    onResetState: () => {
+      dispatch(resetState());
     }
   };
 };
@@ -91,9 +101,18 @@ class AdminPosts extends Component {
   }
 
   componentDidMount() {
-    this.props.onFetchPosts();
-    this.props.onFetchPracticeAreas();
-    this.props.onFetchStaff();
+    const { onFetchPosts, onFetchPracticeAreas, 
+      onFetchStaff } = this.props;
+    
+    onFetchPosts(true);
+    onFetchPracticeAreas();
+    onFetchStaff();
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    
+    onResetState();
   }
 
   renderTableCommentsLink(val, row) { // eslint-disable-line no-unused-vars
@@ -145,10 +164,10 @@ class AdminPosts extends Component {
       onPageNumberChange, data, filterValues, 
       totalPages, sortBy, currentPage, pageLength, 
       pageData, successMessage, selectedRecord,
-      adminOperation, modalShowing } = this.props;
+      adminOperation, modalShowing, onHideModal } = this.props;
     const modalTitle = (adminOperation === "add" && "Add a New Post") ||
-                       (adminOperation === "edit" && `Edit Post (ID: ${selectedRecord.id}`) ||
-                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id}`) ||
+                       (adminOperation === "edit" && `Edit Post (ID: ${selectedRecord.id})`) ||
+                       (adminOperation === "delete" && `Delete Post (ID: ${selectedRecord.id})`) ||
                        '';
     return (
       <main className="container-fluid">
@@ -180,7 +199,8 @@ class AdminPosts extends Component {
           <div className="col-sm-5">
             <SearchField 
               filterValues={filterValues}
-              onFilter={onFilter}/>
+              onFilter={onFilter}
+              placeholder="Search posts by keyword"/>
           </div>
           <div className="col-sm-4">
             <Pagination
@@ -193,6 +213,7 @@ class AdminPosts extends Component {
         {successMessage && <SuccessAlert message={successMessage}/>}
         <Table 
           columns={[
+            { title: 'ID', component: TableText, prop: 'id'},
             { title: 'Created On', component: TableDate, prop: 'created' },
             { title: 'Title', component: TablePostLink, prop: 'title'},
             { title: 'Author', component: TableText, prop: 'author'},
@@ -213,7 +234,8 @@ class AdminPosts extends Component {
           data={data}/>
         <ModalMedium 
           title={modalTitle}
-          show={modalShowing}>
+          show={modalShowing}
+          onHide={onHideModal}>
           {adminOperation === "add" ? <AddPost/> : null}
           {adminOperation === "edit" ? <EditPost/> : null}
           {adminOperation === "delete" ? <DeletePost/> : null}
@@ -234,6 +256,8 @@ AdminPosts.propTypes = {
   onPageLengthChange: PropTypes.func.isRequired,
   onPageNumberChange: PropTypes.func.isRequired,
   onShowModal: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
+  onResetState: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   sortBy: PropTypes.object.isRequired,
   filterValues: PropTypes.string.isRequired,

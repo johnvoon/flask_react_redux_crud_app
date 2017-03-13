@@ -31,91 +31,15 @@ class Staff(ResourceMixin, db.Model):
                         index=True, unique=True, nullable=False)
 
     @classmethod
-    def get_all_staff(cls):
+    def find_by_user_id(cls, user_id):
         """
-        Retrieve all staff members.
-        """
-        return cls.query.order_by(desc(cls.created_on))
+        Find staff by user ID.
 
-    @classmethod
-    def find_by_name(cls, name):
-        """
-        Find a blog by title.
-
-        :param title: Blog title
+        :param user_id: user ID
         :type title: str
-        :return: Blog instance
+        :return: Staff instance
         """
-        return cls.query.filter(cls.fullname == name).first()
-
-    @classmethod
-    def find_by_area(cls, practice_area):
-        """
-        Find posts by area.
-        :param area: Blog area
-        :type area: str
-        :return: Blog instance
-        """
-        return cls.query.filter(cls.practice_area == practice_area
-                        ).order_by(desc(cls.created_on))
-
-    @classmethod
-    def _group_and_count(cls, field):
-        """
-        Group results for a specific model and field.
-
-        :param model: Name of the model
-        :type model: SQLAlchemy model
-        :param field: Name of the field to group on
-        :type field: SQLAlchemy field
-        :return: dict
-        """
-        count = func.count(field)
-        query = db.session.query(count, field).group_by(field).all()
-
-        results = {
-            'query': query,
-            'total': cls.query.count()
-        }
-
-        return results
-
-    @classmethod
-    def group_and_count_by_area(cls):
-        """
-        Perform a group by/count on all subscriber types.
-
-        :return: dict
-        """
-        return cls._group_and_count(cls.area)
-
-
-    @classmethod
-    def group_and_count_by_author(cls):
-        """
-        Perform a group by/count on all subscriber types.
-
-        :return: dict
-        """
-        return cls._group_and_count(cls.author)
-
-    @classmethod
-    def search(cls, query):
-        """
-        Search a blog by 1 or more fields.
-
-        :param query: Search query
-        :type query: str
-        :return: SQLAlchemy filter
-        """
-        if not query:
-            return ''
-
-        search_query = '%{0}%'.format(query)
-        search_chain = (cls.title.ilike(search_query),
-                        cls.body.ilike(search_query))
-
-        return or_(*search_chain)
+        return cls.query.filter(cls.user_id == user_id).first()
 
     def to_json(self):
         matters_handled = [matter.id for matter in self.matters_handled]
@@ -125,7 +49,7 @@ class Staff(ResourceMixin, db.Model):
         return {
             'id': self.id,
             'name': self.user.first_last_name,
-            'datedJoined': self.dated_joined,
+            'dateJoined': self.dated_joined,
             'position': self.position,
             'photo': self.user.photo,
             'posts': self.posts_authored.count(),

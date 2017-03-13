@@ -30,7 +30,6 @@ export function addStaff(config, content) {
     )
     .then(
       ({data: {staff}}) => {
-        console.log(staff);
         const normalizedStaff = normalize(staff, staffSchema);
         const normalizedStaffUsers = normalize(staff, staffUserSchema);
         dispatch(staffAdded(normalizedStaff.entities));
@@ -40,10 +39,10 @@ export function addStaff(config, content) {
   };
 }
 
-export function editStaff(config, content) {
+export function editStaff(config, content, id) {
   return (dispatch) => {
-    return axios.post(
-      `${API_URL}/api/staff`, 
+    return axios.put(
+      `${API_URL}/api/staff/${id}`, 
       content, 
       config
     )

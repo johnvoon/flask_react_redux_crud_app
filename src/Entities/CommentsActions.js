@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { sortByDate } from 'utils';
 import { arrayOf, normalize } from 'normalizr';
-import { commentVisibilityChanged, recordDeleted } from 'Admin/actions';
+import { recordsLoaded, commentVisibilityChanged, 
+  recordDeleted } from 'Admin/actions';
 import { commentSchema } from 'constants/Schemas';
 import { COMMENTS_LOADED,
          COMMENT_ADDED } from 'constants/actionTypes';
 
-export function fetchComments(id) {
+export function fetchComments(id, admin = false) {
   return dispatch => {
     return axios.get(`${API_URL}/api/posts/${id}/comments`)
     .then(({data: {comments}}) => {
@@ -16,10 +17,18 @@ export function fetchComments(id) {
         normalized.result,
         'descending'
       );
-      dispatch(commentsLoaded(
-        normalized.entities,
-        orderedComments
-      ));
+
+      if (admin) {
+        dispatch(recordsLoaded(
+          normalized.entities.comments,
+          normalized.orderedComments
+        ));
+      } else {
+        dispatch(commentsLoaded(
+          normalized.entities,
+          orderedComments
+        ));        
+      }
     });  
   };  
 }

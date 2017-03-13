@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
 import { userSchema } from 'constants/Schemas';
-import { recordAdded,
+import { recordsLoaded,
+         recordAdded,
          recordEdited } from 'Admin/actions';
 import { USERS_LOADED } from 'constants/actionTypes';
 
-export function fetchUsers(config) {
+export function fetchUsers(config, admin = false) {
   return dispatch => {
     axios.get(
       `${API_URL}/api/users`, 
@@ -13,10 +14,18 @@ export function fetchUsers(config) {
     )
     .then(({data: {users}}) => {
       const normalized = normalize(users, arrayOf(userSchema));
-      dispatch(usersLoaded(
-        normalized.entities,
-        normalized
-      ));
+      
+      if (admin) {
+        dispatch(recordsLoaded(
+          normalized.entities.users,
+          normalized.result
+        ));
+      } else {
+        dispatch(usersLoaded(
+          normalized.entities,
+          normalized.result
+        ));  
+      }
     });  
   };
 }
@@ -31,7 +40,10 @@ export function addUser(config, content) {
     .then(
     ({data: {user}}) => {
       const normalized = normalize(user, userSchema);
-      return dispatch(recordAdded(normalized.entities, normalized.entities.users, user.id));
+      return dispatch(recordAdded(
+        normalized.entities, 
+        normalized.entities.users, 
+        user.id));
     });
   };
 }
@@ -45,7 +57,10 @@ export function editUser(config, content, id) {
     )
     .then(({data: {user}}) => {
       const normalized = normalize(user, userSchema);
-      dispatch(recordEdited(normalized.entities));
+      return dispatch(recordEdited(
+        normalized.entities,
+        normalized.entities.users,
+        user.id));
     });
   };
 }

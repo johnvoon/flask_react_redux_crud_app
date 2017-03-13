@@ -7,7 +7,7 @@ import { addMatter, addMatterInsideForm } from 'Entities/MattersActions';
 import MatterParticularsForm from './MatterParticularsForm';
 import ErrorAlert from 'components/ErrorAlert';
 import ButtonBlock from 'components/ButtonBlock';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { entities, authentication } = state;
@@ -47,7 +47,7 @@ class AddMatterForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddMatter, JWT, 
+    const { onAddMatter, JWT, destroy, 
       onHideModal, onJWTExpired } = this.props;
     const config = {
       headers: {
@@ -60,7 +60,10 @@ class AddMatterForm extends Component {
       formData.append(key, data[key]);
     });
     onAddMatter(config, formData)
-    .then(() => onHideModal())
+    .then(() => {
+      destroy();
+      onHideModal();
+    })
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 401) {
@@ -78,7 +81,8 @@ class AddMatterForm extends Component {
   }
 
   _handleSubmitInsideForm(data) {
-    const { onAddMatterInsideForm, JWT, onHideModal, onJWTExpired, changeMatterFieldValue } = this.props;
+    const { onAddMatterInsideForm, JWT, onHideAddMatterForm, 
+      onJWTExpired, changeMatterFieldValue } = this.props;
     const config = {
       headers: {
         'Authorization': `JWT ${JWT}`
@@ -94,7 +98,7 @@ class AddMatterForm extends Component {
       changeMatterFieldValue && 
       changeMatterFieldValue(matterId);
     })
-    .then(() => onHideModal())
+    .then(() => onHideAddMatterForm())
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 401) {
@@ -128,28 +132,12 @@ class AddMatterForm extends Component {
             Save
           </ButtonBlock>
         ) : (
-          <div className="btn-toolbar">
-            <Button
-              customClassNames="btn-danger pull-right" 
-              type="button" 
-              handleClick={onHideModal}>
-              Close
-            </Button>
-            <Button 
-              customClassNames="btn-danger pull-right" 
-              type="button" 
-              disabled={pristine || submitting} 
-              handleClick={reset}>
-              Reset
-            </Button>
-            <Button 
-              customClassNames="btn-primary pull-right" 
-              type="submit"
-              disabled={submitting}
-              handleClick={handleSubmit(data => this._handleSubmit(data))}>
-              Save
-            </Button>      
-          </div>)}
+          <ButtonToolbar
+            onHideModal={onHideModal}
+            pristine={pristine}
+            submitting={submitting}
+            reset={reset}
+            handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>)}
       </form>
     );
   }
@@ -166,7 +154,9 @@ AddMatterForm.propTypes = {
   onJWTExpired: PropTypes.func.isRequired,
   changeMatterFieldValue: PropTypes.func.isRequired,
   addButtonOnly: PropTypes.bool.isRequired,
-  onAddMatterInsideForm: PropTypes.func.isRequired
+  onAddMatterInsideForm: PropTypes.func.isRequired,
+  onHideAddMatterForm: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired
 };
 
 export default connect(

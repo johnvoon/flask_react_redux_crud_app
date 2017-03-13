@@ -6,12 +6,12 @@ import UserAccountDetailsForm from'./UserAccountDetailsForm';
 import UserParticularsForm from './UserParticularsForm';
 import UserAddressForm from './UserAddressForm';
 import StaffDetailsForm from './StaffDetailsForm';
-import { hideModal, loadFormData as load } from 'Admin/actions';
+import { hideModal } from 'Admin/actions';
 import { selectAddStaffForm } from 'Admin/selectors';
 import { removeJWT } from 'Authentication/actions';
 import { addUser } from 'Entities/UsersActions';
 import { addStaff } from 'Entities/StaffActions';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 import ErrorAlert from 'components/ErrorAlert';
 import NavTab from 'components/NavTab';
 import { asyncValidateUserIdentity as asyncValidate } from 'utils';
@@ -27,8 +27,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadFormData: load,
-
     onAddUser: (JWT, content) => {
       return dispatch(addUser(JWT, content));
     },
@@ -58,7 +56,8 @@ class AddStaffForm extends Component {
   }
 
   _handleSubmit(data) {
-    const { onAddUser, onAddStaff, onHideModal, onJWTExpired, JWT } = this.props;
+    const { onAddUser, onAddStaff, onHideModal, 
+      onJWTExpired, JWT, destroy } = this.props;
     const userEntityFields = [
       'email', 'username', 'password', 'lastName', 'firstName', 'middleName', 
       'phoneNumber', 'unitNumber', 'streetAddress', 'suburb', 'postcode',
@@ -87,7 +86,10 @@ class AddStaffForm extends Component {
       staffFormData.append('userId', addedRecordId);
       onAddStaff(config, staffFormData);
     })
-    .then(() => onHideModal())
+    .then(() => {
+      destroy();
+      onHideModal();
+    })
     .catch(({response, message}) => {
       const { status, data } = response;
       if (status === 401) {
@@ -105,7 +107,7 @@ class AddStaffForm extends Component {
   }
 
   fillInAddress(value) {
-    const { loadFormData } = this.props;
+    const { change } = this.props;
     const { gmaps } = value;
     const { address_components } = gmaps;
     const addressComponents = {};
@@ -114,16 +116,14 @@ class AddStaffForm extends Component {
       const value = component.long_name;
       addressComponents[addressType] = value;
     });
-    const initData = {
-      unitNumber: _.get(addressComponents, 'subpremise', ''),
-      streetAddress: _.get(addressComponents, 'street_number', '') + ' ' + _.get(addressComponents, 'route', ''),
-      suburb: _.get(addressComponents, 'locality', ''),
-      postcode: _.get(addressComponents, 'postal_code', ''),
-      state: _.get(addressComponents, 'administrative_area_level_1', ''),
-      country: _.get(addressComponents, 'country', '')
-    };
 
-    loadFormData(initData);
+    change('unitNumber', _.get(addressComponents, 'subpremise', ''));
+    change('streetAddress', _.get(addressComponents, 'street_number', '') + ' ' + 
+      _.get(addressComponents, 'route', ''));
+    change('suburb', _.get(addressComponents, 'locality', ''));
+    change('postcode', _.get(addressComponents, 'postal_code', ''));
+    change('state', _.get(addressComponents, 'administrative_area_level_1', ''));
+    change('country', _.get(addressComponents, 'country', ''));
   }
 
   handleClick(event) {
@@ -163,28 +163,12 @@ class AddStaffForm extends Component {
         <StaffDetailsForm
           isDisplayed={currentTab === tabLabels[3]}/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            className="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </div>
     );
   }
@@ -200,7 +184,8 @@ AddStaffForm.propTypes = {
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   JWT: PropTypes.string.isRequired,
-  loadFormData: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired,
   passwordValue: PropTypes.string.isRequired,
 };
 

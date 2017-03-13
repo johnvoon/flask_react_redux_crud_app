@@ -27,32 +27,22 @@ class Client(ResourceMixin, db.Model):
         super(Client, self).__init__(**kwargs)
 
     @classmethod
-    def find_by_identity(cls, identity):
+    def find_by_user_id(cls, user_id):
         """
-        Find client by user account e-mail or username.
+        Find client by user ID.
 
-        :param identity: Email or username
-        :type identity: str
+        :param user_id: user ID
+        :type title: str
         :return: Client instance
         """
-        user = User.find_by_identity(identity)
-        return cls.filter(cls.user_id == user.id).first()
+        return cls.query.filter(cls.user_id == user_id).first()
 
-    @classmethod
-    def search(cls, query):
-        """
-        Search by 1 or more fields using ILIKE (case-insensitive).
+    def to_json(self):
+        matters = [matter.id for matter in self.matters]
 
-        :param query: Search query
-        :type query: str
-        :return: SQLAlchemy filter
-        """
-        if not query:
-            return ''
-
-        search_query = '%{0}%'.format(query)
-        search_columns = (Client.surname.ilike(search_query),
-                        Client.fullname.ilike(search_query))
-
-        return or_(*search_columns)
-
+        return {
+            'id': self.id,
+            'userId': self.user.id,
+            'matters': matters,
+            'name': self.user.first_last_name
+        }

@@ -37,6 +37,17 @@ class Post(ResourceMixin, db.Model):
     def slug(self):
         return slugify(self.title)
 
+    @classmethod
+    def find_by_title(cls, title):
+        """
+        Find client by user ID.
+
+        :param user_id: user ID
+        :type title: str
+        :return: Client instance
+        """
+        return cls.query.filter(cls.title == title).first()
+
     def to_json(self):
         return {
             'id': self.id,

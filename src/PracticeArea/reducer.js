@@ -13,17 +13,9 @@ export default function practiceAreaReducer(state = initialState, action) {
   return state;
 }
 
-function practiceAreaLoaded(state, { entities, practiceAreaId }) {
+function practiceAreaLoaded(state, { practiceArea, practiceAreaId }) {
   return {
     ...state,
-    currentPracticeArea: entities.practiceAreas[practiceAreaId]
+    currentPracticeArea: practiceArea[practiceAreaId]
   };
 }
-
-// function changePracticeArea(state, action) {
-//   const { practiceAreaId } = action;
-//   return {
-//     ...state,
-//     practiceAreaId
-//   };
-// }

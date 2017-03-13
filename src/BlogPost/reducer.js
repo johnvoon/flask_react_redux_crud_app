@@ -33,10 +33,10 @@ function postsLoaded(state, action) {
   };
 }
 
-function postLoaded(state, { entities, postId }) {
+function postLoaded(state, { post, postId }) {
   return {
     ...state,
-    currentPost: entities.posts[postId]
+    currentPost: post[postId]
   };
 }
 

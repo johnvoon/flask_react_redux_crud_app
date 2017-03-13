@@ -3,10 +3,14 @@ import { Modal } from 'react-bootstrap';
 
 export default class ModalMedium extends Component {
   render() {
-    const { title, children } = this.props;
+    const { title, show, onHide, children } = this.props;
 
     return (
-      <Modal {...this.props} animation={false} aria-labelledby="contained-modal-title">
+      <Modal 
+        animation={false}
+        onHide={onHide}
+        show={show}
+        aria-labelledby="contained-modal-title">
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title">
             {title}
@@ -22,5 +26,7 @@ export default class ModalMedium extends Component {
 
 ModalMedium.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired
 };

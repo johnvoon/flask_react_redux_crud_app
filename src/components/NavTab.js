@@ -19,7 +19,6 @@ export default class NavTab extends Component {
 
 NavTab.propTypes = {
   text: PropTypes.string.isRequired,
-  endpoint: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired
 };

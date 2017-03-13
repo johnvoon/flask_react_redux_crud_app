@@ -12,10 +12,6 @@ const SuccessAlert = ({message}) => {
 
 SuccessAlert.propTypes = {
   message: PropTypes.string.isRequired,
-  onHide: PropTypes.func.isRequired,
-  getJWT: PropTypes.func.isRequired,
-  token: PropTypes.string.isRequired,
-  post: PropTypes.object.isRequired
 };
 
 export default SuccessAlert;

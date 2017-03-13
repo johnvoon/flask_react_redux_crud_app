@@ -161,7 +161,7 @@ class BlogPost extends Component {
               {_.isEmpty(currentUser) ? (
                 <Link to={{
                   pathname: '/login',
-                  query: { next: `/blog/${currentPost.id}`}
+                  query: { next: `/blog/${currentPost.id}/${currentPost.slug}`}
                 }}>
                   <Avatar
                     iconClassName="comment"
@@ -201,9 +201,7 @@ BlogPost.propTypes = {
   onFetchCurrentUser: PropTypes.func.isRequired,
   onFetchRelatedPosts: PropTypes.func.isRequired,
   onFetchComments: PropTypes.func.isRequired,
-  onChangeCurrentPost: PropTypes.func.isRequired,
   onAddComment: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   posts: PropTypes.object.isRequired,
   relatedPosts: PropTypes.array.isRequired,

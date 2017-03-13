@@ -79,9 +79,12 @@ class BlogHome extends Component {
   }
 
   componentDidMount() {
-    this.props.onFetchPosts();
-    this.props.onFetchPracticeAreas();
-    this.props.onFetchStaff();
+    const { onFetchPosts, onFetchPracticeAreas, 
+      onFetchStaff } = this.props;
+    
+    onFetchPosts();
+    onFetchPracticeAreas();
+    onFetchStaff();
   }
 
   toggleSortMenu() {
@@ -102,9 +105,57 @@ class BlogHome extends Component {
     });
   }
 
+  handleAllPostsLinkClick(event) {
+    const { onShowAll } = this.props;
+    
+    event.preventDefault();
+    onShowAll();
+    scrollIntoViewIfNeeded(
+      this._postsContainer, 
+      false, 
+      {duration: 400}
+    );
+  }
+
+  handleSortLinkClick(event, sortBy) {
+    const { onSort, allAvailablePosts } = this.props;
+
+    event.preventDefault();
+    onSort(allAvailablePosts, sortBy);
+    scrollIntoViewIfNeeded(
+      this._postsContainer, 
+      false, 
+      {duration: 400}
+    );
+  }
+
+  handleAreaLinkClick(event, id) {
+    const { onAreaFilter, posts, practiceAreas } = this.props;
+
+    event.preventDefault();
+    onAreaFilter(posts, practiceAreas[id].area);
+    scrollIntoViewIfNeeded(
+      this._postsContainer, 
+      false, 
+      {duration: 400}
+    );
+  }
+
+  handleAuthorLinkClick(event, id) {
+    const { onAuthorFilter, posts, staff } = this.props;
+
+    event.preventDefault();
+    onAuthorFilter(posts, staff[id].name);
+    scrollIntoViewIfNeeded(
+      this._postsContainer, 
+      false, 
+      {duration: 400}
+    );
+  }
+
   render() {
     const { posts, practiceAreas, staff, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
-    const { onSort, onShowAll, onSearchFilter, onAreaFilter, onAuthorFilter, onLoadMore } = this.props;
+    const { onSearchFilter, onLoadMore } = this.props;
     const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
     const postsList = visiblePosts.map((id) => {
       return (
@@ -120,14 +171,7 @@ class BlogHome extends Component {
         <FilterLink
           linkText="All Posts"
           count={Object.keys(posts).length}
-          dispatchEvent={() => {
-            onShowAll();
-            scrollIntoViewIfNeeded(
-              this._postsContainer, 
-              false, 
-              {duration: 400}
-            );
-          }}/>
+          handleClick={(event) => this.handleAllPostsLinkClick(event)}/>
       );
     };
 
@@ -136,32 +180,20 @@ class BlogHome extends Component {
         <FilterLink
           key={sortBy}
           linkText={_.capitalize(sortBy)}
-          dispatchEvent={() => {
-            onSort(allAvailablePosts, sortBy);
-            scrollIntoViewIfNeeded(
-              this._postsContainer, 
-              false, 
-              {duration: 400}
-            );
-          }}/>
+          handleClick={(event, sortBy) => this.handleSortLinkClick(event, sortBy)}/>
       );
     });
 
     const areaLinks = Object.keys(practiceAreas).map((id) => {
-      return (
-        <FilterLink
-          key={id}
-          linkText={practiceAreas[id].area}
-          count={practiceAreas[id].posts}
-          dispatchEvent={() => {
-            onAreaFilter(posts, practiceAreas[id].area);
-            scrollIntoViewIfNeeded(
-              this._postsContainer, 
-              false, 
-              {duration: 400}
-            );
-          }}/>
-      );
+      if (practiceAreas[id].posts.length > 0) {
+        return (
+          <FilterLink
+            key={id}
+            linkText={practiceAreas[id].area}
+            count={practiceAreas[id].posts.length}
+            handleClick={(event) => this.handleAreaLinkClick(event, id)}/>
+        );
+      }
     });
 
     const authorLinks = Object.keys(staff).map((id) => {
@@ -170,14 +202,7 @@ class BlogHome extends Component {
           key={id}
           linkText={staff[id].name}
           count={staff[id].posts}
-          dispatchEvent={() => {
-            onAuthorFilter(posts, staff[id].name);
-            scrollIntoViewIfNeeded(
-              this._postsContainer, 
-              false, 
-              {duration: 400}
-            );
-          }}/>
+          handleClick={(event) => this.handleAuthorLinkClick(event, id)}/>
       );
     });
 
@@ -207,7 +232,8 @@ class BlogHome extends Component {
             <div className="col-md-4">
               <SearchField
                 filterValues={filterValues}
-                onFilter={onSearchFilter.bind(null, posts)}/>
+                onFilter={onSearchFilter.bind(null, posts)}
+                placeholder="Search posts by keyword"/>
               <DropdownMenu
                 heading="Sort by"
                 handleClick={this.toggleSortMenu}

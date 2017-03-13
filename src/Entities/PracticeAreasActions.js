@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { arrayOf, normalize } from 'normalizr';
 import { practiceAreaSchema } from 'constants/Schemas';
-import { recordAdded,
+import { recordsLoaded,
+         recordAdded,
          recordEdited } from 'Admin/actions';
 import { PRACTICE_AREAS_LOADED,
          PRACTICE_AREA_LOADED } from 'constants/actionTypes';
 
-export function fetchPracticeAreas() {
+export function fetchPracticeAreas(admin = false) {
   return dispatch => {
     return axios.get(`${API_URL}/api/practice-areas`)
     .then(({data: {practiceAreas}}) => {
@@ -14,7 +15,18 @@ export function fetchPracticeAreas() {
         practiceAreas, 
         arrayOf(practiceAreaSchema)
       );
-      dispatch(practiceAreasLoaded(normalized.entities, normalized.result));
+
+      if (admin) {
+        dispatch(recordsLoaded(
+          normalized.entities.practiceAreas,
+          normalized.result
+        ));
+      } else {
+        dispatch(practiceAreasLoaded(
+          normalized.entities, 
+          normalized.result
+        ));
+      }
     });
   };
 }
@@ -24,7 +36,11 @@ export function fetchPracticeArea(slug) {
     return axios.get(`${API_URL}/api/practice-areas/${slug}`)
     .then(({data: {practiceArea}}) => {
       const normalized = normalize(practiceArea, practiceAreaSchema);
-      return dispatch(practiceAreaLoaded(normalized.entities, normalized.entities.practiceAreas, practiceArea.id));
+      return dispatch(
+        practiceAreaLoaded(
+          normalized.entities.practiceAreas, 
+          practiceArea.id
+        ));
     });
   };
 }
@@ -38,22 +54,29 @@ export function addPracticeArea(config, content) {
     )
     .then(({data: {practiceArea}}) => {
         const normalized = normalize(practiceArea, practiceAreaSchema);
-        dispatch(recordAdded(normalized.entities, normalized.entities.practiceArea, practiceArea.id));
+        dispatch(recordAdded(
+          normalized.entities, 
+          normalized.entities.practiceAreas, 
+          practiceArea.id
+        ));
       }
     );
   };
 }
 
-export function editPracticeArea(config, content, id) {
+export function editPracticeArea(config, content, slug) {
   return (dispatch) => {
     return axios.put(
-      `${API_URL}/practice-areas/${id}`, 
+      `${API_URL}/api/practice-areas/${slug}`, 
       content,
       config
     )
     .then(({data: {practiceArea}}) => {
       const normalized = normalize(practiceArea, practiceAreaSchema);
-      dispatch(recordEdited(normalized.entities));
+      dispatch(recordEdited(
+        normalized.entities,
+        normalized.entities.practiceAreas,
+        practiceArea.id));
     });
   };
 }
@@ -66,10 +89,9 @@ export function practiceAreasLoaded(entities, practiceAreas) {
   };
 }
 
-export function practiceAreaLoaded(entities, practiceArea, practiceAreaId) {
+export function practiceAreaLoaded(practiceArea, practiceAreaId) {
   return {
     type: PRACTICE_AREA_LOADED,
-    entities,
     practiceArea,
     practiceAreaId
   };

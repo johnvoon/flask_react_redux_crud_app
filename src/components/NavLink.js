@@ -4,17 +4,17 @@ import classNames from 'classnames';
 
 class NavLink extends Component {
   render() {
-    const { router, linkText, endpoint, index } = this.props;
-    const isActive = router.isActive(endpoint, true);
+    const { router, linkText, slug, index } = this.props;
+    const isActive = router.isActive(slug, true);
 
     return (
       <li className={classNames({"active": isActive})}>
         {index ? (
-          <IndexLink to={endpoint}>
+          <IndexLink to={slug}>
             {linkText}
           </IndexLink>
         ) : (
-          <Link to={endpoint}>{linkText}</Link>
+          <Link to={slug}>{linkText}</Link>
         )}
       </li>
     );    
@@ -23,7 +23,7 @@ class NavLink extends Component {
 
 NavLink.propTypes = {
   linkText: PropTypes.string.isRequired,
-  endpoint: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
   router: PropTypes.object.isRequired,
   index: PropTypes.bool.isRequired
 };

@@ -6,7 +6,7 @@ import ErrorAlert from 'components/ErrorAlert';
 import { required } from 'utils';
 import { getJWT } from 'Authentication/actions';
 import { hideModal } from './actions';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 
 const mapStateToProps = (state) => {
   const { authentication } = state;
@@ -36,7 +36,7 @@ class GetJWTForm extends Component {
     };
   }
 
-  handleSubmit(data) {
+  _handleSubmit(data) {
     const { onGetJWT } = this.props;
 
     onGetJWT(data)
@@ -77,28 +77,12 @@ class GetJWTForm extends Component {
           </div>       
         </div>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button
-            customClassNames="btn-primary pull-right" 
-            type="submit" 
-            disabled={submitting}
-            handleClick={handleSubmit(data => this.handleSubmit(data))}>
-            Save
-          </Button>
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }

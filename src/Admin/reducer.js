@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { POSTS_LOADED,
-         USERS_LOADED,
-         COMMENTS_LOADED,
+import deepAssign from 'deep-assign';
+import { RECORDS_LOADED,
          RECORD_ADDED,
          RECORD_EDITED,
          RECORD_DELETED,
@@ -14,7 +13,8 @@ import { POSTS_LOADED,
          SHOW_MODAL,
          HIDE_MODAL,
          CHANGE_SELECTED_RECORD,
-         CHANGE_ADMIN_OPERATION } from 'constants/actionTypes';
+         CHANGE_ADMIN_OPERATION,
+         RESET_STATE } from 'constants/actionTypes';
 
 const initialState = {
   data: {},
@@ -32,14 +32,8 @@ const initialState = {
 
 export default function adminPagesReducer(state = initialState, action) {
   switch (action.type) {
-    case POSTS_LOADED:
-      return postsLoaded(state, action);
-
-    case USERS_LOADED:
-      return usersLoaded(state, action);
-
-    case COMMENTS_LOADED:
-      return commentsLoaded(state, action);
+    case RECORDS_LOADED:
+      return recordsLoaded(state, action);
 
     case RECORD_ADDED:
       return recordAdded(state, action);
@@ -79,36 +73,23 @@ export default function adminPagesReducer(state = initialState, action) {
 
     case HIDE_MODAL:
       return hideModal(state, action);
+
+    case RESET_STATE:
+      return resetState(state, action);
   }
 
   return state;
 }
 
-function postsLoaded(state, { entities, posts }) {
+function recordsLoaded(state, { records, recordIds }) {
   return {
     ...state,
-    data: entities.posts,
-    recordIds: posts
+    data: records || {},
+    recordIds
   };
 }
 
-function usersLoaded(state, { entities, users }) {
-  return {
-    ...state,
-    data: entities.users,
-    recordIds: users
-  };  
-}
-
-function commentsLoaded(state, { entities, comments }) {
-  return {
-    ...state,
-    data: entities.comments || {},
-    recordIds: comments
-  };
-}
-
-function recordAdded(state, { entities, addedRecord, addedRecordId }) { // eslint-disable-line no-unused-vars
+function recordAdded(state, { addedRecord, addedRecordId }) { // eslint-disable-line no-unused-vars
   const { data, recordIds } = state;
 
   return {
@@ -120,9 +101,12 @@ function recordAdded(state, { entities, addedRecord, addedRecordId }) { // eslin
   };
 }
 
-function recordEdited(state, action) { // eslint-disable-line no-unused-vars
+function recordEdited(state, { editedRecord }) { 
+  const { data } = state;
+
   return {
     ...state,
+    data: _.merge({}, data, editedRecord),
     successMessage: "Record edited successfully"
   };
 }
@@ -136,12 +120,11 @@ function commentVisibilityChanged(state, { entities, commentId }) {
   };
 }
 
-function recordDeleted(state, { deletedRecordId }) {
-  const { data, recordIds } = state;
+function recordDeleted(state, { records, recordIds }) {
   return {
     ...state,
-    data: _.omit(data, deletedRecordId),
-    recordIds: _.reject(recordIds, item => item === deletedRecordId),
+    data: records,
+    recordIds,
     successMessage: "Record deleted successfully",
   };
 }
@@ -195,7 +178,7 @@ function filterAdminData(state, { value }) {
 }
 
 function loadFormData(state, { formData }) {
-  return _.merge({}, state, { formData: formData });
+  return deepAssign({}, state, { formData });
 }
 
 function showModal(state, action) { // eslint-disable-line no-unused-vars
@@ -209,5 +192,13 @@ function hideModal(state, action) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     modalShowing: false
+  };
+}
+
+function resetState(state, action) { // eslint-disable-line no-unused-vars
+  return {
+    ...state,
+    data: {},
+    recordIds: []
   };
 }

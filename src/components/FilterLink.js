@@ -1,21 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class Link extends Component {
-  onClick(linkText) {
-    const { dispatchEvent } = this.props;
-
-    event.preventDefault();
-    dispatchEvent(linkText);
-  }
-
   render() {
-    this.onClick = this.onClick.bind(this);
-    const { linkText, count } = this.props;
+    const { linkText, count, handleClick } = this.props;
 
     return (
       <a 
         className="list-group-item"
-        onClick={this.onClick}>
+        onClick={handleClick}>
         {linkText}
         {count ? <span className="badge">{count}</span> : null}
       </a>
@@ -24,7 +16,7 @@ export default class Link extends Component {
 }
 
 Link.propTypes = {
-  dispatchEvent: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
   linkText: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired
 };

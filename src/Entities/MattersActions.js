@@ -3,10 +3,11 @@ import { arrayOf, normalize } from 'normalizr';
 import { matterSchema } from 'constants/Schemas';
 import { MATTERS_LOADED,
          MATTER_ADDED } from 'constants/actionTypes';
-import { recordAdded,
+import { recordsLoaded,
+         recordAdded,
          recordEdited } from 'Admin/actions';
 
-export function fetchMatters(config) {
+export function fetchMatters(config, admin = false) {
   return dispatch => {
     axios.get(
       `${API_URL}/api/matters`, 
@@ -14,10 +15,17 @@ export function fetchMatters(config) {
     )
     .then(({data: {matters}}) => {
       const normalized = normalize(matters, arrayOf(matterSchema));
-      dispatch(mattersLoaded(
-        normalized.entities,
-        normalized.result
-      ));
+      if (admin) {
+        dispatch(recordsLoaded(
+          normalized.entities.matters,
+          normalized.result
+        ));        
+      } else {
+        dispatch(mattersLoaded(
+          normalized.entities,
+          normalized.result
+        ));        
+      }
     });      
   };
 }
@@ -39,7 +47,11 @@ export function addMatter(config, content) {
     )
     .then(({data: {matter}}) => {
       const normalized = normalize(matter, matterSchema);
-      dispatch(recordAdded(normalized.entities, normalized.entities.matters, matter.id));
+      dispatch(recordAdded(
+        normalized.entities, 
+        normalized.entities.matters, 
+        matter.id
+      ));
     });
   };
 }
@@ -53,7 +65,10 @@ export function addMatterInsideForm(config, content) {
     )
     .then(({data: {matter}}) => {
         const normalized = normalize(matter, matterSchema);
-        return dispatch(matterAdded(normalized.entities, matter.id));
+        return dispatch(matterAdded(
+          normalized.entities,
+          matter.id
+        ));
       }
     );
   };
@@ -68,7 +83,11 @@ export function editMatter(config, content, id) {
     )
     .then(({data: {matter}}) => {
       const normalized = normalize(matter, matterSchema);
-      dispatch(recordEdited(normalized.entities));
+      dispatch(recordEdited(
+        normalized.entities,
+        normalized.entities.matters,
+        matter.id
+      ));
     });
   };
 }

@@ -14,6 +14,7 @@ from server.blueprints.staff import staff_api
 from server.blueprints.client import clients_api
 from server.blueprints.user import users_api
 from server.blueprints.client import matters_api
+from server.blueprints.admin import admin_api
 from server.blueprints.contact import contact
 from server.blueprints.user import user
 from server.blueprints.user.models import User
@@ -81,6 +82,7 @@ def create_app():
     app.register_blueprint(contact)
     app.register_blueprint(user)
     app.register_blueprint(practice_areas)
+    app.register_blueprint(admin_api.blueprint, url_prefix='/api')
     app.register_blueprint(posts_api.blueprint, url_prefix='/api')
     app.register_blueprint(comments_api.blueprint, url_prefix='/api')
     app.register_blueprint(practice_areas_api.blueprint, url_prefix='/api')

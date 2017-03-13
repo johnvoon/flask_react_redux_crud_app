@@ -1,6 +1,6 @@
 import os
 from PIL import Image
-from flask import Blueprint, request, url_for, current_app, render_template
+from flask import Blueprint, request, url_for, current_app
 from werkzeug.utils import secure_filename
 from flask_restful import Api, Resource
 from flask_jwt import jwt_required
@@ -14,8 +14,7 @@ posts_api = Api(Blueprint('posts_api', __name__), decorators=[csrf.exempt])
 class PostsAPI(Resource):
     @staticmethod
     def get():
-        posts = Post.query.all()
-        posts = [post.to_json() for post in posts]
+        posts = [post.to_json() for post in Post.query.all()]
         if posts:
             return render_json(200, {'posts': posts})
 
@@ -118,9 +117,6 @@ class PostAPI(Resource):
                 with current_app.app_context():
                     post.img_src = url_for('static', filename='images/2000/{}'.format(filename))
                     post.thumbnail_src = url_for('static', filename='images/400/{}'.format(filename))
-            else:
-                post.img_src = ''
-                post.thumbnail_src = ''
         
         try: 
             post.save()
@@ -135,11 +131,12 @@ class PostAPI(Resource):
     def delete(post_id):
         post = Post.query.get_or_404(post_id)
         if post: 
-            # try:
-            post.delete()
-            return render_json(200, {'post': post.to_json()})
-            # except: 
-            #     return render_json(500, {'message': "An error occurred."})
+            try:
+                post.delete()
+                posts = [post.to_json() for post in Post.query.all()]
+                return render_json(200, {'posts': posts})
+            except: 
+                return render_json(500, {'message': "An error occurred."})
 
         return render_json(404, {'message': 'No post with ID {} found'.format(post_id)})
 

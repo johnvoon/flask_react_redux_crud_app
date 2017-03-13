@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from  'redux-form';
+import { slugify } from 'utils';
 import { hideModal } from 'Admin/actions';
 import { removeJWT } from 'Authentication/actions';
-import { addMatter } from 'Entities/MattersActions';
+import { addPracticeArea } from 'Entities/PracticeAreasActions';
 import ErrorAlert from 'components/ErrorAlert';
-import Button from 'components/Button';
+import ButtonToolbar from 'components/ButtonToolbar';
 import PracticeAreaParticularsForm from './PracticeAreaParticularsForm';
 
 const mapStateToProps = (state) => {
@@ -19,8 +20,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddPracticeArea: (JWT, content) => {
-      return dispatch(addMatter(JWT, content));
+    onAddPracticeArea: (config, content) => {
+      return dispatch(addPracticeArea(config, content));
     },
 
     onJWTExpired: () => {
@@ -51,8 +52,11 @@ class AddPracticeAreaForm extends Component {
 
     let formData = new FormData();
     Object.keys(data).forEach((key) => {
+      key === 'file' && formData.append('file', data.file[0]);
       formData.append(key, data[key]);
     });
+    formData.append('slug', slugify(data.area));
+    
     onAddPracticeArea(config, formData)
     .then(() => onHideModal())
     .catch(({response, message}) => {
@@ -79,28 +83,12 @@ class AddPracticeAreaForm extends Component {
       <form>
         <PracticeAreaParticularsForm/>
         {errorMessage && <ErrorAlert message={errorMessage}/>}
-        <div className="btn-toolbar">
-          <Button
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            handleClick={onHideModal}>
-            Close
-          </Button>
-          <Button 
-            customClassNames="btn-danger pull-right" 
-            type="button" 
-            disabled={pristine || submitting} 
-            handleClick={reset}>
-            Reset
-          </Button>
-          <Button 
-            customClassNames="btn-primary pull-right" 
-            type="submit"
-            disabled={submitting}
-            handleClick={handleSubmit(data => this._handleSubmit(data))}>
-            Save
-          </Button>      
-        </div>
+        <ButtonToolbar
+          onHideModal={onHideModal}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={handleSubmit(data => this._handleSubmit(data))}/>
       </form>
     );
   }

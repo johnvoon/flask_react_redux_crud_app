@@ -21,6 +21,9 @@ class ClientDetailsForm extends Component {
     this.state = {
       showAddMatterForm: false
     };
+
+    this.handleClick = this.handleClick.bind(this);
+    this.onHideAddMatterForm = this.onHideAddMatterForm.bind(this);
   }
 
   handleClick() {
@@ -29,15 +32,13 @@ class ClientDetailsForm extends Component {
     });
   }
 
-  onHide() {
+  onHideAddMatterForm() {
     this.setState({
       showAddMatterForm: false
     });
   }
 
   render() {
-    this.handleClick = this.handleClick.bind(this);
-    this.onHide = this.onHide.bind(this);
     const { matters, isDisplayed, changeMatterFieldValue } = this.props;
     const { showAddMatterForm } = this.state;
     const matterOptions = createOptionsList(matters, "description");
@@ -49,10 +50,12 @@ class ClientDetailsForm extends Component {
         <Field 
           name="matters"
           component={MultiselectFormGroup}
-          label="Matters Handled"
+          label="Matters"
           options={matterOptions}
           placeholder="Select one or more matters"/>
         <ButtonBlock
+          type="button"
+          customClassNames="btn-primary"
           handleClick={this.handleClick}>
           {showAddMatterForm ? "Cancel" : "Add Matter"}
         </ButtonBlock>
@@ -60,7 +63,8 @@ class ClientDetailsForm extends Component {
           <div>
             <AddMatterForm
               addButtonOnly={true}
-              changeMatterFieldValue={changeMatterFieldValue}/>
+              changeMatterFieldValue={changeMatterFieldValue}
+              onHideAddMatterForm={this.onHideAddMatterForm}/>
           </div>
         ) : null}
       </div>

@@ -13,7 +13,6 @@ from flask_login import (
     current_user,
     logout_user)
 
-from lib.safe_next_url import safe_next_url
 from server.blueprints.user.decorators import anonymous_required
 from server.blueprints.user.models import User
 from server.blueprints.user.forms import (
@@ -37,38 +36,6 @@ def login(path):
 @anonymous_required()
 def logout(path):
     return render_template('base.html')
-
-# @user.route('/login', methods=['GET', 'POST'])
-# @anonymous_required()
-# def login():
-#     form = LoginForm(next=request.args.get('next'))
-
-#     if form.validate_on_submit():
-#         u = User.find_by_identity(request.form.get('identity'))
-
-#         if u and u.authenticated(password=request.form.get('password')):
-#             if login_user(u, remember=True) and u.is_active():
-#                 u.update_activity_tracking(request.remote_addr)
-
-#                 next_url = request.form.get('next')
-#                 if next_url:
-#                     return redirect(safe_next_url(next_url))
-
-#                 return redirect(url_for('admin.index'))
-#             else:
-#                 flash('This account has been disabled.', 'error')
-#         else:
-#             flash('Identity or password is incorrect.', 'error')
-
-#     return render_template('login.html', form=form)
-
-
-# @user.route('/logout')
-# @login_required
-# def logout():
-#     logout_user()
-#     return redirect(url_for('user.login'))
-
 
 @user.route('/account/begin_password_reset', methods=['GET', 'POST'])
 @anonymous_required()

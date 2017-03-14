@@ -5,7 +5,7 @@ import LoginForm from './LoginForm';
 class Login extends Component {
   render() {
     return (
-      <main>
+      <main className="container-fluid">
         <Helmet
           title="Log in"
           meta={[

@@ -130,7 +130,7 @@ class BlogPost extends Component {
     });
 
     return (
-      <main className="post">
+      <main className="post container-fluid">
         <Helmet
           title={currentPost.title}
           meta={[
@@ -144,11 +144,11 @@ class BlogPost extends Component {
             backgroundSize: 'cover',
             backgroundAttachment: 'fixed'
           }}/>
-        <div className="container-fluid">
+        <div>
           {post()}
         </div>
         <div className="related-items">
-          <div className="container-fluid related-posts">
+          <div className="related-posts">
             <div className="row">
               {relatedPostsList}
             </div>

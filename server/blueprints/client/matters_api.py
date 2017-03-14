@@ -65,7 +65,6 @@ class MatterApi(Resource):
         matter = Matter.query.get_or_404(id)
 
         if matter:
-
             content = request.form        
             practice_area_ids = content.get('practiceAreas', '')
             staff_ids = content.get('staff', '')

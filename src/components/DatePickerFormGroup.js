@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateField } from 'react-date-picker';
 import classNames from 'classnames';
-import 'react-date-picker/index.css';
 
 const DatePickerFormGroup = (field) => {
   const { input, meta, label } = field;

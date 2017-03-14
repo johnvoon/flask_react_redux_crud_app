@@ -1,6 +1,6 @@
 SECRET_KEY = 'insecurekeyfordev'
 
-MAIL_USERNAME = 'johnksvoon2@gmail.com'
+MAIL_USERNAME = 'johnksvoon@gmail.com'
 MAIL_PASSWORD = 'jv220289'
 
 CELERY_BROKER_URL = 'redis://:devpassword@redis:6379/0'

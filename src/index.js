@@ -7,6 +7,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import configureStore from './store';
 import '../styles/styles.scss';
 import '../styles/styles.less';
+import 'react-date-picker/index.css';
 import App from 'App/index';
 import HomePage from 'HomePage/index';
 import BlogHome from 'BlogHome/index';

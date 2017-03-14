@@ -6,7 +6,8 @@
   "repository": "git@github.com:JohnVoon/concept-website.git",
   "scripts": {
     "start": "API_URL='http://localhost:8000' webpack-dev-server",
-    "build": "NODE_ENV='production' API_URL='https://10.0.0.3' webpack --config webpack.prod.config.js"
+    "staging": "NODE_ENV='production' API_URL='https://10.0.0.3' webpack --config webpack.prod.config.js",
+    "production": "NODE_ENV='production' API_URL='https://174.138.66.189' webpack --config webpack.prod.config.js"
   },
   "author": "",
   "license": "ISC",

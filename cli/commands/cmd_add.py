@@ -78,10 +78,10 @@ def practice_areas():
     data = []
     practice_areas = ["Dispute Resolution", "Criminal Law", "Family Law", "Mergers & Acquisitions"]
     with app.app_context():
-        img_srcs = [url_for('static', filename='images/2000/dispute.jpg'), 
-                    url_for('static', filename='images/2000/criminal.jpg'),
-                    url_for('static', filename='images/2000/family.jpg'),
-                    url_for('static', filename='images/2000/mergers.jpg')]
+        img_srcs = [url_for('static', filename='images/1000/dispute.jpg'), 
+                    url_for('static', filename='images/1000/criminal.jpg'),
+                    url_for('static', filename='images/1000/family.jpg'),
+                    url_for('static', filename='images/1000/mergers.jpg')]
 
         thumbnail_srcs = [url_for('static', filename='images/400/dispute.jpg'), 
                     url_for('static', filename='images/400/criminal.jpg'),
@@ -259,12 +259,12 @@ def posts():
                           url_for('static', filename='images/400/suit.jpg')]
     thumbnail_srcs = itertools.cycle(thumbnail_srcs)
     with app.app_context():
-        img_srcs = [url_for('static', filename='images/2000/glass-architecture.jpg'), 
-                    url_for('static', filename='images/2000/building.jpg'),
-                    url_for('static', filename='images/2000/ipad.jpg'),
-                    url_for('static', filename='images/2000/pencils.jpg'),
-                    url_for('static', filename='images/2000/team_meeting.jpg'),
-                    url_for('static', filename='images/2000/suit.jpg')]
+        img_srcs = [url_for('static', filename='images/1000/glass-architecture.jpg'), 
+                    url_for('static', filename='images/1000/building.jpg'),
+                    url_for('static', filename='images/1000/ipad.jpg'),
+                    url_for('static', filename='images/1000/pencils.jpg'),
+                    url_for('static', filename='images/1000/team_meeting.jpg'),
+                    url_for('static', filename='images/1000/suit.jpg')]
     img_srcs = itertools.cycle(img_srcs)
     author_ids = db.session.query(Staff.id).all()
     practice_area_ids = db.session.query(PracticeArea.id).all()

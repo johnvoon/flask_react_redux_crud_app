@@ -72,7 +72,6 @@ module.exports = {
         ]
       }
     }),
-    extractCSS,
     extractSCSS,
     extractLESS,
     new webpack.DefinePlugin({

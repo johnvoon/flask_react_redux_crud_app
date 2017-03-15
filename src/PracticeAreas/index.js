@@ -36,7 +36,7 @@ class PracticeAreas extends Component {
             id={id}
             text={practiceAreaName}
             slug={`/practice-areas/${slug}`}
-            imgSrc={practiceAreas[id].imgSrc}
+            imgSrc={practiceAreas[id].thumbnailSrc}
             customClassNames="btn-practice-area"/>
         </div>
       );

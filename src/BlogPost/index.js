@@ -130,7 +130,7 @@ class BlogPost extends Component {
     });
 
     return (
-      <main className="post container-fluid">
+      <main className="post">
         <Helmet
           title={currentPost.title}
           meta={[
@@ -147,7 +147,7 @@ class BlogPost extends Component {
         <div>
           {post()}
         </div>
-        <div className="related-items">
+        <div className="related-items container-fluid">
           <div className="related-posts">
             <div className="row">
               {relatedPostsList}

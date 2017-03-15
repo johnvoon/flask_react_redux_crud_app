@@ -61,11 +61,7 @@ class HomePage extends Component {
           className="jumbotron"
           style={{backgroundImage: `url(${API_URL}/static/images/2000/home.jpg)`}}>
           <div className="container text-center">
-            <Button 
-              type="button" 
-              customClassNames="btn-primary btn-home">
-              Make an appointment today
-            </Button>
+            <h1>We're ready to listen</h1>
           </div>
         </div>
         <div className="container-fluid">

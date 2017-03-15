@@ -5,18 +5,20 @@ export default class Sidebar extends Component {
   renderLinks() {
     const { links } = this.props;
     return links.map((link, idx) => {
-      const linkText = link[0];
-      const endpoint = link[1];
-      
-      return (
-        <Link
-          key={idx}
-          className="list-group-item"
-          to={endpoint}
-          onClick={window.location.reload}>
-          {linkText}
-        </Link>
-      );
+      if (link ) {
+        const linkText = link[0];
+        const slug = link[1];
+        
+        return (
+          <Link
+            key={idx}
+            className="list-group-item"
+            to={slug}
+            onClick={window.location.reload}>
+            {linkText}
+          </Link>
+        );
+      } else return null
     });
   }
 

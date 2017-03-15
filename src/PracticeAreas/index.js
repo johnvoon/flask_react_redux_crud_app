@@ -5,9 +5,12 @@ import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import ButtonLink from 'components/ButtonLink';
 
 const mapStateToProps = (state) => {
-  const { entities } = state;
+  const { practiceAreas, entities } = state;
 
-  return {...entities};
+  return {
+    ...practiceAreas,
+    ...entities
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -17,16 +20,22 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class PracticeAreas extends Component {
+  constructor(props) {
+    super(props);
+    this.renderButtonLinks = this.renderButtonLinks.bind(this);
+  }
+
   componentDidMount() {
     this.props.onFetchPracticeAreas();
   }
 
-  render() {
-    const { practiceAreas } = this.props;
-    const buttonLinks = Object.keys(practiceAreas).map(id => {
+  renderButtonLinks() {
+    const { practiceAreas, practiceAreaIds } = this.props;
+
+    return practiceAreaIds.map(id => {
       const practiceAreaName = practiceAreas[id].area;
       const slug = practiceAreas[id].slug;
-
+      
       return (
         <div
           key={id}
@@ -41,7 +50,9 @@ class PracticeAreas extends Component {
         </div>
       );
     });
+  }
 
+  render() {
     return (
       <main>
         <Helmet
@@ -59,7 +70,7 @@ class PracticeAreas extends Component {
           </div>
         </div>
         <div className="container-fluid">
-          {buttonLinks}
+          {this.renderButtonLinks()}
         </div>
       </main>
     );

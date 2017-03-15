@@ -4,12 +4,14 @@ import Headroom from 'react-headroom';
 import MainNavbar from 'components/MainNavbar';
 import Sidebar from 'components/Sidebar';
 import { fetchCurrentUser } from 'Authentication/actions';
+import { toggleSidebar, hideSidebar } from './actions';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => {
-  const { entities, authentication } = state;
+  const { app, entities, authentication } = state;
   return {
+    ...app,
     ...entities,
     ...authentication
   };
@@ -18,32 +20,29 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   onFetchCurrentUser: () => {
     dispatch(fetchCurrentUser());
+  },
+
+  onToggleSidebar: () => {
+    dispatch(toggleSidebar());
+  },
+
+  onHideSidebar: () => {
+    dispatch(hideSidebar());
   }
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showSidebar: false
-    };
-
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
     this.props.onFetchCurrentUser();
   }
 
-  handleClick() {
-    this.setState({
-      showSidebar: this.state.showSidebar ? false : true
-    });
-  }
-
   render() {
-    const { showSidebar } = this.state;
-    const { currentUser } = this.props;
+    const { currentUser, sidebarShowing,
+      onToggleSidebar, onHideSidebar } = this.props;
     const links = [
       ["Home", "/", "index"],
       ["Practice Areas", "/practice-areas"],
@@ -59,17 +58,18 @@ class App extends Component {
             style={{zIndex: '4'}}>
             <MainNavbar
               links={links}
-              handleClick={this.handleClick}
-              showSidebar={showSidebar}/>
+              handleClick={onToggleSidebar}
+              sidebarShowing={sidebarShowing}/>
           </Headroom>
         </header>
         <VelocityTransitionGroup
           enter={{animation: "fadeIn"}}
           leave={{animation: "fadeOut"}}>
-          {showSidebar ? (
+          {sidebarShowing ? (
             <Sidebar
-              links={links}/>
-          ) : undefined}
+              links={links}
+              handleHide={onHideSidebar}/>
+          ) : null}
         </VelocityTransitionGroup>
         {this.props.children}
       </div>

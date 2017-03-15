@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 
 export default class Sidebar extends Component {
   renderLinks() {
-    const { links } = this.props;
+    const { links, handleHide } = this.props;
+    
     return links.map((link, idx) => {
       if (link ) {
         const linkText = link[0];
@@ -14,7 +15,7 @@ export default class Sidebar extends Component {
             key={idx}
             className="list-group-item"
             to={slug}
-            onClick={window.location.reload}>
+            onClick={handleHide}>
             {linkText}
           </Link>
         );

@@ -23,7 +23,7 @@ export function fetchPracticeAreas(admin = false) {
         ));
       } else {
         dispatch(practiceAreasLoaded(
-          normalized.entities, 
+          normalized.entities,
           normalized.result
         ));
       }
@@ -81,11 +81,11 @@ export function editPracticeArea(config, content, slug) {
   };
 }
 
-export function practiceAreasLoaded(entities, practiceAreas) {
+export function practiceAreasLoaded(entities, practiceAreaIds) {
   return {
     type: PRACTICE_AREAS_LOADED,
     entities,
-    practiceAreas
+    practiceAreaIds
   };
 }
 

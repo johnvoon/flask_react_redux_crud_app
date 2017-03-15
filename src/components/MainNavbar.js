@@ -33,7 +33,7 @@ export default class MainNavbar extends Component {
   }
 
   render() {
-    const { handleClick, showSidebar } = this.props;
+    const { handleClick, sidebarShowing } = this.props;
 
     return (
       <nav className="navbar navbar-default navbar-inverse">
@@ -51,7 +51,7 @@ export default class MainNavbar extends Component {
                 "collapsed",
                 "hamburger",
                 "hamburger--elastic",
-                {"is-active": showSidebar})}
+                {"is-active": sidebarShowing})}
               type="button"
               onClick={handleClick}>
               <span className="hamburger-box"> 
@@ -73,5 +73,5 @@ export default class MainNavbar extends Component {
 MainNavbar.propTypes = {
   links: PropTypes.array.isRequired,
   handleClick: PropTypes.func.isRequired,
-  showSidebar: PropTypes.bool.isRequired,
+  sidebarShowing: PropTypes.bool.isRequired,
 };

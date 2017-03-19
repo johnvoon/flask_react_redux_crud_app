@@ -1,7 +1,9 @@
 var webpack = require('webpack');
 var path = require('path');
+var glob = require('glob');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var PurifyCSSPlugin = require('purifycss-webpack');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var fontMagician = require('postcss-font-magician');
@@ -9,17 +11,13 @@ var extractCSS = new ExtractTextPlugin('../stylesheets/[name]-css.css');
 var extractSCSS = new ExtractTextPlugin('../stylesheets/[name]-scss.css');
 var extractLESS = new ExtractTextPlugin('../stylesheets/[name]-less.css');
 var VENDOR_LIBS = [
-  'axios', 'bootstrap', 'classnames',
-  'hamburgers', 'lodash', 'material-ui', 'moment',
-  'react', 'react-bootstrap', 'react-custom-scrollbars',
-  'react-date-picker', 'react-dom', 'react-dropzone',
-  'react-geosuggest', 'react-headroom', 'react-helmet',
-  'react-infinite-scroller', 'react-redux', 'react-router',
-  'react-rte', 'react-rte-material', 'react-select',
-  'react-tap-event-plugin', 'react-textarea-autosize',
+  'axios', 'bootstrap', 'classnames', 
+  'hamburgers', 'lodash', 'moment',
+  'react', 'react-bootstrap', 'react-custom-scrollbars', 
+  'react-dom', 'react-headroom', 'react-helmet', 'react-redux', 
+  'react-router', 'react-tap-event-plugin',
   'redux', 'redux-form', 'redux-promise', 'redux-thunk',
-  'reselect', 'scroll-into-view-if-needed', 'scrollreveal',
-  'velocity-animate', 'velocity-react'
+  'reselect', 'scrollreveal'
 ];
 
 module.exports = {
@@ -74,6 +72,9 @@ module.exports = {
     }),
     extractSCSS,
     extractLESS,
+    new PurifyCSSPlugin({
+      paths: glob.sync(path.join(__dirname, 'server/templates/*.html'))
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'API_URL': JSON.stringify(process.env.API_URL)

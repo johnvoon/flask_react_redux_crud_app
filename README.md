@@ -1,90 +1,65 @@
 # Concept Law Firm Website
+------
 
-A modern law firm website with custom content management system.
-
-<strong>LIVE AT: TBA</strong>
-
-<strong>Development process documented at: medium.com</strong>
-
-<strong>Note: Please use Chrome for now as cross-browser compatibility is still being implemented.</strong>
-
-## Overview
-
-A concept law firm website I built from the back- to front-end to learn Flask and React. 
+A simple fake mobile-responsive law firm website with custom CMS hosted on digital ocean. It's my first website and where I learned Flask and React. 
 
 ## Instructions
+------
 
-Login with username: "admin", password: "devpassword" for access to account with admin privileges.
+<strong>Check it out at: TBA</strong>
 
-## Features
-- Mobile responsive
-- Custom content management system
+Login with:
 
-### Blog Posts Index Page
-- Instantaneous filters (by keyword, practice area or author)
-- Infinite scrolling for loading more posts
+- username: "admin"
+- password: "password" 
 
-### Blog Post Page
-- Displays related posts
-- Displays comments and comment form
+for access to admin functionality.
 
-### Admin Pages
-- Instantaneous keyword search filter and column sort
-- CRUD functionality with instantaneous success and error feedback.
+## Features:
+------
 
-### Admin User Page
-- Integrated user management system where clients and staff can be managed in one place. No need for time-wasting switching between routes. 
-- Individual client and staff user accounts can only be created by a user with admin privileges
-- "Add User" and "Edit User" forms feature client- and server-side field validation, address autocomplete.
-- If added user role is "staff", "Add Staff" form will be automatically displayed.
-- If added user role is "client", "Add Client" form will be automatically displayed.
-- "Add Staff" form features client-side field validation, datepicker, image uploading, multiselect fields.
-- "Add Client" form features
-
-### Admin Posts Page
-- "Add Post" and "Edit Post" forms feature client- and server-side field validation, image file uploading and RichTextEditor input. 
-
-
-- Admin dashboard and pages are protected and require authentication and admin user privileges
-- Certain admin operations (e.g. POST, PUT, DELETE requests) additionally require a JWT (obtained client-side from admin pages).
-- On expiry of JWT, user is redirected back to JWT request page (inputted data is automatically saved)
-- Contact form on every page
-- Interactive home and staff pages.
-
+- Blog page with keyword search, practice area or author filters, infinite scrolling
+- Simple authentication
+- CMS for adding/editing blog posts, users (client, staff, public), practice areas and matters; with instantaneous success and error feedback, JWT authentication system, client-side form field validation, rich text editing, address autocomplete, datepicker, image uploading, multiselect fields, etc.
+ 
 ## Implementation
-- <b>Flask</b> web framework
-- Website hosted on <b>Digital Ocean</b>
-- <b>Gunicorn</b> web application server
-- <b>Nginx</b> reverse proxy for serving static assets, handling SSL, etc.
-- <b>Bootstrap</b> (customized using LESS) CSS framework
-- User authentication with <b>Flask</b> and <b>Flask-Login</b>
-- Password hashing using <b>Bcrypt</b>
-- Automated emails generated with and <b>Flask-Mail</b> and <b>Celery</b>
-- Back-end API built using [<b>Flask-RESTful</b>](http://flask-restful-cn.readthedocs.io/en/0.3.4/)
-- API endpoints protected using [<b>Flask-JWT</b>](https://pythonhosted.org/Flask-JWT/)
-- Interactive user interface with [<b>React</b>](https://facebook.github.io/react/) (code written in ES6)
-- Application state management with <b>Redux</b>
-- [<b>Redux-Thunk</b>](https://github.com/gaearon/redux-thunk) middleware for dispatching Redux actions
-- Front-end routing with [<b>React-Router</b>](https://github.com/ReactTraining/react-router)
-- Form state management and validation using [<b>Redux-Form</b>](http://redux-form.com/)
-- Date-time formatting with [<b>Moment.js</b>](https://momentjs.com/) 
-- JSON data normalization with [<b>Normalizr</b>](https://github.com/paularmstrong/normalizr)
-- HTTP requests with [<b>Axios</b>](https://github.com/mzabriskie/axios)
-- Memoized selectors with [<b>Reselect</b>](https://github.com/reactjs/reselect)
-- Modal implementation with <b>React-Bootstrap</b>
-- Infinite scrolling with <b>Redux Infinite Scroll</b>
-- RichTextEditor element from [<b>React-RTE</b>](https://github.com/sstur/react-rte)
-- Select controls from [<p>React-Select</p>](https://github.com/JedWatson/react-select)
-- [<b>Lodash</b>](https://lodash.com/) JavaScript helper functions
-- Front-end module bundling with [<b>Webpack</b>](https://webpack.github.io/)
-- [<b>Docker</b>](https://www.docker.com/) for containerization
-- <b>PostgreSQL</b> database with [<b>SQLAlchemy</b>](http://www.sqlalchemy.org/) ORM
-- Images uploaded with [<b>React-dropzone</b>](https://github.com/okonet/react-dropzone)
-- JavaScript linting with [<b>ESLint</b>](http://eslint.org/)
-- Fake data generated with <b>fake-factory</b>
-- Address form autocomplete using <b>Google Places API</b> and [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest)
+------
+
+| Technology | Description |
+|------|-------------|
+| [<b>Flask</b>](http://flask.pocoo.org/) |  Python web framework |
+| [<b>Gunicorn</b>](http://gunicorn.org/) | Web application server |
+| [<b>Nginx</b>](https://www.nginx.com/) | Reverse proxy server serving static resources and handling gzip and SSL |
+| [<b>Docker</b>](https://www.docker.com/) | Containerization of app |
+| [<b>PostgreSQL</b>](https://www.postgresql.org/) | Database |
+| [<b>SQLAlchemy</b>](http://www.sqlalchemy.org/) | ORM |
+| [<b>Flask-RESTful</b>](http://flask-restful-cn.readthedocs.io/en/0.3.4/) | For building APIs with Flask |
+| [<b>Flask-Login</b>](https://pypi.python.org/pypi/Flask-Login) | User authentication |
+| [<b>Flask-JWT</b>](https://pythonhosted.org/Flask-JWT/) | Protection of API endpoints using JSON Web Token |
+| [<b>Bcrypt</b>](https://pypi.python.org/pypi/bcrypt/3.1.3) | Password hashing |
+| [<b>Pillow</b>](https://python-pillow.org/) | Image compression |
+| [<b>React</b>](https://facebook.github.io/react/) | JavaScript library for building user interfaces |
+| [<b>Redux</b>](https://redux.js.org/docs/introduction/) | Application state management |
+| [<b>Redux-Thunk</b>](https://github.com/gaearon/redux-thunk) | Middleware for dispatching Redux actions |
+| [<b>React-Router</b>](https://github.com/ReactTraining/react-router) | Client-side routing |
+| [<b>Redux-Form</b>](http://redux-form.com/) | Form state management |
+| [<b>Moment.js</b>](https://momentjs.com/) | Date-time formatting |
+| [<b>Normalizr</b>](https://github.com/paularmstrong/normalizr) | JSON data normalization |
+| [<b>Axios</b>](https://github.com/mzabriskie/axios) | Performing AJAX requests |
+| [<b>Reselect</b>](https://github.com/reactjs/reselect) | Memoized selectors |
+| [<b>Bootstrap</b>](http://getbootstrap.com/) | Styling |
+| [<b>Redux Infinite Scroll</b>](https://github.com/RealScout/redux-infinite-scroll) | Infinite scrolling |
+| [<b>React-RTE</b>](https://github.com/sstur/react-rte) | RichTextEditor element |
+| [<p>React-Select</p>](https://github.com/JedWatson/react-select) | Multiselect form controls |
+| [<b>React-dropzone</b>](https://github.com/okonet/react-dropzone) | Image upload form field |
+| [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest) | Address autocomplete form field |
+| [<b>Lodash</b>](https://lodash.com/) | JavaScript helper functions |
+| [<b>Webpack</b>](https://webpack.github.io/) | Module bundling |
+| [<b>ESLint</b>](http://eslint.org/) | JavaScript linting |
 
 ## Resources Consulted
+------
+
 - Web Development (Steve Huffman, Udacity, https://www.udacity.com/course/web-development--cs253)
 - Build a SAAS App with Flask (Nick Janetakis, Udemy, https://www.udemy.com/the-build-a-saas-app-with-flask-course/)
 - The Docker for DevOps Course (Nick Janetakis, Udemy, https://www.udemy.com/the-docker-for-devops-course-from-development-to-production/)
@@ -94,14 +69,11 @@ Login with username: "admin", password: "devpassword" for access to account with
 - mxstbr/react-boilerplate (https://github.com/mxstbr/react-boilerplate)
 - andrewngu/sound-redux (https://github.com/andrewngu/sound-redux)
 - carlosrocha/react-data-components (https://github.com/carlosrocha/react-data-components)
-- dmeents/redux-form-tut (https://gist.github.com/dmeents/62151997c2eb17a2daf535111778efa2)
-- okonet/react-dropzone (https://github.com/okonet/react-dropzone)
-- BBB/dropzone-redux-form-example(https://github.com/BBB/dropzone-redux-form-example)
 
-## Todo
-- Migrate to Node.js
-- Enable server-side rendering
-- Staff portal for viewing appointment diary, sending invoices/receipts and case status updates
-- Client portal for receiving invoices/receipts and case status updates
-- Instant chat pop-up for answering enquiries from website visitors
-- Security enhancements
+## In the works
+------
+
+- Server rendering
+- New user registration and appointment scheduling
+- Staff/client portal portal
+- Internationalization

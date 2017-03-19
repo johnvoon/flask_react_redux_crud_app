@@ -3,8 +3,11 @@ Flask==0.10.1
 # HTTP Requests
 requests==2.12.4
 
-# Dev and production web app server.
+# Web application server.
 gunicorn==19.4.5
+
+# Server-side JavaScript
+react==4.1.0
 
 # Testing and static analysis.
 pytest==2.9.1
@@ -23,9 +26,6 @@ celery==3.1.23
 
 # Forms.
 WTForms-Components==0.9.7
-
-# Payments.
-stripe==1.32.0
 
 # Utils.
 fake-factory==0.5.7

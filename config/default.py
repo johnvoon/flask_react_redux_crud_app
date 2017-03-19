@@ -1,5 +1,6 @@
 from datetime import timedelta
 from celery.schedules import crontab
+from react.conf import settings
 
 DEBUG = True
 LOG_LEVEL = 'DEBUG'  # CRITICAL / ERROR / WARNING / INFO / DEBUG
@@ -31,5 +32,10 @@ RATELIMIT_HEADERS_ENABLED = True
 
 # File upload
 IMAGES = 'server/static/images/'
+IMAGES_1000 = 'server/static/images/1000'
 IMAGES_2000 = 'server/static/images/2000'
 IMAGES_400 = 'server/static/images/400'
+
+settings.configure(
+  RENDER_URL='http://10.0.0.3:9009/render'
+)

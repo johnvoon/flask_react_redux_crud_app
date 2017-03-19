@@ -1,25 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import sr from 'components/ScrollReveal';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchPosts } from 'Entities/PostsActions';
 import Button from 'components/Button';
-
-const mapStateToProps = (state) => {
-  const { entities } = state;
-
-  return {...entities};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  onFetchPracticeAreas: () => {
-    dispatch(fetchPracticeAreas());
-  },
-  onFetchPosts: () => {
-    dispatch(fetchPosts());
-  }
-});
 
 class HomePage extends Component {
   constructor(props) {
@@ -38,8 +21,6 @@ class HomePage extends Component {
       distance: 0
     };
 
-    sr.reveal(this.whoWeAre, config);
-    sr.reveal(this.coreValues, config);
   }
 
   handleClick(index) {
@@ -83,7 +64,4 @@ class HomePage extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps, 
-  mapDispatchToProps
-)(HomePage);
+export default HomePage;

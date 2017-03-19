@@ -32,8 +32,4 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  onFetchCurrentUser: PropTypes.func.isRequired
-};
-
 export default Login;

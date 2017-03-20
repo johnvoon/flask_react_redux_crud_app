@@ -16,7 +16,7 @@ export default function appReducer(state = initialState, action) {
   return state;
 }
 
-function toggleSidebar(state, actions) {
+function toggleSidebar(state, actions) { // eslint-disable-line no-unused-vars
   const { sidebarShowing } = state;
 
   return {
@@ -25,7 +25,7 @@ function toggleSidebar(state, actions) {
   }
 }
 
-function hideSidebar(state, actions) {
+function hideSidebar(state, actions) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     sidebarShowing: false

@@ -39,9 +39,9 @@ export default class MainNavbar extends Component {
       <nav className="navbar navbar-default navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            <Link to="/">
-              <img src={`${API_URL}/static/images/concept-logo.png`}
-                   className="img-fluid"
+            <Link className="navbar-brand" to="/">
+              <img className="logo"
+                   src={`${API_URL}/static/images/concept.png`}
                    title="Concept Law Firm" 
                    alt="Concept Law Firm"/>
             </Link>

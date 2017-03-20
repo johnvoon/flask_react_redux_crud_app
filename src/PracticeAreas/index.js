@@ -62,11 +62,12 @@ class PracticeAreas extends Component {
           ]}/>
         <div 
           className="jumbotron"
-          style={{backgroundImage: `url(${API_URL}/static/images/2000/home.jpg)`}}>
+          style={{backgroundImage: `url(${API_URL}/static/images/2000/melbourne-night.jpg)`}}>
           <div className="container">
             <h1 className="text-uppercase">
               Practice Areas
             </h1>
+            <h3>We excel at what we do</h3>
           </div>
         </div>
         <div className="container-fluid">

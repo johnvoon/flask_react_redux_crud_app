@@ -10,14 +10,18 @@ var fontMagician = require('postcss-font-magician');
 var extractCSS = new ExtractTextPlugin('../stylesheets/[name]-css.css');
 var extractSCSS = new ExtractTextPlugin('../stylesheets/[name]-scss.css');
 var extractLESS = new ExtractTextPlugin('../stylesheets/[name]-less.css');
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var VENDOR_LIBS = [
-  'axios', 'bootstrap', 'classnames', 
+  'axios', 'bootstrap', 'classnames',
   'hamburgers', 'lodash', 'moment',
-  'react', 'react-bootstrap', 'react-custom-scrollbars', 
-  'react-dom', 'react-headroom', 'react-helmet', 'react-redux', 
-  'react-router', 'react-tap-event-plugin',
+  'react', 'react-bootstrap', 'react-custom-scrollbars',
+  'react-date-picker', 'react-dom', 'react-dropzone',
+  'react-geosuggest', 'react-headroom', 'react-helmet',
+  'react-infinite-scroller', 'react-redux', 'react-router',
+  'react-rte', 'react-select', 'react-tap-event-plugin',
   'redux', 'redux-form', 'redux-promise', 'redux-thunk',
-  'reselect', 'scrollreveal'
+  'reselect', 'scroll-into-view-if-needed', 'scrollreveal',
+  'velocity-animate', 'velocity-react'
 ];
 
 module.exports = {
@@ -61,7 +65,6 @@ module.exports = {
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
-      minimize: true,
       debug: false,
       options: {
         postcss: [
@@ -70,11 +73,9 @@ module.exports = {
         ]
       }
     }),
+    extractCSS,
     extractSCSS,
     extractLESS,
-    new PurifyCSSPlugin({
-      paths: glob.sync(path.join(__dirname, 'server/templates/*.html'))
-    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'API_URL': JSON.stringify(process.env.API_URL)
@@ -92,7 +93,10 @@ module.exports = {
     new CleanWebpackPlugin([
       'server/templates/base.html',
       'server/static/scripts',
-      'server/static/styles'
-    ])
+      'server/static/stylesheets'
+    ]),
+    new PurifyCSSPlugin({
+      paths: glob.sync(path.join(__dirname, 'app/*.html'))
+    })
   ]
 };

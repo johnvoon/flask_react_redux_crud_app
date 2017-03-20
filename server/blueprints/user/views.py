@@ -28,15 +28,6 @@ user = Blueprint('user', __name__, template_folder='templates')
 @user.route('/login', strict_slashes=False)
 @anonymous_required()
 def login():
-    rendered = render_component(
-      '/concept/src/Authentication/Login.js',
-      None,
-      to_static_markup=True
-    )
-
-    return render_template('base.html', rendered=rendered)
-
-
     return render_template('base.html')
 
 @user.route('/logout', strict_slashes=False, defaults={'path': ''})

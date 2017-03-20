@@ -48,7 +48,7 @@ class ViewPracticeArea extends Component {
       <form>
         <StaticFormGroup 
           label="Image">
-          <img src={selectedRecord.thumbnailSrc} alt="Practice area background image"/>
+          <img className="img-responsive" src={selectedRecord.thumbnailSrc} alt="Practice area background image"/>
         </StaticFormGroup>
         <StaticFormGroup 
           label="Area">

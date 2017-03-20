@@ -94,9 +94,6 @@ module.exports = {
       'server/templates/base.html',
       'server/static/scripts',
       'server/static/stylesheets'
-    ]),
-    new PurifyCSSPlugin({
-      paths: glob.sync(path.join(__dirname, 'app/*.html'))
-    })
+    ])
   ]
 };

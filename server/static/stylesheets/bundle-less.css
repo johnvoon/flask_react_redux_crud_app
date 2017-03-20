@@ -12096,6 +12096,12 @@ a {
   border: 0;
   padding: 5px 10px;
 }
+.navbar-brand {
+  padding: 0;
+}
+.logo {
+  height: 70px;
+}
 textarea {
   resize: none;
 }
@@ -12376,6 +12382,9 @@ textarea {
 .dropzone-image-container:hover .image-filename {
   visibility: visible;
   background: rgba(29, 106, 154, 0.5);
+}
+.home-content {
+  max-width: 700px;
 }
 .btn-home {
   margin-top: 70px;

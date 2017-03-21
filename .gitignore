@@ -1,2 +1,5 @@
 node_modules/
 instance/
+npm-debug.log
+alembic.ini
+celerybeat-schedule

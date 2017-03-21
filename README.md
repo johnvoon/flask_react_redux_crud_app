@@ -1,29 +1,25 @@
 # Concept Law Firm Website
-------
 
-A simple fake mobile-responsive law firm website with custom CMS hosted on digital ocean. It's my first website and where I learned Flask and React. 
+A simple fake mobile-responsive law firm website with custom CMS hosted on digital ocean. It's my first website and where I learned Flask and React.
 
-## Instructions
-------
+<strong>Check it out at: https://conceptlawfirm.xyz/</strong>
 
-<strong>Check it out at: TBA</strong>
+## Login
 
-Login with:
+Whenever prompted, enter:
 
 - username: "admin"
 - password: "password" 
 
-for access to admin functionality.
+to login and access admin functionality.
 
 ## Features:
-------
 
 - Blog page with keyword search, practice area or author filters, infinite scrolling
 - Simple authentication
 - CMS for adding/editing blog posts, users (client, staff, public), practice areas and matters; with instantaneous success and error feedback, JWT authentication system, client-side form field validation, rich text editing, address autocomplete, datepicker, image uploading, multiselect fields, etc.
  
 ## Implementation
-------
 
 | Technology | Description |
 |------|-------------|
@@ -54,11 +50,10 @@ for access to admin functionality.
 | [<b>React-dropzone</b>](https://github.com/okonet/react-dropzone) | Image upload form field |
 | [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest) | Address autocomplete form field |
 | [<b>Lodash</b>](https://lodash.com/) | JavaScript helper functions |
-| [<b>Webpack</b>](https://webpack.github.io/) | Module bundling |
+| [<b>Webpack 2</b>](https://webpack.github.io/) | Module bundling |
 | [<b>ESLint</b>](http://eslint.org/) | JavaScript linting |
 
 ## Resources Consulted
-------
 
 - Web Development (Steve Huffman, Udacity, https://www.udacity.com/course/web-development--cs253)
 - Build a SAAS App with Flask (Nick Janetakis, Udemy, https://www.udemy.com/the-build-a-saas-app-with-flask-course/)
@@ -71,9 +66,9 @@ for access to admin functionality.
 - carlosrocha/react-data-components (https://github.com/carlosrocha/react-data-components)
 
 ## In the works
-------
 
 - Server rendering
-- New user registration and appointment scheduling
+- New user registration
+- Appointment scheduling
 - Staff/client portal portal
 - Internationalization

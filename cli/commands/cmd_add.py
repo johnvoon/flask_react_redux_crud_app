@@ -1,6 +1,4 @@
-import click
-import random
-import itertools
+import click, random, itertools, os
 from datetime import datetime
 from faker import Faker
 from flask import url_for
@@ -250,21 +248,15 @@ def posts():
         random_titles.append(fake.sentence(nb_words=6, variable_nb_words=True))
 
     random_titles = list(set(random_titles))
+    thumbnail_srcs = []
+    img_srcs = []
     with app.app_context():
-        thumbnail_srcs = [url_for('static', filename='images/400/glass-architecture.jpg'), 
-                          url_for('static', filename='images/400/building.jpg'),
-                          url_for('static', filename='images/400/ipad.jpg'),
-                          url_for('static', filename='images/400/pencils.jpg'),
-                          url_for('static', filename='images/400/team_meeting.jpg'),
-                          url_for('static', filename='images/400/suit.jpg')]
+        for file in os.listdir('/concept/server/static/images'):
+            if file.endswith('.jpg'):
+                thumbnail_srcs.append(url_for('static', filename='images/400/{}'.format(file)))
+                img_srcs.append(url_for('static', filename='images/1000/{}'.format(file)))
+
     thumbnail_srcs = itertools.cycle(thumbnail_srcs)
-    with app.app_context():
-        img_srcs = [url_for('static', filename='images/1000/glass-architecture.jpg'), 
-                    url_for('static', filename='images/1000/building.jpg'),
-                    url_for('static', filename='images/1000/ipad.jpg'),
-                    url_for('static', filename='images/1000/pencils.jpg'),
-                    url_for('static', filename='images/1000/team_meeting.jpg'),
-                    url_for('static', filename='images/1000/suit.jpg')]
     img_srcs = itertools.cycle(img_srcs)
     author_ids = db.session.query(Staff.id).all()
     practice_area_ids = db.session.query(PracticeArea.id).all()

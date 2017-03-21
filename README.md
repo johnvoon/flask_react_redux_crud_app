@@ -1,6 +1,6 @@
 # Concept Law Firm Website
 
-A simple fake mobile-responsive law firm website with custom CMS hosted on digital ocean. It's my first website and where I learned Flask and React.
+A simple fake mobile-responsive law firm website with custom CMS hosted on Digital Ocean. My first experience with Flask and React.
 
 <strong>Check it out at: https://conceptlawfirm.xyz/</strong>
 
@@ -46,8 +46,8 @@ to login and access admin functionality.
 | [<b>Bootstrap</b>](http://getbootstrap.com/) | Styling |
 | [<b>Redux Infinite Scroll</b>](https://github.com/RealScout/redux-infinite-scroll) | Infinite scrolling |
 | [<b>React-RTE</b>](https://github.com/sstur/react-rte) | RichTextEditor element |
-| [<p>React-Select</p>](https://github.com/JedWatson/react-select) | Multiselect form controls |
-| [<b>React-dropzone</b>](https://github.com/okonet/react-dropzone) | Image upload form field |
+| [<b>React-Select</b>](https://github.com/JedWatson/react-select) | Multiselect form controls |
+| [<b>React-Dropzone</b>](https://github.com/okonet/react-dropzone) | Image upload form field |
 | [<b>React-Geosuggest</b>](https://github.com/ubilabs/react-geosuggest) | Address autocomplete form field |
 | [<b>Lodash</b>](https://lodash.com/) | JavaScript helper functions |
 | [<b>Webpack 2</b>](https://webpack.github.io/) | Module bundling |

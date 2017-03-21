@@ -8,7 +8,7 @@
     "start": "API_URL='http://localhost:8000' webpack-dev-server",
     "build:dev": "NODE_ENV='production' API_URL='http://localhost:8000' webpack --config webpack.prod.config.js",
     "build:staging": "NODE_ENV='production' API_URL='https://10.0.0.3' webpack --config webpack.prod.config.js",
-    "build:production": "NODE_ENV='production' API_URL='https://conceptlawfirm.xyz' webpack --config webpack.prod.config.js"
+    "build:production": "NODE_ENV='production' API_URL='https://www.conceptlawfirm.xyz' webpack --config webpack.prod.config.js"
   },
   "author": "",
   "license": "ISC",

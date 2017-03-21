@@ -1,0 +1,35 @@
+.home-content {
+  max-width: 700px;
+}
+
+.btn-home {
+  margin-top: 70px;
+  color: #fff;
+  width: min-content;
+  background-color: transparent;
+  border: 2px solid #fff;
+  &:hover {
+    background: rgba(245, 245, 245, 0.4);
+  }
+}
+
+@media (min-width: 576px) {
+  .btn-home {
+    margin-top: 180px;
+    font-size: @font-size-h3;
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+  .btn-home {
+    margin-top: 250px;
+    font-size: @font-size-h2;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .btn-home {
+    margin-top: 320px;
+    font-size: @font-size-h1;
+  }
+}

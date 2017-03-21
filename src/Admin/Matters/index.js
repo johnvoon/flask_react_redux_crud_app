@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import ViewMatter from './ViewMatter';
 import AddMatter from './AddMatter';
@@ -57,8 +58,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchStaff());
     },
 
-    onFetchClients: () => {
-      dispatch(fetchClients());
+    onFetchClients: (config) => {
+      dispatch(fetchClients(config));
     },
 
     onFilter: ({target: {value}}) => {
@@ -120,7 +121,7 @@ class AdminMatters extends Component {
       onFetchMatters(config, true);
       onFetchPracticeAreas();
       onFetchStaff();
-      onFetchClients();
+      onFetchClients(config);
     } else {
       onChangeAdminOperation("authenticate");
       onShowModal();
@@ -210,6 +211,7 @@ class AdminMatters extends Component {
             { name: 'description', content: "List of blog posts" }
           ]}/>
         <h1>List of All Matters</h1>
+        <Link to="/admin">Back to Admin Dashboard</Link>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">

@@ -9,9 +9,9 @@ import { CLIENTS_LOADED,
          CLIENT_EDITED,
          CLIENT_USER_EDITED } from 'constants/actionTypes';
 
-export function fetchClients() {
+export function fetchClients(config) {
   return dispatch => {
-    return axios.get(`${API_URL}/api/clients`)
+    return axios.get(`${API_URL}/api/clients`, config)
     .then(({data: {clients}}) => {
       const normalizedClients = normalize(clients, arrayOf(clientSchema));
       const normalizedClientUsers = normalize(clients, arrayOf(clientUserSchema));

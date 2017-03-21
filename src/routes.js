@@ -1,8 +1,7 @@
-import React from 'react';
 import App from 'App/index';
 
 function errorLoading(err) {
-  console.error('Dynamic page loading failed', err);
+  console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
 }
 
 function loadRoute(cb) {
@@ -20,6 +19,22 @@ const routes = {
     }
   },
   childRoutes: [
+    {
+      path: 'privacy-policy',
+      getComponent(location, cb) {
+        System.import('PrivacyPolicy/index')
+          .then(loadRoute(cb))
+          .catch(errorLoading);
+      }
+    },
+    {
+      path: 'terms-of-service',
+      getComponent(location, cb) {
+        System.import('TermsOfService/index')
+          .then(loadRoute(cb))
+          .catch(errorLoading);
+      }
+    },
     {
       path: 'blog',
       getComponent(location, cb) {
@@ -117,6 +132,6 @@ const routes = {
       }
     }
   ]
-}
+};
 
 export default routes;

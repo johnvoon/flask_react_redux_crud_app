@@ -13,6 +13,7 @@ import Post from 'components/Post';
 import RelatedPost from 'components/RelatedPost';
 import Comment from 'components/Comment';
 import Avatar from 'components/Avatar';
+import Footer from 'components/Footer';
 
 const mapStateToProps = (state) => {
   const { entities, blogPost, authentication } = state;
@@ -130,68 +131,71 @@ class BlogPost extends Component {
     });
 
     return (
-      <main className="post">
-        <Helmet
-          title={currentPost.title}
-          meta={[
-            { name: 'description', content: currentPost.summary }
-          ]}/>
-        <div 
-          className="jumbotron"
-          style={{
-            backgroundImage: `url(${currentPost.imgSrc})`,
-            backgroundPosition: 'top center',
-            backgroundSize: 'cover',
-            backgroundAttachment: 'fixed'
-          }}/>
-        <div>
-          {post()}
-        </div>
-        <div className="related-items container-fluid">
-          <div className="related-posts">
-            <div className="row">
-              {relatedPostsList}
-            </div>
+      <div>
+        <main className="post">
+          <Helmet
+            title={currentPost.title}
+            meta={[
+              { name: 'description', content: currentPost.summary }
+            ]}/>
+          <div 
+            className="jumbotron"
+            style={{
+              backgroundImage: `url(${currentPost.imgSrc})`,
+              backgroundPosition: 'top center',
+              backgroundSize: 'cover',
+              backgroundAttachment: 'fixed'
+            }}/>
+          <div>
+            {post()}
           </div>
-          <div className="comments">
-            <div 
-              className="comment-form"
-              onClick={this.showCommentForm}
-              onBlur={this.hideCommentForm}>
-              {_.isEmpty(currentUser) ? (
-                <Link to={{
-                  pathname: '/login',
-                  query: { next: `/blog/${currentPost.id}/${currentPost.slug}`}
-                }}>
+          <div className="related-items container-fluid">
+            <div className="related-posts">
+              <div className="row">
+                {relatedPostsList}
+              </div>
+            </div>
+            <div className="comments">
+              <div 
+                className="comment-form"
+                onClick={this.showCommentForm}
+                onBlur={this.hideCommentForm}>
+                {_.isEmpty(currentUser) ? (
+                  <Link to={{
+                    pathname: '/login',
+                    query: { next: `/blog/${currentPost.id}/${currentPost.slug}`}
+                  }}>
+                    <Avatar
+                      iconClassName="comment"
+                      avatarText="Log in to leave a comment..."/>
+                  </Link>
+                ) : (
                   <Avatar
-                    iconClassName="comment"
-                    avatarText="Log in to leave a comment..."/>
-                </Link>
+                    avatarPhoto={currentUser.photo}
+                    avatarText={showCommentForm ? currentUser.name : "Leave a Comment"}/>
+                )}
+                <VelocityTransitionGroup 
+                  enter={{animation: "slideDown"}}
+                  leave={{animation: "slideUp"}}>
+                  {_.isEmpty(currentUser) || !showCommentForm ? null : 
+                    <CommentForm
+                      name={currentUser.name}
+                      onAddComment={onAddComment}
+                      onHideCommentForm={this.hideCommentForm}
+                      postId={currentPost.id}/>}
+                </VelocityTransitionGroup>
+              </div>
+              {sortedComments.length === 1 ? (
+                <h3>{sortedComments.length} comment</h3>  
               ) : (
-                <Avatar
-                  avatarPhoto={currentUser.photo}
-                  avatarText={showCommentForm ? currentUser.name : "Leave a Comment"}/>
+                <h3>{sortedComments.length} comments</h3>
               )}
-              <VelocityTransitionGroup 
-                enter={{animation: "slideDown"}}
-                leave={{animation: "slideUp"}}>
-                {_.isEmpty(currentUser) || !showCommentForm ? null : 
-                  <CommentForm
-                    name={currentUser.name}
-                    onAddComment={onAddComment}
-                    onHideCommentForm={this.hideCommentForm}
-                    postId={currentPost.id}/>}
-              </VelocityTransitionGroup>
+              {commentsList}
             </div>
-            {sortedComments.length === 1 ? (
-              <h3>{sortedComments.length} comment</h3>  
-            ) : (
-              <h3>{sortedComments.length} comments</h3>
-            )}
-            {commentsList}
           </div>
-        </div>
-      </main>
+        </main>
+        <Footer/>
+      </div>
     );
   }
 }

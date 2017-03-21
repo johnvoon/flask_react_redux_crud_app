@@ -94,6 +94,15 @@ module.exports = {
       'server/templates/base.html',
       'server/static/scripts',
       'server/static/stylesheets'
-    ])
+    ]),
+    new OptimizeCssAssetsPlugin({
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: {
+        discardComments: {
+          removeAll: true
+        },
+        safe: true
+      }
+    })
   ]
 };

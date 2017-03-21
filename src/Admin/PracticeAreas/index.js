@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import AddPracticeArea from './AddPracticeArea';
 import EditPracticeArea from './EditPracticeArea';
 import ViewPracticeArea from './ViewPracticeArea';
+import GetJWTForm from 'Admin/GetJWTForm';
 import Pagination from 'components/Pagination';
 import Table from 'components/Table';
 import SearchField from 'components/SearchField';
@@ -31,20 +33,21 @@ import { filterAdminData,
 import { selectData, selectPageData, selectTotalPages } from 'Admin/selectors';
 
 const mapStateToProps = (state) => {
-  const { entities, adminPages } = state;
+  const { entities, authentication, adminPages } = state;
   return {
     pageData: selectPageData(state),
     totalPages: selectTotalPages(state),
     data: selectData(state),
     ...entities,
+    ...authentication,
     ...adminPages
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchMatters: () => {
-      dispatch(fetchMatters());
+    onFetchMatters: (config) => {
+      dispatch(fetchMatters(config));
     },
 
     onFetchPracticeAreas: (admin) => {
@@ -104,13 +107,44 @@ class AdminPracticeAreas extends Component {
   }
 
   componentDidMount() {
-    const { onFetchMatters, onFetchPracticeAreas, 
+    const { JWT, onShowModal, onChangeAdminOperation,
+      onFetchMatters, onFetchPracticeAreas,
       onFetchStaff, onFetchPosts } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
     
-    onFetchPracticeAreas(true);
-    onFetchMatters();
-    onFetchStaff();
-    onFetchPosts();
+    if (JWT) {
+      onFetchPracticeAreas(true);
+      onFetchMatters(config);
+      onFetchStaff();
+      onFetchPosts();
+    } else {
+      onChangeAdminOperation("authenticate");
+      onShowModal();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { onFetchMatters, onFetchPracticeAreas, 
+      onFetchStaff, onFetchPosts, 
+      onHideModal } = this.props;
+    const { JWT } = nextProps;
+    const config = {
+      headers: {
+        'Authorization': `JWT ${JWT}`
+      }
+    };
+
+    if (!this.props.JWT && JWT) {
+      onFetchPracticeAreas(true);
+      onFetchMatters(config);
+      onFetchStaff();
+      onFetchPosts();
+      onHideModal();
+    }
   }
 
   componentWillUnmount() {
@@ -181,7 +215,8 @@ class AdminPracticeAreas extends Component {
       data, filterValues, totalPages, 
       sortBy, currentPage, pageLength, 
       pageData, successMessage, onHideModal } = this.props;
-    const modalTitle = (adminOperation === "read" && `Practice Area Info (ID: ${selectedRecord.id})`) ||
+    const modalTitle = (adminOperation === "authenticate" && "Load Practice Areas") ||
+                       (adminOperation === "read" && `Practice Area Info (ID: ${selectedRecord.id})`) ||
                        (adminOperation === "add" && "Add a New Practice Area") ||
                        (adminOperation === "edit" && `Edit Practice Area (ID: ${selectedRecord.id})`) ||
                        '';
@@ -194,6 +229,7 @@ class AdminPracticeAreas extends Component {
             { name: 'description', content: "List of practice areas" }
           ]}/>
         <h1>List of All Practice Areas</h1>
+        <Link to="/admin">Back to Admin Dashboard</Link>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">
@@ -249,6 +285,7 @@ class AdminPracticeAreas extends Component {
           title={modalTitle}
           show={modalShowing}
           onHide={onHideModal}>
+          {adminOperation === "authenticate" ? <GetJWTForm/> : null}
           {adminOperation === "read" ? <ViewPracticeArea/> : null}
           {adminOperation === "add" ? <AddPracticeArea/> : null}
           {adminOperation === "edit" ? <EditPracticeArea/> : null}
@@ -282,7 +319,8 @@ AdminPracticeAreas.propTypes = {
   modalShowing: PropTypes.bool.isRequired,
   selectedRecord: PropTypes.object.isRequired,
   adminOperation: PropTypes.string.isRequired,
-  onResetState: PropTypes.func.isRequired
+  onResetState: PropTypes.func.isRequired,
+  JWT: PropTypes.string.isRequired
 };
 
 export default connect(

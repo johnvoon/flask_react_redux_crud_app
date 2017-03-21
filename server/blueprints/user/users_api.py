@@ -17,7 +17,7 @@ users_api = Api(Blueprint('users_api', __name__), decorators=[csrf.exempt])
 @users_api.resource('/users')
 class UsersAPI(Resource):
     @staticmethod
-    # @jwt_required()
+    @jwt_required()
     def get():
         users = User.query.all()
         users = [user.to_json() for user in users]
@@ -80,6 +80,7 @@ class UserValidationApi(Resource):
 @users_api.resource('/users/<int:user_id>')
 class UserApi(Resource):
     @staticmethod
+    @jwt_required()
     def get(user_id):
         user = User.query.get_or_404(user_id)
         if user:

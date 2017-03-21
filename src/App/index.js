@@ -80,7 +80,10 @@ class App extends Component {
 App.propTypes = {
   onFetchCurrentUser: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  currentUser: PropTypes.object.isRequired
+  currentUser: PropTypes.object.isRequired,
+  sidebarShowing: PropTypes.bool.isRequired,
+  onToggleSidebar: PropTypes.func.isRequired,
+  onHideSidebar: PropTypes.func.isRequired
 };
 
 export default connect(

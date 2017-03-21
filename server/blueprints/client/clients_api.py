@@ -12,6 +12,7 @@ clients_api = Api(Blueprint('clients_api', __name__))
 @clients_api.resource('/clients')
 class ClientsAPI(Resource):
     @staticmethod
+    @jwt_required()
     def get():
         client = Client.query.all()
         if client:

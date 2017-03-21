@@ -223,6 +223,7 @@ class AdminComments extends Component {
           ]}/>
         <h1>{`Comments for Post ${this.props.params.id}`}</h1>
         <Link to="/admin/posts">Back to Posts</Link>
+        <Link to="/admin">Back to Admin Dashboard</Link>
         <div className="row">
           <div className="col-sm-3">
             <PageLengthMenu 

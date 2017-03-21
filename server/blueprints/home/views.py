@@ -8,11 +8,10 @@ home = Blueprint('home', __name__)
 def index():
     return render_template('base.html')
 
-@home.route('/terms')
+@home.route('/terms-of-service')
 def terms():
-    return render_template('terms.html')
+    return render_template('base.html')
 
-
-@home.route('/privacy')
+@home.route('/privacy-policy')
 def privacy():
-    return render_template('privacy.html')
+    return render_template('base.html')

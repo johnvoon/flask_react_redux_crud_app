@@ -8,6 +8,7 @@ import PostCard from 'components/PostCard';
 import FilterLink from 'components/FilterLink';
 import SearchField from 'components/SearchField';
 import DropdownMenu from 'components/DropdownMenu';
+import Footer from 'components/Footer';
 import { fetchPosts } from 'Entities/PostsActions';
 import { fetchPracticeAreas } from 'Entities/PracticeAreasActions';
 import { fetchStaff } from 'Entities/StaffActions';
@@ -207,70 +208,73 @@ class BlogHome extends Component {
     });
 
     return (
-      <main>
-        <Helmet
-          title="Our Blog"
-          meta={[
-            { name: 'description', content: "Our firm's latest blog posts written by industry professionals." }
-          ]}/>
-        <div 
-          className="jumbotron"
-          style={{
-            backgroundImage: `url(${API_URL}/static/images/2000/coffee-smartphone.jpg)`,
-            backgroundPosition: "top center",
-            backgroundSize: "cover",
-            backgroundAttachment: "fixed"
-          }}>
-          <div className="container">
-            <h1 className="text-uppercase">Blog Posts</h1>
-            <h3>Written by leading industry professionals</h3>
-          </div>
-        </div>
-        {(Object.keys(posts).length > 0) ? 
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-4">
-              <SearchField
-                filterValues={filterValues}
-                onFilter={onSearchFilter.bind(null, posts)}
-                placeholder="Search posts by keyword"/>
-              <DropdownMenu
-                heading="Sort by"
-                handleClick={this.toggleSortMenu}
-                showMenu={showSortMenu}
-                links={sortLinks}/>
-              <DropdownMenu
-                heading="Filter by Practice Area"
-                handleClick={this.toggleAreaMenu}
-                showMenu={showAreaMenu}
-                showAllLink={allPostsLink()}
-                links={areaLinks}/>
-              <DropdownMenu
-                heading="Filter by Author"
-                handleClick={this.toggleAuthorMenu}
-                showMenu={showAuthorMenu}
-                showAllLink={allPostsLink()}
-                links={authorLinks}/>        
-            </div>
-            <div 
-              className="col-md-8"
-              ref={node => this._postsContainer = node}>
-              <h2 className="no-margin-top">{
-                (currentFilter === "area") ? filterValues :
-                (currentFilter === "author") ? `Posts by ${filterValues}` :
-                (currentFilter === "keyword") ? `Posts found: ${allAvailablePosts.length}` :
-                "All Posts"}</h2>
-              <InfiniteScroll 
-                pageStart={0}
-                loadMore={onLoadMore.bind(null, allAvailablePosts)}
-                hasMore={hasMore}
-                threshold={100}>
-                {postsList}
-              </InfiniteScroll>
+      <div>
+        <main>
+          <Helmet
+            title="Our Blog"
+            meta={[
+              { name: 'description', content: "Our firm's latest blog posts written by industry professionals." }
+            ]}/>
+          <div 
+            className="jumbotron"
+            style={{
+              backgroundImage: `url(${API_URL}/static/images/2000/coffee-smartphone.jpg)`,
+              backgroundPosition: "top center",
+              backgroundSize: "cover",
+              backgroundAttachment: "fixed"
+            }}>
+            <div className="container">
+              <h1 className="text-uppercase">Blog Posts</h1>
+              <h3>Written by leading industry professionals</h3>
             </div>
           </div>
-        </div> : <div/>}
-      </main>
+          {(Object.keys(posts).length > 0) ? 
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-4">
+                <SearchField
+                  filterValues={filterValues}
+                  onFilter={onSearchFilter.bind(null, posts)}
+                  placeholder="Search posts by keyword"/>
+                <DropdownMenu
+                  heading="Sort by"
+                  handleClick={this.toggleSortMenu}
+                  showMenu={showSortMenu}
+                  links={sortLinks}/>
+                <DropdownMenu
+                  heading="Filter by Practice Area"
+                  handleClick={this.toggleAreaMenu}
+                  showMenu={showAreaMenu}
+                  showAllLink={allPostsLink()}
+                  links={areaLinks}/>
+                <DropdownMenu
+                  heading="Filter by Author"
+                  handleClick={this.toggleAuthorMenu}
+                  showMenu={showAuthorMenu}
+                  showAllLink={allPostsLink()}
+                  links={authorLinks}/>        
+              </div>
+              <div 
+                className="col-md-8"
+                ref={node => this._postsContainer = node}>
+                <h2 className="no-margin-top">{
+                  (currentFilter === "area") ? filterValues :
+                  (currentFilter === "author") ? `Posts by ${filterValues}` :
+                  (currentFilter === "keyword") ? `Posts found: ${allAvailablePosts.length}` :
+                  "All Posts"}</h2>
+                <InfiniteScroll 
+                  pageStart={0}
+                  loadMore={onLoadMore.bind(null, allAvailablePosts)}
+                  hasMore={hasMore}
+                  threshold={100}>
+                  {postsList}
+                </InfiniteScroll>
+              </div>
+            </div>
+          </div> : <div/>}
+          <Footer/>
+        </main>
+      </div>
     );
   }
 }

@@ -4,8 +4,9 @@ import Helmet from 'react-helmet';
 import classNames from 'classnames';
 import { createOptionsList } from 'utils';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Link, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { fetchPracticeAreas, fetchPracticeArea } from 'Entities/PracticeAreasActions';
+import Footer from 'components/Footer';
 
 const mapStateToProps = (state) => {
   const { practiceArea, entities } = state;
@@ -61,7 +62,7 @@ class PracticeArea extends Component {
         );
       } else {
         return (
-          <div key={idx} dangerouslySetInnerHTML={{__html: description}}/>
+          <div key={idx} dangerouslySetInnerHTML={{__html: description}}/> // eslint-disable-line react/no-danger
         );
       }
     });
@@ -139,16 +140,7 @@ class PracticeArea extends Component {
             </Scrollbars>
           </div>
         </div>
-        <footer className="footer text-center">
-          <div className="container">
-            <ul className="list-inline">
-              <li className="text-muted">Concept Law Firm &copy; 2017</li>
-              <li><Link to="#">Contact</Link></li>
-              <li><Link to="#">Privacy Policy</Link></li>
-              <li><Link to="#">Terms of Service</Link></li>
-            </ul>
-          </div>
-        </footer>  
+        <Footer/>
       </main>
     );
   }

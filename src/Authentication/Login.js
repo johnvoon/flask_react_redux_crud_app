@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import LoginForm from './LoginForm';
+import Footer from 'components/Footer';
 
 class Login extends Component {
   render() {
@@ -27,6 +28,7 @@ class Login extends Component {
           <p>Log in to post a comment or view your portal</p>
           <LoginForm/>
         </div>
+        <Footer/>
       </main>
     );
   }

@@ -22,7 +22,7 @@ function toggleSidebar(state, actions) { // eslint-disable-line no-unused-vars
   return {
     ...state,
     sidebarShowing: (sidebarShowing ? false : true)
-  }
+  };
 }
 
 function hideSidebar(state, actions) { // eslint-disable-line no-unused-vars

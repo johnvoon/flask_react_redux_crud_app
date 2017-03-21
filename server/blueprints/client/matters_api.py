@@ -12,6 +12,7 @@ matters_api = Api(Blueprint('matters_api', __name__))
 @matters_api.resource('/matters')
 class MattersAPI(Resource):
     @staticmethod
+    @jwt_required()
     def get():
         matters = Matter.query.all()
         matter = [matter.to_json() for matter in matters]

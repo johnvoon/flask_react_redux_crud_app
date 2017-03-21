@@ -17,6 +17,7 @@
     "babel-eslint": "^7.1.1",
     "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.3.2",
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
     "clean-webpack-plugin": "^0.1.15",

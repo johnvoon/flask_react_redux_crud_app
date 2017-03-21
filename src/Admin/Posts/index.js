@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import AddPost from './AddPost';
 import EditPost from './EditPost';
@@ -177,6 +178,7 @@ class AdminPosts extends Component {
             { name: 'description', content: "List of blog posts" }
           ]}/>
         <h1>List of All Posts</h1>
+        <Link to="/admin">Back to Admin Dashboard</Link>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">

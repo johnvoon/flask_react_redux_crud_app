@@ -19,7 +19,7 @@ export default class Sidebar extends Component {
             {linkText}
           </Link>
         );
-      } else return null
+      } else return null;
     });
   }
 
@@ -41,4 +41,5 @@ export default class Sidebar extends Component {
 
 Sidebar.propTypes = {
   links: PropTypes.array.isRequired,
+  handleHide: PropTypes.func.isRequired
 };

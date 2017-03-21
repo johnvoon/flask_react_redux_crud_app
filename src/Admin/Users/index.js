@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import GetJWTForm from 'Admin/GetJWTForm';
 import AddUser from './AddUser';
@@ -229,6 +230,7 @@ class AdminUsers extends Component {
             { name: 'description', content: "List of users." }
         ]}/>
         <h1>List of All Users</h1>
+        <Link to="/admin">Back to Admin Dashboard</Link>
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <div className="form-group">

@@ -24,7 +24,6 @@ export default function authenticationReducer(state = initialState, action) {
 }
 
 function currentUserLoaded(state, { currentUser }) {
-
   return {
     ...state,
     currentUser
@@ -32,7 +31,6 @@ function currentUserLoaded(state, { currentUser }) {
 }
 
 function JWTLoaded(state, { JWT }) {
-
   return {
     ...state,
     JWT

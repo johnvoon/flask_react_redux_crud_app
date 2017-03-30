@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/constants/actionTypes.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/constants</a> actionTypes.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>52/52</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>52/52</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// APP ACTIONS
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const HIDE_SIDEBAR = 'HIDE_SIDEBAR';
+&nbsp;
+// AUTHENTICATION ACTIONS
+export const CURRENT_USER_LOADED = 'CURRENT_USER_LOADED';
+export const JWT_LOADED = 'JWT_LOADED';
+export const REMOVE_JWT = 'REMOVE_JWT';
+&nbsp;
+// USERS ACTIONS
+export const USERS_LOADED = 'USERS_LOADED';
+&nbsp;
+// POSTS ACTIONS
+export const POSTS_LOADED = 'POSTS_LOADED';
+export const POST_LOADED = 'POST_LOADED';
+&nbsp;
+// ADMIN ACTIONS
+export const ADMIN_COUNT_LOADED = 'ADMIN_COUNT_LOADED';
+&nbsp;
+// ADMIN PAGES ACTIONS
+export const RECORDS_LOADED = 'RECORDS_LOADED';
+export const RECORD_ADDED = 'RECORD_ADDED';
+export const RECORD_EDITED = 'RECORD_EDITED';
+export const RECORD_DELETED = 'RECORD_DELETED';
+export const COMMENT_VISIBILITY_CHANGED = 'COMMENT_VISIBILITY_CHANGED';
+export const SORT_DATA = 'SORT_DATA';
+export const CHANGE_PAGE_NUMBER = 'CHANGE_PAGE_NUMBER';
+export const CHANGE_PAGE_LENGTH = 'CHANGE_PAGE_LENGTH';
+export const CHANGE_SELECTED_RECORD = 'CHANGE_SELECTED_RECORD';
+export const CHANGE_ADMIN_OPERATION = 'CHANGE_ADMIN_OPERATION';
+export const LOAD_FORM_DATA = 'LOAD_FORM_DATA';
+export const FILTER_ADMIN_DATA = 'FILTER_ADMIN_DATA';
+export const RESET_ADDED_RECORD = 'RESET_ADDED_RECORD';
+export const SHOW_MODAL = 'SHOW_MODAL';
+export const HIDE_MODAL = 'HIDE_MODAL';
+export const RESET_STATE = 'RESET_STATE';
+&nbsp;
+// COMMENTS ACTIONS
+export const COMMENTS_LOADED = 'COMMENTS_LOADED';
+export const COMMENT_ADDED = 'COMMENT_ADDED';
+export const COMMENT_DELETED = 'COMMENT_DELETED';
+&nbsp;
+// PRACTICE AREAS ACTIONS
+export const PRACTICE_AREAS_LOADED = 'PRACTICE_AREAS_LOADED';
+export const CHANGE_PRACTICE_AREA = 'CHANGE_PRACTICE_AREA';
+&nbsp;
+// PRACTICE AREA ACTIONS
+export const PRACTICE_AREA_LOADED = 'PRACTICE_AREA_LOADED';
+&nbsp;
+// MATTERS ACTIONS
+export const MATTERS_LOADED = 'MATTERS_LOADED';
+export const MATTER_ADDED = 'MATTER_ADDED';
+export const MATTER_EDITED = 'MATTER_EDITED';
+&nbsp;
+// STAFF ACTIONS
+export const STAFF_LOADED = 'STAFF_LOADED';
+export const STAFF_USERS_LOADED = 'STAFF_USERS_LOADED';
+export const STAFF_ADDED = 'STAFF_ADDED';
+export const STAFF_USER_ADDED = 'STAFF_USER_ADDED';
+export const STAFF_EDITED = 'STAFF_EDITED';
+export const STAFF_USER_EDITED = 'STAFF_USER_EDITED';
+&nbsp;
+// CLIENT ACTIONS
+export const CLIENTS_LOADED = 'CLIENTS_LOADED';
+export const CLIENT_USERS_LOADED = 'CLIENT_USERS_LOADED';
+export const CLIENT_ADDED = 'CLIENT_ADDED';
+export const CLIENT_USER_ADDED = 'CLIENT_USER_ADDED';
+export const CLIENT_EDITED = 'CLIENT_EDITED';
+export const CLIENT_USER_EDITED = 'CLIENT_USER_EDITED';
+&nbsp;
+// BLOG HOME ACTIONS
+export const SHOW_ALL_POSTS = 'SHOW_ALL_POSTS';
+export const SORT_POSTS = 'SORT_POSTS';
+export const FILTER_BY_AREA = 'FILTER_BY_AREA';
+export const FILTER_BY_AUTHOR = 'FILTER_BY_AUTHOR';
+export const FILTER_POSTS_BY_KEYWORD = 'FILTER_BY_KEYWORD';
+export const LOAD_MORE = 'LOAD_MORE';
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 28 2017 18:10:03 GMT+1100 (AEDT)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

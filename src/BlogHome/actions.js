@@ -13,40 +13,37 @@ export function showAllPosts() {
   };
 }
 
-export function sortPosts(posts, sortBy) {
+export function sortPosts(sortBy) {
   return {
     type: SORT_POSTS,
-    posts,
     sortBy
   };
 }
 
-export function filterPostsByKeyword(value, posts) {
+export function filterPostsByKeyword(value) {
   return {
     type: FILTER_POSTS_BY_KEYWORD,
-    value,
-    posts
+    value
   };
 }
 
-export function filterByArea(posts, area) {
+export function filterByArea(area) {
   return {
     type: FILTER_BY_AREA,
-    posts,
     area
   };
 }
 
-export function filterByAuthor(posts, author) {
+export function filterByAuthor(author) {
   return {
     type: FILTER_BY_AUTHOR,
-    posts,
     author
   }; 
 }
 
-export function loadMore() {
+export function loadMore(filteredPostIds) {
   return {
-    type: LOAD_MORE
+    type: LOAD_MORE,
+    filteredPostIds
   };
 }

@@ -18,5 +18,5 @@ export default class Link extends Component {
 Link.propTypes = {
   handleClick: PropTypes.func.isRequired,
   linkText: PropTypes.string.isRequired,
-  count: PropTypes.number.isRequired
+  count: PropTypes.number
 };

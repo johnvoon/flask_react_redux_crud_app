@@ -14,7 +14,7 @@ posts_api = Api(Blueprint('posts_api', __name__), decorators=[csrf.exempt])
 class PostsAPI(Resource):
     @staticmethod
     def get():
-        posts = [post.to_json() for post in Post.query.all()]
+        posts = [post.to_json() for post in Post.query.order_by(Post.created_on.desc())]
         if posts:
             return render_json(200, {'posts': posts})
 
@@ -133,7 +133,7 @@ class PostAPI(Resource):
         if post: 
             try:
                 post.delete()
-                posts = [post.to_json() for post in Post.query.all()]
+                posts = [post.to_json() for post in Post.query.order_by(Post.created_on.desc())]
                 return render_json(200, {'posts': posts})
             except: 
                 return render_json(500, {'message': "An error occurred."})

@@ -1,0 +1,19 @@
+exports[`FilterLink should render <a> and <span> if count prop is supplied 1`] = `
+<a
+  className="list-group-item"
+  onClick={[Function]}>
+  Family Law
+  <span
+    className="badge">
+    2
+  </span>
+</a>
+`;
+
+exports[`FilterLink should render <a> only if count prop not supplied 1`] = `
+<a
+  className="list-group-item"
+  onClick={[Function]}>
+  Family Law
+</a>
+`;

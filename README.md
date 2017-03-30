@@ -1,6 +1,6 @@
 # Concept Law Firm Website
 
-A simple fake mobile-responsive law firm website with custom CMS hosted on Digital Ocean. My first experience with Flask and React.
+A mock mobile-responsive law firm website with custom CMS hosted on Digital Ocean. My first experience with Flask and React.
 
 <strong>Check it out at: https://conceptlawfirm.xyz/</strong>
 
@@ -18,6 +18,10 @@ to login and access admin functionality.
 - Blog page with keyword search, practice area or author filters, infinite scrolling
 - Simple authentication
 - CMS for adding/editing blog posts, users (client, staff, public), practice areas and matters; with instantaneous success and error feedback, JWT authentication system, client-side form field validation, rich text editing, address autocomplete, datepicker, image uploading, multiselect fields, etc.
+
+## Testing
+
+- The project is still being tested. Check out the "/src/App", "/src/BlogHome" and "/src/PostsActions" folders to see some written tests.  
  
 ## Implementation
 
@@ -52,6 +56,8 @@ to login and access admin functionality.
 | [<b>Lodash</b>](https://lodash.com/) | JavaScript helper functions |
 | [<b>Webpack 2</b>](https://webpack.github.io/) | Module bundling |
 | [<b>ESLint</b>](http://eslint.org/) | JavaScript linting |
+| [<b>Jest</b>](https://facebook.github.io/jest/) | JavaScript testing framework |
+| [<b>Enzyme</b>](https://facebook.github.io/jest/) | JavaScript testing utility for React |
 
 ## Resources Consulted
 

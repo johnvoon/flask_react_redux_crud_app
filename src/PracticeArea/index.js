@@ -7,6 +7,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { withRouter } from 'react-router';
 import { fetchPracticeAreas, fetchPracticeArea } from 'Entities/PracticeAreasActions';
 import Footer from 'components/Footer';
+import { VelocityComponent } from 'velocity-react';
 
 const mapStateToProps = (state) => {
   const { practiceArea, entities } = state;
@@ -78,8 +79,42 @@ class PracticeArea extends Component {
           className="jumbotron hidden-md hidden-lg"
           style={{backgroundImage: `url(${currentPracticeArea.imgSrc})`}}>
           <div className="container text-center">
+          <VelocityComponent 
+            animation={{opacity: 1}}
+            duration={500}
+            runOnMount={true}>
             <h1 className="text-uppercase">{practiceAreaName}</h1>
-            <select 
+          </VelocityComponent>
+          <select 
+            className={classNames(
+              "form-control",
+              "select",
+              `bg-${imgFilename}`)}
+            onChange={this.handleChange}>
+            <option 
+              className="text-uppercase
+              "value="">
+              Select Practice Area
+            </option>
+            {practiceAreaOptions.map((option) => {
+              const [id, text] = option.split(" - ");
+              return (
+                <option key={id} value={id}>{text}</option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+      <div className="container-fluid visible-sm visible-xs">
+        {description}  
+      </div>
+      <div className="row practice-area-container visible-md visible-lg">
+        <div 
+          className="col-md-5 practice-area-image"
+          style={{backgroundImage: `url('${API_URL}/static/images/2000/${imgFilename}.jpg')`}}>
+          <div className="select-absolute">
+            <h1 className="text-uppercase text-left">{practiceAreaName}</h1>
+            <select
               className={classNames(
                 "form-control",
                 "select",
@@ -96,52 +131,23 @@ class PracticeArea extends Component {
                   <option key={id} value={id}>{text}</option>
                 );
               })}
-            </select>
+            </select>                
           </div>
         </div>
-        <div className="container-fluid visible-sm visible-xs">
-          {description}  
+        <div className="col-md-7 practice-area-content">
+          <Scrollbars 
+            style={{ 
+              width: '80%', 
+              height: '70%', 
+              marginTop: '70px',
+              marginLeft: 'auto',
+              marginRight: 'auto' }}>
+            {description}
+          </Scrollbars>
         </div>
-        <div className="row practice-area-container visible-md visible-lg">
-          <div 
-            className="col-md-5 practice-area-image"
-            style={{backgroundImage: `url('${API_URL}/static/images/2000/${imgFilename}.jpg')`}}>
-            <div className="select-absolute">
-              <h1 className="text-uppercase text-left">{practiceAreaName}</h1>
-              <select
-                className={classNames(
-                  "form-control",
-                  "select",
-                  `bg-${imgFilename}`)}
-                onChange={this.handleChange}>
-                <option 
-                  className="text-uppercase
-                  "value="">
-                  Select Practice Area
-                </option>
-                {practiceAreaOptions.map((option) => {
-                  const [id, text] = option.split(" - ");
-                  return (
-                    <option key={id} value={id}>{text}</option>
-                  );
-                })}
-              </select>                
-            </div>
-          </div>
-          <div className="col-md-7 practice-area-content">
-            <Scrollbars 
-              style={{ 
-                width: '80%', 
-                height: '70%', 
-                marginTop: '70px',
-                marginLeft: 'auto',
-                marginRight: 'auto' }}>
-              {description}
-            </Scrollbars>
-          </div>
-        </div>
-        <Footer/>
-      </main>
+      </div>
+      <Footer/>
+    </main>
     );
   }
 }

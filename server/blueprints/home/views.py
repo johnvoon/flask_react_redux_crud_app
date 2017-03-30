@@ -1,6 +1,5 @@
 import os
 from flask import Blueprint, render_template
-from react.render import render_component
 
 home = Blueprint('home', __name__)
 

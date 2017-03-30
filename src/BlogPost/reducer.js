@@ -24,12 +24,10 @@ export default function blogPostReducer(state = initialState, action) {
   return state;
 }
 
-function postsLoaded(state, action) {
-  const { posts } = action;
-
+function postsLoaded(state, { postIds }) {
   return {
     ...state,
-    relatedPosts: posts.slice(0, 3)
+    relatedPosts: postIds.slice(0, 3)
   };
 }
 

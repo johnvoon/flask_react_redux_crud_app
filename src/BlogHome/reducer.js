@@ -1,5 +1,3 @@
-import _ from 'lodash';
-import { filter, sort, sortByDate } from '../utils';
 import { POSTS_LOADED,
          SHOW_ALL_POSTS,
          SORT_POSTS,
@@ -8,18 +6,11 @@ import { POSTS_LOADED,
          FILTER_BY_AUTHOR,
          LOAD_MORE } from 'constants/actionTypes';
 
-const initialState = { 
-  data: {},
-  // all posts from database
-  allPosts: [],
-  // visible and hidden posts (visible on scroll)
-  allAvailablePosts: [],
-  // visible posts only
-  visiblePosts: [],
+const initialState = {
+  postIds: [],
   sortBy: '',
   currentFilter: '',
   filterValues: '',
-  cursorStart: 0,
   cursorEnd: 5,
   hasMore: true
 };
@@ -39,121 +30,73 @@ export default function blogHomeReducer(state = initialState, action) {
     case FILTER_BY_AUTHOR:
       return filterByAuthor(state, action);
     case LOAD_MORE:
-      return loadMore(state);
+      return loadMore(state, action);
   }
 
   return state;
 }
 
-function postsLoaded(state, { entities, posts }) {
+function postsLoaded(state, { postIds }) {
   return {
     ...state,
-    data: entities.posts,
-    allPosts: posts,
-    allAvailablePosts: posts,
-    visiblePosts: posts.slice(0, 5),
-    cursorStart: 0,
+    postIds,
     cursorEnd: 5
   };
 }
 
-function sortPosts(state, { posts, sortBy }) {
-  const { data } = state;
-  let sortedPosts;
-  if (sortBy === "created") {
-    sortedPosts = sortByDate(data, posts, "descending");
-  } else {
-    sortedPosts = sort(data, posts, sortBy, "ascending"); 
-  }
-
+function sortPosts(state, { sortBy }) {
   return {
     ...state,
     sortBy,
-    allAvailablePosts: sortedPosts,
-    visiblePosts: sortedPosts.slice(0, 5),
   };
 }
 
-function filterPostsByKeyword(state, {value, posts}) {
-  let filteredPosts = filter(value, posts);
-  
+function filterPostsByKeyword(state, {value }) {
   return {
     ...state,
     currentFilter: "keyword",
-    allAvailablePosts: filteredPosts,
     filterValues: value,
-    visiblePosts: filteredPosts.slice(0, 5),
-    cursorStart: 0,
     cursorEnd: 5,
     hasMore: true
   };
 }
 
 function showAllPosts(state, action) { // eslint-disable-line no-unused-vars
-  const allPosts = state.allPosts;
-
   return {
     ...state,
     currentFilter: '',
     filterValues: '',
-    allAvailablePosts: allPosts,
-    visiblePosts: allPosts.slice(0, 5),
-    cursorStart: 0,
     cursorEnd: 5,
     hasMore: true
   };
 }
 
-function filterByArea(state, { posts, area }) {
-  const postsByArea = _.filter(
-    state.allPosts,
-    id => posts[id].practiceArea === area
-  );
-    
+function filterByArea(state, { area }) {
   return {
     ...state,
     currentFilter: "area",
     filterValues: area,
-    allAvailablePosts: postsByArea,
-    visiblePosts: postsByArea.slice(0, 5),
-    cursorStart: 0,
     cursorEnd: 5,
-    currentPost: '',
     hasMore: true
   };
 }
 
-function filterByAuthor(state, { posts, author }) {
-  const postsByAuthor = _.filter(
-    state.allPosts,
-    id => posts[id].author === author
-  );
-    
+function filterByAuthor(state, { author }) {
   return {
     ...state,
     currentFilter: "author",
     filterValues: author,
-    allAvailablePosts: postsByAuthor,
-    visiblePosts: postsByAuthor.slice(0, 5),
-    cursorStart: 0,
     cursorEnd: 5,
     hasMore: true
   };
 }
 
-function loadMore(state) {
-  const { allAvailablePosts, visiblePosts, cursorStart, cursorEnd } = state;
-  if (cursorEnd < allAvailablePosts.length) {
-    const newCursorStart = cursorStart + 5;
-    const newCursorEnd = cursorEnd + 5;
-    const morePosts = allAvailablePosts.slice(newCursorStart, newCursorEnd);
-    const updatedVisiblePosts = visiblePosts.concat(morePosts);
-    
+function loadMore(state, { filteredPostIds }) {
+  const { cursorEnd } = state;
+  if (cursorEnd < filteredPostIds.length) {
     return {
       ...state,
-      visiblePosts: updatedVisiblePosts,
-      cursorStart: newCursorStart,
-      cursorEnd: newCursorEnd,
+      cursorEnd: cursorEnd + 5,
       hasMore: true
     };
   }

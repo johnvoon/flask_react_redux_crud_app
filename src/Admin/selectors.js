@@ -10,7 +10,7 @@ export const selectAddStaffForm = formValueSelector('AddStaffForm');
 
 export const selectAddClientForm = formValueSelector('AddClientForm');
 
-const selectAdminPages = (state) =>
+export const selectAdminPages = (state) =>
   state.adminPages;
 
 export const selectData = createSelector(
@@ -18,34 +18,34 @@ export const selectData = createSelector(
   (adminPages) => adminPages.data
 );
 
-const selectPageLength = createSelector(
+export const selectPageLength = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.pageLength
 );
 
-const selectCurrentPage = createSelector(
+export const selectCurrentPage = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.currentPage
 );
       
-const selectSortBy = createSelector(
+export const selectSortBy = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.sortBy
 );
 
-const selectFilterValues = createSelector(
+export const selectFilterValues = createSelector(
   selectAdminPages,
   (adminPages) => adminPages.filterValues
 );
 
-const selectFilteredData = createSelector(
+export const selectFilteredData = createSelector(
   [selectData, selectFilterValues],
   (data, filterValues) => {
     return filter(filterValues, data);
   }
 );
 
-const selectSortedData = createSelector(
+export const selectSortedData = createSelector(
   [selectData, selectFilteredData, selectSortBy],
   (data, filteredData, { prop, order }) => {
     if (prop === 'created') {

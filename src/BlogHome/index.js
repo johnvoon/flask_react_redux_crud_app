@@ -18,17 +18,20 @@ import { showAllPosts,
          filterByArea, 
          filterByAuthor, 
          loadMore } from './actions';
+import { selectVisiblePostIds, selectFilteredPostIds } from './selectors';
 
 const mapStateToProps = (state) => {
   const { entities, blogHome } = state;
 
   return {
+    visiblePostIds: selectVisiblePostIds(state),
+    filteredPostIds: selectFilteredPostIds(state),
     ...entities,
     ...blogHome
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch) => ({
   onFetchPosts: () => {
     dispatch(fetchPosts());
   },
@@ -41,38 +44,39 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(fetchStaff());
   },
 
-  onSearchFilter: (posts, {target: {value}}) => {
-    dispatch(filterPostsByKeyword(value, posts));
+  onFilterPostsByKeyword: ({target: {value}}) => {
+    dispatch(filterPostsByKeyword(value));
   },
 
-  onShowAll: () => {
+  onShowAllPosts: () => {
     dispatch(showAllPosts());
   },
 
-  onSort: (posts, sortBy) => {
-    dispatch(sortPosts(posts, sortBy));
+  onSortPosts: (sortBy) => {
+    dispatch(sortPosts(sortBy));
   },
 
-  onAreaFilter: (posts, linkText) => {
-    dispatch(filterByArea(posts, linkText));
+  onFilterByArea: (linkText) => {
+    dispatch(filterByArea(linkText));
   },
 
-  onAuthorFilter: (posts, linkText) => {
-    dispatch(filterByAuthor(posts, linkText));
+  onFilterByAuthor: (linkText) => {
+    dispatch(filterByAuthor(linkText));
   },
 
-  onLoadMore: (allAvailablePosts) => {
-    (allAvailablePosts.length > 0) && dispatch(loadMore());
+  onLoadMore: (filteredPostIds) => {
+    dispatch(loadMore(filteredPostIds));
   }
 });
 
-class BlogHome extends Component {
+export class BlogHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showSortMenu: false,
       showAreaMenu: false,
-      showAuthorMenu: false
+      showAuthorMenu: false,
+      showPostCard: false
     };
     this.toggleSortMenu = this.toggleSortMenu.bind(this);
     this.toggleAreaMenu = this.toggleAreaMenu.bind(this);
@@ -107,10 +111,10 @@ class BlogHome extends Component {
   }
 
   handleAllPostsLinkClick(event) {
-    const { onShowAll } = this.props;
+    const { onShowAllPosts } = this.props;
     
     event.preventDefault();
-    onShowAll();
+    onShowAllPosts();
     scrollIntoViewIfNeeded(
       this._postsContainer, 
       false, 
@@ -119,10 +123,10 @@ class BlogHome extends Component {
   }
 
   handleSortLinkClick(event, sortBy) {
-    const { onSort, allAvailablePosts } = this.props;
+    const { onSortPosts } = this.props;
 
     event.preventDefault();
-    onSort(allAvailablePosts, sortBy);
+    onSortPosts(sortBy);
     scrollIntoViewIfNeeded(
       this._postsContainer, 
       false, 
@@ -131,10 +135,10 @@ class BlogHome extends Component {
   }
 
   handleAreaLinkClick(event, id) {
-    const { onAreaFilter, posts, practiceAreas } = this.props;
+    const { onFilterByArea, practiceAreas } = this.props;
 
     event.preventDefault();
-    onAreaFilter(posts, practiceAreas[id].area);
+    onFilterByArea(practiceAreas[id].area);
     scrollIntoViewIfNeeded(
       this._postsContainer, 
       false, 
@@ -143,10 +147,10 @@ class BlogHome extends Component {
   }
 
   handleAuthorLinkClick(event, id) {
-    const { onAuthorFilter, posts, staff } = this.props;
+    const { onFilterByAuthor, staff } = this.props;
 
     event.preventDefault();
-    onAuthorFilter(posts, staff[id].name);
+    onFilterByAuthor(staff[id].name);
     scrollIntoViewIfNeeded(
       this._postsContainer, 
       false, 
@@ -155,15 +159,17 @@ class BlogHome extends Component {
   }
 
   render() {
-    const { posts, practiceAreas, staff, visiblePosts, allAvailablePosts, filterValues, currentFilter, hasMore } = this.props;
-    const { onSearchFilter, onLoadMore } = this.props;
-    const { showSortMenu, showAreaMenu, showAuthorMenu } = this.state;
-    const postsList = visiblePosts.map((id) => {
+    const { posts, practiceAreas, staff, 
+      visiblePostIds, filteredPostIds, filterValues, 
+      currentFilter, hasMore } = this.props;
+    const { onFilterPostsByKeyword, onLoadMore } = this.props;
+    const { showSortMenu, showAreaMenu, 
+      showAuthorMenu } = this.state;
+    const postsList = visiblePostIds.map((id) => {
       return (
         <PostCard
           key={id}
-          post={posts[id]}
-        />
+          post={posts[id]}/>
       );
     });
     
@@ -176,12 +182,12 @@ class BlogHome extends Component {
       );
     };
 
-    const sortLinks = ["views", "title", "created", "author"].map(sortBy => {
+    const sortLinks = ["title", "created", "author"].map(sortBy => {
       return (
         <FilterLink
           key={sortBy}
           linkText={_.capitalize(sortBy)}
-          handleClick={(event, sortBy) => this.handleSortLinkClick(event, sortBy)}/>
+          handleClick={(event) => this.handleSortLinkClick(event, sortBy)}/>
       );
     });
 
@@ -234,7 +240,7 @@ class BlogHome extends Component {
               <div className="col-md-4">
                 <SearchField
                   filterValues={filterValues}
-                  onFilter={onSearchFilter.bind(null, posts)}
+                  onFilter={onFilterPostsByKeyword}
                   placeholder="Search posts by keyword"/>
                 <DropdownMenu
                   heading="Sort by"
@@ -260,11 +266,11 @@ class BlogHome extends Component {
                 <h2 className="no-margin-top">{
                   (currentFilter === "area") ? filterValues :
                   (currentFilter === "author") ? `Posts by ${filterValues}` :
-                  (currentFilter === "keyword") ? `Posts found: ${allAvailablePosts.length}` :
+                  (currentFilter === "keyword") ? `Posts found: ${filteredPostIds.length}` :
                   "All Posts"}</h2>
                 <InfiniteScroll 
                   pageStart={0}
-                  loadMore={onLoadMore.bind(null, allAvailablePosts)}
+                  loadMore={() => filteredPostIds.length > 0 && onLoadMore(filteredPostIds)}
                   hasMore={hasMore}
                   threshold={100}>
                   {postsList}
@@ -283,17 +289,17 @@ BlogHome.propTypes = {
   onFetchPosts: PropTypes.func.isRequired,
   onFetchPracticeAreas: PropTypes.func.isRequired,
   onFetchStaff: PropTypes.func.isRequired,
-  onShowAll: PropTypes.func.isRequired,
-  onSearchFilter: PropTypes.func.isRequired,
-  onAreaFilter: PropTypes.func.isRequired,
-  onAuthorFilter: PropTypes.func.isRequired,
+  onShowAllPosts: PropTypes.func.isRequired,
+  onFilterPostsByKeyword: PropTypes.func.isRequired,
+  onFilterByArea: PropTypes.func.isRequired,
+  onFilterByAuthor: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired,
-  onSort: PropTypes.func.isRequired,
+  onSortPosts: PropTypes.func.isRequired,
   posts: PropTypes.object.isRequired,
   practiceAreas: PropTypes.object.isRequired,
   staff: PropTypes.object.isRequired,
-  allAvailablePosts: PropTypes.array.isRequired,
-  visiblePosts: PropTypes.array.isRequired,
+  filteredPostIds: PropTypes.array.isRequired,
+  visiblePostIds: PropTypes.array.isRequired,
   filterValues: PropTypes.string.isRequired,
   currentFilter: PropTypes.string.isRequired,
   hasMore: PropTypes.bool.isRequired,

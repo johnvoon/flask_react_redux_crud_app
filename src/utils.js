@@ -1,7 +1,17 @@
 import _ from 'lodash';
 import axios from 'axios';
 import slug from 'slug';
+import { normalize, arrayOf } from 'normalizr';
 
+// Normalize data
+
+export function normalizeResponseData(data, schema) {
+  if (Array.isArray(data)) {
+    return normalize(data, arrayOf(schema));
+  } else {
+    return normalize(data, schema);
+  }
+}
 
 // Options list
 
@@ -12,6 +22,20 @@ export function createOptionsList(normalizedData, key) {
 }
 
 // Sort data
+
+export function sortPosts(posts, ids, prop="created") {
+  if (prop === "created") {
+    return ids.sort((a, b) => {
+      return new Date(posts[b].created) - new Date(posts[a].created);
+    });
+  } else {
+    return ids.sort((a, b) => {
+      if (posts[a][prop] < posts[b][prop]) return -1;
+      if (posts[a][prop] > posts[b][prop]) return 1;
+      return 0; 
+    });
+  }
+}
 
 export function sort(data, ids, prop, order) {
   return ids.sort((a, b) => {

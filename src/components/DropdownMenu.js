@@ -33,6 +33,6 @@ DropdownMenu.propTypes = {
   handleClick: PropTypes.func.isRequired,
   heading: PropTypes.string.isRequired,
   showMenu: PropTypes.bool.isRequired,
-  showAllLink: PropTypes.node.isRequired,
-  links: PropTypes.node.isRequired
+  showAllLink: PropTypes.node,
+  links: PropTypes.node
 };

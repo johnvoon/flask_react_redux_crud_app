@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/utils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">src</a> utils.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">36.62% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>26/71</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.52% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>6/63</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">28.13% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/32</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">41.27% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>26/63</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">71x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import _ from 'lodash';
+import axios from 'axios';
+import slug from 'slug';
+import { normalize, arrayOf } from 'normalizr';
+&nbsp;
+// Normalize data
+&nbsp;
+export function normalizeResponseData(data, schema) {
+  if (Array.isArray(data)) {
+    return normalize(data, arrayOf(schema));
+  } else {
+    return normalize(data, schema);
+  }
+}
+&nbsp;
+// Options list
+&nbsp;
+export function createOptionsList(normalizedData, key) {
+  return Object.keys(normalizedData).map(id =&gt;
+    `${id} - ${normalizedData[id][key]}`
+  );
+}
+&nbsp;
+// Sort data
+&nbsp;
+export function sortPosts(posts, ids, prop=<span class="branch-0 cbranch-no" title="branch not covered" >"created")</span> {
+  if (prop === "created") {
+    return ids.sort((a, b) =&gt; {
+      return new Date(posts[b].created) - new Date(posts[a].created);
+    });
+  } else {
+    return ids.sort((a, b) =&gt; {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (posts[a][prop] &lt; posts[b][prop]) <span class="cstat-no" title="statement not covered" >return -1;</span>
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (posts[a][prop] &gt; posts[b][prop]) <span class="cstat-no" title="statement not covered" >return 1;</span>
+      return 0; 
+    });
+  }
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >sort(</span>data, ids, prop, order) {
+<span class="cstat-no" title="statement not covered" >  return ids.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (order === 'ascending') {</span>
+<span class="cstat-no" title="statement not covered" >      if (data[a][prop] &lt; data[b][prop]) <span class="cstat-no" title="statement not covered" >return -1;</span></span>
+<span class="cstat-no" title="statement not covered" >      if (data[a][prop] &gt; data[b][prop]) <span class="cstat-no" title="statement not covered" >return 1;</span></span>
+<span class="cstat-no" title="statement not covered" >      return 0;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      if (data[b][prop] &lt; data[a][prop]) <span class="cstat-no" title="statement not covered" >return -1;</span></span>
+<span class="cstat-no" title="statement not covered" >      if (data[b][prop] &gt; data[a][prop]) <span class="cstat-no" title="statement not covered" >return 1;</span></span>
+<span class="cstat-no" title="statement not covered" >      return 0;</span>
+    }
+  });
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >sortByDate(</span>data, ids, order) {
+<span class="cstat-no" title="statement not covered" >  return ids.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (order === 'ascending') {</span>
+<span class="cstat-no" title="statement not covered" >      return new Date(data[a].created) - new Date(data[b].created);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return new Date(data[b].created) - new Date(data[a].created);  </span>
+    }
+  });
+}
+&nbsp;
+// Filter data
+&nbsp;
+export function filter(filterValues, data) {
+  const keywords = String(filterValues).toLowerCase().trim().split(/\s+/);
+  return Object.keys(data).filter(id =&gt; {
+    const recordTerms = _.values(data[id]).join(" ").toLowerCase();
+    return keywords.every(keyword =&gt; {
+      return recordTerms.indexOf(keyword) &gt;= 0;
+    });
+  });
+}
+&nbsp;
+// Text conversion
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >slugify(</span>string) {
+<span class="cstat-no" title="statement not covered" >  return slug(string, { lower: true, remove: /\&amp;/g });</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >camelize(</span>string) {
+<span class="cstat-no" title="statement not covered" >  return string.replace(/(?:^\w|[A-Z]|\b\w)/g, <span class="fstat-no" title="function not covered" >fu</span>nction(letter, index) {</span>
+<span class="cstat-no" title="statement not covered" >    return index == 0 ? letter.toLowerCase() : letter.toUpperCase();</span>
+  }).replace(/\s+/g, '');
+}
+&nbsp;
+// Form Validations
+&nbsp;
+export const required = <span class="fstat-no" title="function not covered" >va</span>lue =&gt; 
+<span class="cstat-no" title="statement not covered" >  value ? undefined : 'Required';</span>
+&nbsp;
+export const passwordRequired = <span class="fstat-no" title="function not covered" >va</span>lue =&gt;
+<span class="cstat-no" title="statement not covered" >  value ? undefined : 'Please enter your password.';</span>
+&nbsp;
+export const maxLength = <span class="fstat-no" title="function not covered" >ma</span>x =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >va</span>lue =&gt; </span>
+<span class="cstat-no" title="statement not covered" >  value &amp;&amp; value.length &gt; max ? `Must be ${max} characters or less` : undefined;</span>
+&nbsp;
+export const number = <span class="fstat-no" title="function not covered" >va</span>lue =&gt; 
+<span class="cstat-no" title="statement not covered" >  value &amp;&amp; isNaN(Number(value)) ? 'Must be a number' : undefined;</span>
+&nbsp;
+export const username = <span class="fstat-no" title="function not covered" >va</span>lue =&gt;
+<span class="cstat-no" title="statement not covered" >  value &amp;&amp; !/^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/.test(value) ?</span>
+  'Invalid username' : undefined;
+&nbsp;
+export const email = <span class="fstat-no" title="function not covered" >va</span>lue =&gt;
+<span class="cstat-no" title="statement not covered" >  value &amp;&amp; !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?</span>
+    'Invalid email address' : undefined;
+&nbsp;
+export const passwordMatch = <span class="fstat-no" title="function not covered" >pa</span>ssword =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >va</span>lue =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  value &amp;&amp; password !== value ? "Passwords don't match" : undefined;</span>
+&nbsp;
+export const asyncValidateUserIdentity = <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return axios.post(</span>
+    `${API_URL}/api/users/validate`, value)
+    .then(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >undefined)</span> // important, otherwise returns uncaught in promise error on form submit
+    .catch(<span class="fstat-no" title="function not covered" >({</span>response, message}) =&gt; { // eslint-disable-line no-unused-vars
+      const { status, data } = <span class="cstat-no" title="statement not covered" >response;</span>
+<span class="cstat-no" title="statement not covered" >      if (status === 404 &amp;&amp;</span>
+        ['username', 'email'].every(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; 
+<span class="cstat-no" title="statement not covered" >          Object.keys(value).indexOf(key) &gt; -1)</span>) {
+<span class="cstat-no" title="statement not covered" >        throw { username: data.username,</span>
+                email: data.email };
+      }
+<span class="cstat-no" title="statement not covered" >      if (status === 404 &amp;&amp; </span>
+        Object.keys(value).includes('username')) {
+<span class="cstat-no" title="statement not covered" >        throw { username: data.username };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (status === 404 &amp;&amp; </span>
+        Object.keys(value).includes('email')) {
+<span class="cstat-no" title="statement not covered" >        throw { email: data.email };</span>
+      } 
+    });
+};
+&nbsp;
+export const asyncValidatePostTitle = <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return axios.post(</span>
+    `${API_URL}/api/posts/validate`, value)
+    .then(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >undefined)</span> // important, otherwise will return uncaught in promise error on form submit
+    .catch(<span class="fstat-no" title="function not covered" >({</span>response, message}) =&gt; { // eslint-disable-line no-unused-vars
+      const { status, data } = <span class="cstat-no" title="statement not covered" >response;</span>
+<span class="cstat-no" title="statement not covered" >      if (status === 404 &amp;&amp; </span>
+        Object.keys(value).includes('title')) {
+<span class="cstat-no" title="statement not covered" >        throw { title: data.title };</span>
+      }
+    });
+};</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 28 2017 18:10:03 GMT+1100 (AEDT)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

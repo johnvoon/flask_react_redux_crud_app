@@ -2,8 +2,6 @@
 
 A mock mobile-responsive law firm website with custom CMS hosted on Digital Ocean. My first experience with Flask and React.
 
-<strong>Check it out at: https://conceptlawfirm.xyz/</strong>
-
 ## Login
 
 Whenever prompted, enter:

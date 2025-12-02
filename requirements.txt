@@ -29,7 +29,7 @@ WTForms-Components==0.9.7
 
 # Utils.
 fake-factory==0.5.7
-Pillow==4.0.0
+Pillow==10.3.0
 python-slugify==1.2.1
 
 # Password hashing.
